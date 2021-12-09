@@ -16,24 +16,24 @@ Company.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        addressStreet: {
+        address_street: {
             type: DataTypes.STRING,
             allowNull: false,
            
         },
-        addressCity: {
+        address_city: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        addressState: {
+        address_state: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        addressZip: {
+        address_zip: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        addressPhone: {
+        address_phone: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
