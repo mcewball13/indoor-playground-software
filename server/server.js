@@ -1,37 +1,45 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const { typeDefs, resolvers } = require('./schemas');
-const { authMiddleware } = require('./utils/auth');
-const db = require('./config/connection');
+const routes = require('./controllers');
+const sequelize = require('./config/connection');
 const path = require('path');
+const exphbs = require('express-handlebars');
+const session = require('express-session');
+const helpers = require('./utils/helpers');
 
+
+
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+
+const sess = {
+  secret: 'super super secret',
+  cookie: {},
+  resave: false,
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize
+  })
+};
+
+
+const hbs = exphbs.create({helpers});
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: authMiddleware
-});
-
-server.start().then(() => {
-	server.applyMiddleware({ app });
-});
-
-app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session(sess));
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-}
 
- app.get('*', (req, res) => {
-   res.sendFile(path.join(__dirname, '../client/build/index.html'));
- });
+app.use(routes);
 
-db.once('open', () => {
-  app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`);
-    console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
-  });
+
+// Turn off sequelize for the moment to get it up and running, once models are done, activate
+
+
+sequelize.sync({ force: false}).then(() => {
+  app.listen(PORT, () => console.log('Now listening'));
 });
+

@@ -1,0 +1,637 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Merriweather Sans", sans-serif;
+}
+p {
+  font-family: "Merriweather Sans", sans-serif;
+}
+
+header {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem;
+  background-color: #000;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  line-height: 1.3;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nav bar */
+
+.nav-logo {
+  font-size: 1.2rem;
+  margin-left: 1rem;
+  color: #fff;
+}
+
+.post-title {
+  font-size: 5rem;
+}
+.difficulty-label {
+  font-weight: 500;
+}
+
+@media screen and (max-width: 767px) {
+  .nav-menu {
+
+    position: fixed;
+    top: 3rem;
+    right: -85%;
+    width: 80%;
+    height: 100%;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: 0.5s;
+    backdrop-filter: blur(0.7em);
+  }
+  .post-title {
+    font-size: 13vw;
+  }
+}
+
+.nav-item {
+  margin-bottom: 2rem;
+}
+
+.nav-link {
+  position: relative;
+  color: #000;
+}
+
+.nav-toggle {
+  font-size: 1.3rem;
+  color: #fff;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.show {
+  right: 0;
+}
+
+/* Filter Styling */
+
+
+.filter-dropdown-container select{
+  font-size: 14px
+}
+.form-check-label {
+  padding: 0 10px 0 0 !important;
+}
+.filter-bar-top {
+  background-color: rgb(214, 202, 202);
+  width: 100%;
+}
+#checkbox-btn-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Post Styling */
+
+.view-posts {
+  margin: 5rem;
+}
+
+/* Hero/Homepage Styling */
+
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  width: 100vw;
+  height: 85vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/JPEG/homepage.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  filter: brightness(30%);
+}
+
+.hero-content {
+  position: relative;
+  color: #fff;
+  text-align: center;
+  margin: 0.625rem;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.hero-sub {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-top: 3rem;
+}
+
+.hero-button {
+  margin-top: 4rem;
+  padding: 0.8rem 1.4rem;
+  font-size: 0.9325rem;
+  font-weight: 400;
+  background-color: #1874cd;
+  color: #fff;
+  border: 1px solid;
+  border-radius: 1.5625rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.hero-button:hover {
+  border-color: #1874cd;
+  transition: 0.3s;
+}
+
+.hero-link {
+  color: #fff;
+}
+
+/* Login/Register Page Styling */
+.login-container,
+.register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 90vh;
+}
+
+.login-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/JPEG/login.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  filter: blur(0.15em);
+}
+
+.register-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/images/JPEG/register.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  filter: blur(0.3em);
+}
+
+.login-form {
+  z-index: 10;
+  padding: 2.5rem 1.3rem;
+  border-radius: 0.625em;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.register-form {
+  z-index: 10;
+  padding: 3.4rem 2.2rem;
+  border-radius: 0.625em;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.form-title {
+  padding-bottom: 1.25rem;
+  text-align: center;
+  color: #fff;
+}
+
+.form-input {
+  position: relative;
+  margin: 1.875rem;
+  border-bottom: 2px solid #fff;
+}
+
+.input-field {
+  border: none;
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 0.3125rem;
+  font-size: 1.1rem;
+  color: #fff;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+.form-label {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 0.3125rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 1.1rem;
+  color: #d3d3d3;
+  transition: 0.5s;
+}
+
+.input-span::before {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 0.125rem;
+  top: 2.5rem;
+  left: 0;
+  background: #1874cd;
+  transition: 0.5s;
+}
+
+.form-input .input-field:focus ~ .form-label,
+.form-input .input-field:valid ~ .form-label {
+  top: -0.3125rem;
+  color: #fff;
+}
+
+.form-input .input-field:focus ~ .input-span::before {
+  width: 100%;
+}
+
+.form-button {
+  text-align: center;
+}
+
+.form-submit {
+  margin-top: 0.8rem;
+  width: 75%;
+  height: 2.5rem;
+  border-radius: 1.5625rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #1874cd;
+  outline: none;
+  border: 1px solid;
+}
+
+.form-submit:hover {
+  border-color: #1874cd;
+  transition: 0.3s;
+}
+
+.form-signin {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.form-signup {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.register-link {
+  color: #fff;
+}
+
+.signin-link {
+  color: #fff;
+}
+
+.signin-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Create Exercise Page Styling */
+
+.create-exercise {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 80vh;
+}
+
+.form-whole {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ex-difficulty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-title {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.diffculty-container {
+  margin-bottom: 1rem;
+}
+
+.type-container {
+  margin-bottom: 1rem;
+}
+
+.tags-container {
+  margin-bottom: 1rem;
+}
+
+.exercise-container {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.exercise-title {
+  margin-right: 0.6rem;
+}
+
+.exercise-input {
+  width: 40%;
+}
+
+.description-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -1rem;
+}
+
+.description-label {
+  margin-right: 0.5rem;
+}
+
+.btn-create {
+  align-self: center;
+  margin-top: 2rem;
+  width: 40%;
+  padding: 0.5rem 1rem;
+  font-size: 1.125rem;
+  font-weight: 200;
+  background-color: #1874cd;
+  color: #fff;
+  border: 1px solid;
+  border-radius: 1.5625rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn-image {
+  align-self: center;
+  margin-top: 1rem;
+  width: 40%;
+  padding: 0.5rem 1rem;
+  background-color: #f72119;
+  color: #fff;
+  font-weight: 200;
+  font-size: 1.125rem;
+  border: 1px solid;
+  border-radius: 1.5625rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.img-container {
+  margin-top: 4rem;
+}
+
+/* Modal Cards */
+
+#chat-bubble,
+#thumbs-up {
+  max-height: 20px;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  vertical-align: center;
+}
+.img-container {
+  width: 50%;
+}
+
+@media screen and (min-width: 576px) {
+  nav {
+    height: 3.2rem;
+  }
+
+  .nav-logo {
+    font-size: 1.5rem;
+  }
+
+  .nav-toggle {
+    font-size: 1.7rem;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-sub {
+    font-size: 2rem;
+  }
+
+  .hero-button {
+    padding: 0.875rem 1.625rem;
+    font-size: 1rem;
+  }
+
+  .login-form,
+  .register-form {
+    padding: 3.7rem 4.5rem;
+  }
+
+  .form-title {
+    font-size: 2.5rem;
+  }
+
+  .input-field {
+    padding: 0 3rem;
+  }
+
+  .form-label {
+    font-size: 1.3rem;
+  }
+
+  .signin-link {
+    font-size: 1.1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  nav {
+    width: calc(100% + 1rem);
+    height: calc(3rem + 1rem);
+  }
+
+  .nav-list {
+    display: flex;
+  }
+
+  .nav-item {
+    margin-right: 1.3rem;
+    margin-bottom: -1rem;
+  }
+
+  .nav-link {
+    color: #fff;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .hero-title {
+    font-size: 3.2rem;
+  }
+
+  .hero-sub {
+    font-size: 2.15rem;
+  }
+
+  .hero-button {
+    padding: 0.9375rem 1.875rem;
+    font-size: 1.125rem;
+  }
+
+  .login-container,
+  .register-container {
+    height: 90vh;
+  }
+
+  .login-form,
+  .register-form {
+    padding: 4rem 6rem;
+  }
+
+  /* Login/Register Styling */
+
+  .form-title {
+    font-size: 3rem;
+  }
+
+  .input-field {
+    padding: 0 4rem;
+  }
+
+  .form-input {
+    margin: 2rem;
+  }
+
+  /* Create Exercise Styling */
+
+  .create-title {
+    margin-top: 1.5rem;
+    font-size: 3.3rem;
+  }
+
+  .diffculty-container {
+    text-align: center;
+    font-size: 1.25rem;
+  }
+
+  .type-container {
+    font-size: 1.25rem;
+  }
+
+  .tags-container {
+    font-size: 1.25rem;
+  }
+
+  .exercise-container {
+    font-size: 1.25rem;
+  }
+
+  .exercise-input {
+    width: 11%;
+  }
+
+  .description-container {
+    font-size: 1.25rem;
+  }
+
+  .description-label {
+    margin-left: 3rem;
+  }
+
+  .description-input {
+    width: 15%;
+    height: 100%;
+    padding: 0.3rem;
+  }
+
+  .btn-create {
+    width: 15%;
+  }
+
+  .btn-image {
+    width: 15%;
+  }
+
+  .signin-link {
+    font-size: 1.25rem;
+  }
+}

@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
+const {Sequelize} = require('sequelize');
 
-//mongodb+srv://heroku_app:admin@graphql-library.l74ep.mongodb.net/graphql-library?retryWrites=true&w=majority
-mongoose.connect(
-  process.env.MONGODB_URI || 'mongodb://localhost/graphql-library',
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  }
-);
+require('dotenv').config();
 
-module.exports = mongoose.connection;
+let sequelize = process.env.JAWSDB_URL
+? new Sequelize(process.env.JAWSDB_URL)
+: new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PW, {
+    host:'localhost',
+    dialect: 'mysql',
+    dialectOptions: {
+        decimalNumbers:true,
+    }
+});
+module.exports = Sequelize;

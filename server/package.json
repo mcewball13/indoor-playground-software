@@ -1,25 +1,37 @@
 {
-  "name": "graphql-activities",
+  "name": "Project2",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "watch": "nodemon",
-    "seed": "node seeders/seeds.js"
+    "test": "jest",
+    "start": "nodemon server.js",
+    "seeds": "node seeds/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbertRyanFonseca/Project2.git"
+  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "apollo-server-express": "^2.15.1",
-    "bcrypt": "^5.0.1",
-    "express": "^4.17.1",
-    "faker": "^5.5.3",
-    "graphql": "^15.5.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.22"
+  "bugs": {
+    "url": "https://github.com/AlbertRyanFonseca/Project2/issues"
   },
+  "homepage": "https://github.com/AlbertRyanFonseca/Project2#readme",
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "jest": "^27.0.6"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "connect-session-sequelize": "^7.1.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.2",
+    "express-session": "^1.17.2",
+    "mysql2": "^2.2.5",
+    "nodemon": "^2.0.12",
+    "npm-check-updates": "^11.8.3",
+    "sequelize": "^6.6.5"
   }
 }
