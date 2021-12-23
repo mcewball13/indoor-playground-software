@@ -1,20 +1,17 @@
 const router = require("express").Router();
 const {
-    Post,
-    User,
-    Comment,
-    Picture,
-    Type,
-    Tags,
-    Difficulty,
-    PostTags,
+    CustomerMinor,
+    CustomerGuardian,
+    Locations,
+    Company
 } = require("../models");
 const sequelize = require("../config/connection");
 const isSignedIn = require("../utils/userAuth");
 const { Op } = require("sequelize");
 
-router.get("/", (req, res) => {
-    res.render("homepage");
+router.get("/", async (req, res) => {
+    const guardianData = await CustomerGuardian.findAll()
+    res.json(guardianData)
 });
 
 router.get("/login", (req, res) => {

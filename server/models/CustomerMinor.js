@@ -1,52 +1,44 @@
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Company extends Model {
-    
-}
+class CustomerMinor extends Model {}
 
-Company.init(
+CustomerMinor.init( 
     {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        companyName: {
+        firstName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        addressStreet: {
-            type: DataTypes.STRING,
-            allowNull: false,
-           
-        },
-        addressCity: {
+        lastName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        addressState: {
-            type: DataTypes.STRING,
+        birthdate: {
+            type: DataTypes.DATEONLY,
             allowNull: false,
         },
-        addressZip: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        addressPhone: {
+        email: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                
+                isEmail: true, 
             }
+        },
+        notes: {
+            type: DataTypes.TEXT,
         },
     },
     {
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'company'
+        modelName: 'customer_guardian'
     }
 )
 
-module.exports = Company;
+module.exports = CustomerMinor;

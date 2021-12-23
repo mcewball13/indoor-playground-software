@@ -1,18 +1,16 @@
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Company extends Model {
-    
-}
+class Locations extends Model {}
 
-Company.init(
+Locations.init(
     {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        companyName: {
+        locationName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -44,9 +42,10 @@ Company.init(
     {
         sequelize,
         freezeTableName: true,
+        timestamps: false,
         underscored: true,
-        modelName: 'company'
+        modelName: 'locations'
     }
 )
 
-module.exports = Company;
+module.exports = Locations;

@@ -1,20 +1,33 @@
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Company extends Model {
-    
-}
+class CustomerGuardian extends Model {}
 
-Company.init(
+CustomerGuardian.init( 
     {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        companyName: {
+        firstName: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        lastName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        birthdate: {
+            type: DataTypes.DATEONLY,
+            allowNull: false,
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                isEmail: true, 
+            }
         },
         addressStreet: {
             type: DataTypes.STRING,
@@ -36,17 +49,26 @@ Company.init(
         addressPhone: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: {
-                
-            }
         },
+        storedValue: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        notes: {
+            type: DataTypes.TEXT,
+        },
+        isAccountOwner: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
+
     },
     {
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'company'
+        modelName: 'customer_guardian'
     }
 )
 
-module.exports = Company;
+module.exports = CustomerGuardian;
