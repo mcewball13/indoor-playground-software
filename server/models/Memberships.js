@@ -1,5 +1,8 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
+const moment = require("moment");
+
+const momentDate = moment().format("MMM Do YYYY")
 
 class Memberships extends Model {}
 
@@ -24,35 +27,23 @@ Memberships.init(
                 len: [1],
             },
         },
-        img_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "picture",
-                key: "id",
-            },
+        thumbnail: {
+            type: DataTypes.STRING(1000),
+            allowNull: true,
         },
-        user_id: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: "user",
-                key: "id",
-            },
-        },
-        type_id: {
-            type: DataTypes.INTEGER,
+        startDate: {
+            type: DataTypes.DATE,
             allowNull: false,
-            references: {
-                model: "type",
-                key: "id",
-            },
+            defaultValue: Date.now(),
         },
-        difficulty_id: {
-            type: DataTypes.INTEGER,
+        endDate: {
+            type: DataTypes.DATE,
             allowNull: false,
-            references: {
-                model: "difficulty",
-                key: "id",
-            },
+            defaultValue: momentDate.add(1, 'M'),
+        },
+        isActive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
         },
     },
     {
