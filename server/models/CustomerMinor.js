@@ -37,7 +37,7 @@ CustomerMinor.init(
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: 'customer_guardian'
+        modelName: 'customer_minor'
     }
 )
 

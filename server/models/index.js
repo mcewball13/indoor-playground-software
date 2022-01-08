@@ -7,12 +7,12 @@ const CustomerMinor = require("./CustomerMinor");
 Company.hasMany(Locations, {
     foreignKey: "company_id",
 });
-// Locations.hasMany(CustomerGuardian, {
-//     foreignKey: "locations_id",
-// });
-// Company.hasMany(CustomerGuardian, {
-//     foreignKey: "company_id",
-// });
+Locations.hasMany(CustomerGuardian, {
+    foreignKey: "locations_id",
+});
+Company.hasMany(CustomerGuardian, {
+    foreignKey: "company_id",
+});
 Locations.hasMany(CustomerMinor, {
     foreignKey: "locations_id",
 });
