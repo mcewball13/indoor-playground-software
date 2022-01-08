@@ -41,6 +41,23 @@ Memberships.init(
             allowNull: false,
             defaultValue: momentDate.add(1, 'M'),
         },
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: true,
+        },
+        isRenewable: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+        },
+        renewalPrice: {
+            type: DataTypes.FLOAT,
+            allowNull: true,
+        },
+        minLengthInMonths: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: 1,
+        },
         isActive: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
