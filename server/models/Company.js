@@ -1,5 +1,9 @@
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection');
+const moment = require('moment');
+const Datatype = require('faker/lib/datatype');
+
+const currentDate = moment().format("MM/DD/YYYY")
 
 class Company extends Model {
     
@@ -39,6 +43,11 @@ Company.init(
             validate: {
                 
             }
+        },
+        dateInBusiness: {
+            type: DataTypes.DATEONLY,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
         },
     },
     {

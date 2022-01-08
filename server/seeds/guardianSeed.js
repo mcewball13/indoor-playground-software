@@ -17,7 +17,9 @@ for (let i = 0; i < 50; i++) {
             addressPhone: faker.phone.phoneNumber(),
             storedValue: faker.finance.amount(1,200,2),
             notes: faker.lorem.paragraph(3),
-            isAccountOwner: true
+            isAccountOwner: true,
+            company_id: Math.floor((Math.random() * 7)+1),
+            locations_id: Math.floor((Math.random() * 4)+1)
         }
     )
     

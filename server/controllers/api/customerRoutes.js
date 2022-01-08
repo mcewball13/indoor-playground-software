@@ -1,16 +1,17 @@
 const router = require("express").Router();
-const { User, Post, Comment, Votes } = require("../../models");
+const { CustomerGuardian, CustomerMinor } = require("../../models");
 
 // get all users
-router.get("/", (req, res) => {
-    User.findAll({
-        attributes: { exclude: ["password"] },
-    })
-        .then((dbUserData) => res.json(dbUserData))
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
+router.get("/", async (req, res) => {
+    try {
+        const guardianData = await CustomerGuardian.findAll({})
+        res.json(guardianData)
+        
+    } catch (error) {
+        res.status(500).statusMessage(error)
+        
+    }
+        
 });
 
 router.get("/:id", (req, res) => {

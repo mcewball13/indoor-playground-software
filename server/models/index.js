@@ -1,19 +1,20 @@
 const Company = require("./Company");
-const Locations = require("./Locations");
+const Location = require("./Location");
 const CustomerGuardian = require("./CustomerGuardian");
 const CustomerMinor = require("./CustomerMinor");
 
 // Create associations with the main company
-Company.hasMany(Locations, {
+Company.hasMany(Location, {
     foreignKey: "company_id",
 });
-Locations.hasMany(CustomerGuardian, {
+Location.hasMany(CustomerGuardian, {
     foreignKey: "locations_id",
 });
 Company.hasMany(CustomerGuardian, {
     foreignKey: "company_id",
+    onDelete: "cascade"
 });
-Locations.hasMany(CustomerMinor, {
+Location.hasMany(CustomerMinor, {
     foreignKey: "locations_id",
 });
 Company.hasMany(CustomerMinor, {
@@ -47,5 +48,5 @@ module.exports = {
     CustomerGuardian,
     CustomerMinor,
     Company,
-    Locations
+    Location
 };
