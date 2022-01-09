@@ -7,6 +7,7 @@ const typeDefs = gql`
   }
   type Query{
     allCustomers: [CustomerGuardians]
+    singleCustomer(id: ID!): CustomerGuardians
     
   }
 `;
