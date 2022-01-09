@@ -1,4 +1,4 @@
-const { Location } = require("../models");
+const { Locations } = require("../models");
 const faker = require("faker")
 
 const locations = []
@@ -18,6 +18,6 @@ for (let i = 0; i < 4; i++) {
     
 }
 
-const seedLocations =()=> Location.bulkCreate(locations);
+const seedLocations =()=> Locations.bulkCreate(locations);
 
 module.exports = seedLocations;

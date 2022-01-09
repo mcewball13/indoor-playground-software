@@ -1,20 +1,21 @@
 const Company = require("./Company");
-const Location = require("./Location");
+const Locations = require("./Location");
 const CustomerGuardian = require("./CustomerGuardian");
 const CustomerMinor = require("./CustomerMinor");
+const CustomerGuardianHasCustomerMinor = require("./CustomerGuardianHasCustomerMinor");
 
 // Create associations with the main company
-Company.hasMany(Location, {
+Company.hasMany(Locations, {
     foreignKey: "company_id",
 });
-Location.hasMany(CustomerGuardian, {
+Locations.hasMany(CustomerGuardian, {
     foreignKey: "locations_id",
 });
 Company.hasMany(CustomerGuardian, {
     foreignKey: "company_id",
-    onDelete: "cascade"
+    onDelete: "cascade",
 });
-Location.hasMany(CustomerMinor, {
+Locations.hasMany(CustomerMinor, {
     foreignKey: "locations_id",
 });
 Company.hasMany(CustomerMinor, {
@@ -26,27 +27,32 @@ Company.hasMany(CustomerMinor, {
 CustomerGuardian.belongsToMany(CustomerGuardian, {
     through: "customer_guardian_has_customer_guardian",
     as: "guardiansInGuardians",
-    foreignKey: "gurdian_id",
+    foreignKey: "guardian_id",
 });
 
 // Create the many to many relationship with guardians and minors
 
 CustomerGuardian.belongsToMany(CustomerMinor, {
-    through: "customer_guardian_has_customer_minor",
+    through: {
+        model: "customer_guardian_has_customer_minor",
+        unique: false,
+    },
     as: "guardians",
-    foreignKey: "gurdian_id",
+    foreignKey: "guardian_id",
 });
 CustomerMinor.belongsToMany(CustomerGuardian, {
-    through: "customer_guardian_has_customer_minor",
+    through: {
+        model: "customer_guardian_has_customer_minor",
+        unique: true,
+    },
     as: "minors",
     foreignKey: "minor_id",
 });
-
-
 
 module.exports = {
     CustomerGuardian,
     CustomerMinor,
     Company,
-    Location
+    Locations,
+    CustomerGuardianHasCustomerMinor,
 };
