@@ -1,6 +1,7 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
+const cookieParser = require("cookie-parser")
 
 const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware } = require('./utils/auth');
@@ -25,6 +26,7 @@ server.start().then(() => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser())
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -39,7 +41,7 @@ if (process.env.NODE_ENV === 'production') {
 // Turn off sequelize for the moment to get it up and running, once models are done, activate
 
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => console.log('Now listening'));
   console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
 });

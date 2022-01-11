@@ -7,15 +7,20 @@ const resolvers = {
   Query: {
  
     allCustomers: async (parent, args, context) => {
+      try {
         const guardianData = await CustomerGuardian.findAll({})
         console.log(guardianData);
         return guardianData;
+        
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     singleCustomer: async (parent, {id}, context) => {
       try {
+
         const customer = await CustomerGuardian.findByPk(id)
-        console.log(customer)
         return customer;
       } catch (error) {
         console.log(error);

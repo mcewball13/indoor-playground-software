@@ -13,21 +13,12 @@ async function newExerciseHandler(event) {
         'textarea[name="description-input"]'
     ).value;
 
+ const input = $(".inputField").val()
+ const radioSelection = $("radioSelection").val()
 
-    const response = await fetch(`/api/posts`, {
-        method: "POST",
-        body: JSON.stringify({
-            tagIds,
-            difficulty_id,
-            type_id,
-            title,
-            description,
-            img_id,
-        }),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+ const selection = radioSelection === "Specialty" ? `spec=${input}` : `lname=${input}` 
+
+    const response = await fetch(`/api/posts?${selection}`)
 
     if (response.ok) {
         document.location.replace("/exercises");
