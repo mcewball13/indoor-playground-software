@@ -3,6 +3,7 @@ const Locations = require("./Location");
 const CustomerGuardian = require("./CustomerGuardian");
 const CustomerMinor = require("./CustomerMinor");
 const CustomerGuardianHasCustomerMinor = require("./CustomerGuardianHasCustomerMinor");
+const Employee = require("./Employee")
 
 // Create associations with the main company
 Company.hasMany(Locations, {
@@ -55,4 +56,5 @@ module.exports = {
     Company,
     Locations,
     CustomerGuardianHasCustomerMinor,
+    Employee
 };

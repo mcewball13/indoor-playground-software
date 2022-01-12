@@ -1,10 +1,22 @@
-const { CustomerGuardian } = require('../models');
+const { CustomerGuardian, Employee } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
 
 
 const resolvers = {
   Query: {
+
+    allEmployees: async (parent, args, context) => {
+      try {
+        const guardianData = await Employee.findAll({})
+        console.log(guardianData);
+        return guardianData;
+        
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
  
     allCustomers: async (parent, args, context) => {
       try {
@@ -30,16 +42,37 @@ const resolvers = {
 
     
   },
-  // Mutation: {
-    //create user data
-    // addUser: async (parents, args) => {
-    //   const employee = await Employee.create(args);
-    //   console.log(employee);
-    //   const token = signToken(employee);
+  Mutation: {
+    // create user data
+    addUser: async (parents, {input}) => {
+      console.log(input)
+      const employee = await Employee.create(input);
+      console.log(employee);
+      const token = signToken(employee);
 
-    //   return { token, employee};
-    // },
-  // }
+      return { token, employee};
+    },
+    loginUser: async (parents, {input}) => {
+      const {email: emailInput, password: passwordInput} = input
+// check to see if the email is found
+      const userData = Employee.findOne({
+        where: {
+          email: emailInput,
+        }
+      })
+      if (!userData) throw new AuthenticationError("Incorrect credentials, Please try again")
+
+      const validPassword = (await userData).checkPassword(passwordInput)
+
+      if (!validPassword) throw new AuthenticationError("Incorrect credentials, Please try again")
+
+      const employee = await Employee.create(input);
+      console.log(employee);
+      const token = signToken(employee);
+
+      return { token, employee};
+    },
+  }
 }
 
 
