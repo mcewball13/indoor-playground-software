@@ -44,7 +44,7 @@ const typeDefs = gql`
   }
   type Mutation{
     addUser(input: AddEmployeeFieldsInput): Auth
-    loginUser(email: String, password: String): Employee
+    loginUser(email: String, password: String): Auth
     
   }
 `;
