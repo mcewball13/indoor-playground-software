@@ -1,18 +1,12 @@
-const { CustomerGuardian, Employee } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
+
+const employeeQueries = require('./employeeResolvers/employeeQueries')
+const { CustomerGuardian, Employee } = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
     Query: {
-        allEmployees: async (parent, args, context) => {
-            try {
-                const guardianData = await Employee.findAll({});
-                console.log(guardianData);
-                return guardianData;
-            } catch (error) {
-                console.log(error);
-            }
-        },
+        ...employeeQueries,
 
         allCustomers: async (parent, args, context) => {
             try {
@@ -51,24 +45,26 @@ const resolvers = {
                     email: email,
                 },
             });
+            // check to see if the user exists
             if (!userData)
                 throw new AuthenticationError(
                     "Incorrect credentials, Please try again"
                 );
-
+            // try to compare the password from the userData return
             const validPassword = userData.checkPassword(password);
 
+            // if the password doesn't exist or is wrong throw error
             if (!validPassword)
                 throw new AuthenticationError(
                     "Incorrect credentials, Please try again"
                 );
 
+            // create the employee object from the return if no errors
             const employee = await userData.get({ plain: true });
-
-            console.log(employee);
-
+            // sign token with employee object
+            // do we need all the info or just username and PW in the token?
             const token = signToken(employee);
-
+            // return the token and the employee object to match the Auth type in typeDefs
             return { token, employee };
         },
     },
