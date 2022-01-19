@@ -7,7 +7,7 @@ export default function useLocalStorage(key, defaultValue) {
     const storedValue = localStorage.getItem(key);
     return storedValue === null ? defaultValue : JSON.parse(storedValue);
   });
-
+// check local storage
   useEffect(() => {
     const listener = (e) => {
       if (e.storageArea === localStorage && e.key === key) {
