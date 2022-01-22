@@ -3,6 +3,7 @@ const seedCompanies = require("./companySeed")
 const seedLocations = require("./locationSeed")
 const seedMinors = require("./minorSeed")
 const seedGuardiansMinors = require("./guardianMinorSeed")
+const seedRoles = require("./rolesSeed")
 
 const sequelize = require("../config/connection");
 
@@ -18,6 +19,8 @@ const seedAll = async () => {
     await seedGuardians();
     console.log("=============");
     await seedGuardiansMinors();
+    console.log("=============");
+    await seedRoles();
     console.log("=============");
     
     process.exit(0);

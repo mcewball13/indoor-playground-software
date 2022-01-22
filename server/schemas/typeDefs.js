@@ -5,7 +5,7 @@ const typeDefs = gql`
     token: ID!
     employee: Employee
   }
-  type CustomerGuardians {
+  type CustomerGuardian {
     id: ID!
     firstName: String!
     lastName: String!
@@ -24,6 +24,13 @@ const typeDefs = gql`
     addressZip: String
     addressPhone: String
   }
+  type Role {
+    id: ID!
+    roleTitle: String!
+    description: String
+    thumbnail: String
+    isActive: Boolean!
+  }
   input AddEmployeeFieldsInput {
     username: String!
     lastName: String!
@@ -38,9 +45,10 @@ const typeDefs = gql`
     addressPhone: String
   }
   type Query{
-    allCustomers: [CustomerGuardians]
-    singleCustomer(id: ID!): CustomerGuardians 
+    allCustomers: [CustomerGuardian]
+    singleCustomer(id: ID!): CustomerGuardian 
     allEmployees: [Employee]
+    getRoles: [Role]
   }
   type Mutation{
     addUser(input: AddEmployeeFieldsInput): Auth

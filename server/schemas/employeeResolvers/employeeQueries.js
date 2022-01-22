@@ -1,4 +1,4 @@
-const { CustomerGuardian, Employee } = require("../../models");
+const { CustomerGuardian, Employee, EmployeeRoles} = require("../../models");
 
 module.exports = {
     allEmployees: async (parent, args, context) => {
@@ -10,4 +10,13 @@ module.exports = {
             console.log(error);
         }
     },
+    getRoles: async (parent, args, context) => {
+        try {
+            const roleData = await EmployeeRoles.findAll({})
+            return roleData
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
