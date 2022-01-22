@@ -18,6 +18,8 @@ import { countries } from '../../../_mock';
 // components
 import Label from '../../../components/Label';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import { useDispatch, useSelector } from '../../../redux/store';
+import { getRoles } from '../../../redux/slices/userForm';
 
 // ----------------------------------------------------------------------
 
@@ -29,14 +31,16 @@ UserNewForm.propTypes = {
 export default function UserNewForm({ isEdit, currentUser }) {
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    fName: Yup.string().required('First name is required'),
+    lName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
     phoneNumber: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
     company: Yup.string().required('Company is required'),
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
@@ -46,11 +50,11 @@ export default function UserNewForm({ isEdit, currentUser }) {
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
+      fName: currentUser?.firstName || '',
+      lName: currentUser?.lastName || '',
       email: currentUser?.email || '',
       phoneNumber: currentUser?.phoneNumber || '',
       address: currentUser?.address || '',
-      country: currentUser?.country || '',
       state: currentUser?.state || '',
       city: currentUser?.city || '',
       zipCode: currentUser?.zipCode || '',
@@ -76,9 +80,13 @@ export default function UserNewForm({ isEdit, currentUser }) {
     setValue,
     handleSubmit,
     formState: { isSubmitting },
+    formState
+    
   } = methods;
 
   const values = watch();
+
+  const { roles, locations } = useSelector(state => state.newUserForm)
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -87,8 +95,15 @@ export default function UserNewForm({ isEdit, currentUser }) {
     if (!isEdit) {
       reset(defaultValues);
     }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
+ 
+  useEffect(() => {
+  dispatch(getRoles());
+
+ }, [dispatch]);
+ 
 
   const onSubmit = async () => {
     try {
@@ -213,25 +228,26 @@ export default function UserNewForm({ isEdit, currentUser }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
+              <RHFTextField name="fName" label="First Name" />
+              <RHFTextField name="lName" label="Last Name" />
               <RHFTextField name="email" label="Email Address" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
 
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
+             
 
               <RHFTextField name="state" label="State/Region" />
               <RHFTextField name="city" label="City" />
               <RHFTextField name="address" label="Address" />
               <RHFTextField name="zipCode" label="Zip/Code" />
               <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
+              <RHFSelect name="role" label="Role" placeholder="Role">
+                <option value="" />
+                {roles.length && roles.map((role, i) => (
+                  <option value={role.roleTitle} key={i}>
+                   {role.roleTitle}
+                  </option>
+                ))}
+              </RHFSelect>
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

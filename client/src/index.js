@@ -54,6 +54,7 @@ import reportWebVitals from './reportWebVitals';
 
 // ----------------------------------------------------------------------
 
+
 ReactDOM.render(
   <AuthProvider>
     <HelmetProvider>
@@ -63,7 +64,9 @@ ReactDOM.render(
             <SettingsProvider>
               <CollapseDrawerProvider>
                 <BrowserRouter>
-                  <App />
+                  
+                    <App />
+                
                 </BrowserRouter>
               </CollapseDrawerProvider>
             </SettingsProvider>
