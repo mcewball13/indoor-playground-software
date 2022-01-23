@@ -24,6 +24,19 @@ Company.hasMany(CustomerMinor, {
     foreignKey: "company_id",
 });
 
+// create employee relationships
+
+Employee.hasOne(Locations, {
+    foreignKey: "employee_id"
+})
+
+Locations.belongsTo(Employee, {
+    foreignKey: "employee_id"
+})
+Employee.belongsTo(EmployeeRoles, {
+    foreignKey: 'role_id'
+})
+
 // Create the many to many association with itself for account owners and other adults on the same account.
 
 CustomerGuardian.belongsToMany(CustomerGuardian, {
@@ -45,7 +58,7 @@ CustomerGuardian.belongsToMany(CustomerMinor, {
 CustomerMinor.belongsToMany(CustomerGuardian, {
     through: {
         model: "customer_guardian_has_customer_minor",
-        unique: true,
+        unique: false,
     },
     as: "minors",
     foreignKey: "minor_id",

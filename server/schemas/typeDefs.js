@@ -31,6 +31,19 @@ const typeDefs = gql`
     thumbnail: String
     isActive: Boolean!
   }
+  type Locations {
+    id: ID!
+    locationName: String!
+    addressStreet: String!
+    addressCity: String!
+    addressState: String!
+    addressZip: String!
+    addressPhone: String!
+  }
+  type EmployeeForm {
+    roles: [Role]
+    locations: [Locations]
+  }
   input AddEmployeeFieldsInput {
     username: String!
     lastName: String!
@@ -49,6 +62,7 @@ const typeDefs = gql`
     singleCustomer(id: ID!): CustomerGuardian 
     allEmployees: [Employee]
     getRoles: [Role]
+    addEmployeeFormFill: EmployeeForm
   }
   type Mutation{
     addUser(input: AddEmployeeFieldsInput): Auth

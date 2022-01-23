@@ -1,6 +1,6 @@
 const { AuthenticationError } = require("apollo-server-express");
 
-const employeeQueries = require('./employeeResolvers/employeeQueries')
+const employeeQueries = require('./employeeResolvers/employeeResolverQueries')
 const { CustomerGuardian, Employee } = require("../models");
 const { signToken } = require("../utils/auth");
 
