@@ -13,15 +13,15 @@ const helpers = require('./utils/helpers');
 const app = express();
 const PORT = process.env.PORT || 3031;
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: authMiddleware
-});
+// const server = new ApolloServer({
+//   typeDefs,
+//   resolvers,
+//   context: authMiddleware
+// });
 
-server.start().then(() => {
-	server.applyMiddleware({ app });
-});
+// server.start().then(() => {
+// 	server.applyMiddleware({ app });
+// });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,11 +38,9 @@ if (process.env.NODE_ENV === 'production') {
 //  });
 
 
-// Turn off sequelize for the moment to get it up and running, once models are done, activate
 
 
 sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log('Now listening'));
-  console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+  app.listen(PORT, () => console.log(`Now listening on port ${PORT}`));
 });
 

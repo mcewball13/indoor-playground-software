@@ -39,6 +39,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
     fName: Yup.string().required('First name is required'),
     lName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
+    password: Yup.string().required('Password is required').min(8, "Password is too short - 8 characters minimum").matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
     phoneNumber: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
     company: Yup.string().required('Company is required'),
@@ -53,6 +54,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
       fName: currentUser?.firstName || '',
       lName: currentUser?.lastName || '',
       email: currentUser?.email || '',
+      password: '',
       phoneNumber: currentUser?.phoneNumber || '',
       address: currentUser?.address || '',
       state: currentUser?.state || '',
@@ -231,15 +233,20 @@ export default function UserNewForm({ isEdit, currentUser }) {
               <RHFTextField name="fName" label="First Name" />
               <RHFTextField name="lName" label="Last Name" />
               <RHFTextField name="email" label="Email Address" />
+              <RHFTextField name="password" label="Password" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
-
-             
-
               <RHFTextField name="state" label="State/Region" />
               <RHFTextField name="city" label="City" />
               <RHFTextField name="address" label="Address" />
               <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
+              <RHFSelect name="location" label="Location" placeholder="Location">
+                <option value="" />
+                {roles.length && roles.map((role, i) => (
+                  <option value={role.roleTitle} key={i}>
+                   {role.roleTitle}
+                  </option>
+                ))}
+              </RHFSelect>
               <RHFSelect name="role" label="Role" placeholder="Role">
                 <option value="" />
                 {roles.length && roles.map((role, i) => (
