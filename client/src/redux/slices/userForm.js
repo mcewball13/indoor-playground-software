@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import sum from 'lodash/sum';
-import uniqBy from 'lodash/uniqBy';
+
 // utils
-import { useMutation, useQuery } from '@apollo/client';
-//
-import { GET_ROLE_NAMES } from '../../utils/gql/queries/employeeQueries';
+import axios from 'axios';
 import { dispatch } from '../store';
 
 // ----------------------------------------------------------------------
@@ -52,8 +49,19 @@ export function getRoles() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await useQuery(GET_ROLE_NAMES);
-      dispatch(slice.actions.getRolesSuccess(response.data.roles));
+      const response = await axios.get("/api/employees/roles")
+      dispatch(slice.actions.getRolesSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error))
+    }
+  };
+}
+export function getLocations() {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get("/api/locations")
+      dispatch(slice.actions.getLocationsSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error))
     }
