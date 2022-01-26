@@ -3,8 +3,8 @@ const Locations = require("./Location");
 const CustomerGuardian = require("./CustomerGuardian");
 const CustomerMinor = require("./CustomerMinor");
 const CustomerGuardianHasCustomerMinor = require("./CustomerGuardianHasCustomerMinor");
-const Employee = require("./Employee")
-const EmployeeRoles = require("./EmployeeRoles")
+const Employees = require("./Employees");
+const EmployeeRoles = require("./EmployeeRoles");
 
 // Create associations with the main company
 Company.hasMany(Locations, {
@@ -23,6 +23,23 @@ Locations.hasMany(CustomerMinor, {
 Company.hasMany(CustomerMinor, {
     foreignKey: "company_id",
 });
+
+Locations.hasMany(EmployeeRoles, {
+    foreignKey: "location_id",
+    unique: false,
+});
+
+// create employee relationships
+
+Locations.hasMany(Employees, {
+    foreignKey: "location_id",
+});
+
+Employees.belongsTo(EmployeeRoles, {
+    foreignKey: "role_id",
+});
+
+// Company informational relationships
 
 // Create the many to many association with itself for account owners and other adults on the same account.
 
@@ -45,7 +62,7 @@ CustomerGuardian.belongsToMany(CustomerMinor, {
 CustomerMinor.belongsToMany(CustomerGuardian, {
     through: {
         model: "customer_guardian_has_customer_minor",
-        unique: true,
+        unique: false,
     },
     as: "minors",
     foreignKey: "minor_id",
@@ -57,6 +74,6 @@ module.exports = {
     Company,
     Locations,
     CustomerGuardianHasCustomerMinor,
-    Employee,
-    EmployeeRoles
+    Employees,
+    EmployeeRoles,
 };

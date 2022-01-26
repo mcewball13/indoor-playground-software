@@ -13,8 +13,6 @@ import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@m
 import { fData } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// _mock
-import { countries } from '../../../_mock';
 // components
 import Label from '../../../components/Label';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
@@ -82,8 +80,6 @@ export default function UserNewForm({ isEdit, currentUser }) {
     setValue,
     handleSubmit,
     formState: { isSubmitting },
-    formState
-    
   } = methods;
 
   const values = watch();
@@ -241,9 +237,9 @@ export default function UserNewForm({ isEdit, currentUser }) {
               <RHFTextField name="zipCode" label="Zip/Code" />
               <RHFSelect name="location" label="Location" placeholder="Location">
                 <option value="" />
-                {roles.length && roles.map((role, i) => (
-                  <option value={role.roleTitle} key={i}>
-                   {role.roleTitle}
+                {locations.length && locations.map((location, i) => (
+                  <option value={location.locationName} key={i}>
+                   {location.locationName}
                   </option>
                 ))}
               </RHFSelect>

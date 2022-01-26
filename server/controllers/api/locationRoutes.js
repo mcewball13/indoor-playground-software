@@ -1,29 +1,19 @@
 const router = require("express").Router();
-const { Employees, EmployeeRoles } = require("../../models");
+const { Employees, EmployeeRoles, Locations } = require("../../models");
 
-// get all employees
+// get all Roles and Locations
+
 router.get("/", async (req, res) => {
     try {
-        const employeeData = await Employee.findAll({})
-        
-        
-    } catch (error) {
-        res.status(500).statusMessage(error)
-        
-    }
-        
-});
-router.get("/roles", async (req, res) => {
-    try {
-        const roleData = await EmployeeRoles.findAll()
-        res.status(200).json(roleData)
-        
+        const locationsData = await Locations.findAll()
+        res.status(200).json(locationsData)   
         
     } catch (error) {
         res.status(500).statusMessage(error)
     }
         
 });
+
 
 // router.get("/:id", (req, res) => {
 //     User.findOne({
