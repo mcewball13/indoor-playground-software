@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 // form
@@ -8,13 +8,24 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import {
+  Box,
+  Card,
+  Grid,
+  Stack,
+  Switch,
+  Typography,
+  FormControlLabel,
+  InputAdornment,
+  IconButton,
+} from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
 import Label from '../../../components/Label';
+import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
 import { getRoles } from '../../../redux/slices/userForm';
@@ -32,12 +43,17 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
+  //  show password local state
+  const [showPassword, setShowPassword] = useState(false);
 
   const NewUserSchema = Yup.object().shape({
     fName: Yup.string().required('First name is required'),
     lName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
-    password: Yup.string().required('Password is required').min(8, "Password is too short - 8 characters minimum").matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
+    password: Yup.string()
+      .required('Password is required')
+      .min(8, 'Password is too short - 8 characters minimum')
+      .matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
     phoneNumber: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
     company: Yup.string().required('Company is required'),
@@ -84,7 +100,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
 
   const values = watch();
 
-  const { roles, locations } = useSelector(state => state.newUserForm)
+  const { roles, locations } = useSelector((state) => state.newUserForm);
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -93,15 +109,13 @@ export default function UserNewForm({ isEdit, currentUser }) {
     if (!isEdit) {
       reset(defaultValues);
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
- 
-  useEffect(() => {
-  dispatch(getRoles());
 
- }, [dispatch]);
- 
+  useEffect(() => {
+    dispatch(getRoles());
+  }, [dispatch]);
 
   const onSubmit = async () => {
     try {
@@ -229,7 +243,20 @@ export default function UserNewForm({ isEdit, currentUser }) {
               <RHFTextField name="fName" label="First Name" />
               <RHFTextField name="lName" label="Last Name" />
               <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="password" label="Password" />
+              <RHFTextField
+                name="password"
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
               <RHFTextField name="phoneNumber" label="Phone Number" />
               <RHFTextField name="state" label="State/Region" />
               <RHFTextField name="city" label="City" />
@@ -237,19 +264,21 @@ export default function UserNewForm({ isEdit, currentUser }) {
               <RHFTextField name="zipCode" label="Zip/Code" />
               <RHFSelect name="location" label="Location" placeholder="Location">
                 <option value="" />
-                {locations.length && locations.map((location, i) => (
-                  <option value={location.locationName} key={i}>
-                   {location.locationName}
-                  </option>
-                ))}
+                {locations.length &&
+                  locations.map((location, i) => (
+                    <option value={location.locationName} key={i}>
+                      {location.locationName}
+                    </option>
+                  ))}
               </RHFSelect>
               <RHFSelect name="role" label="Role" placeholder="Role">
                 <option value="" />
-                {roles.length && roles.map((role, i) => (
-                  <option value={role.roleTitle} key={i}>
-                   {role.roleTitle}
-                  </option>
-                ))}
+                {roles.length &&
+                  roles.map((role, i) => (
+                    <option value={role.roleTitle} key={i}>
+                      {role.roleTitle}
+                    </option>
+                  ))}
               </RHFSelect>
             </Box>
 
