@@ -29,6 +29,7 @@ import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
 import { getRoles } from '../../../redux/slices/userForm';
+import LightboxModal from '../../../components/LightboxModal';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,19 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const { enqueueSnackbar } = useSnackbar();
   //  show password local state
   const [showPassword, setShowPassword] = useState(false);
+  //  lightbox state
+  // const [openLightbox, setOpenLightbox] = useState(false);
+
+  // const [selectedImage, setSelectedImage] = useState(0);
+
+  // const imagesLightbox = gallery.map((img) => img.imageUrl);
+
+  // const handleOpenLightbox = (url) => {
+  //   const selectedImage = imagesLightbox.findIndex((index) => index === url);
+  //   setOpenLightbox(true);
+  //   setSelectedImage(selectedImage);
+  // };
+
 
   const NewUserSchema = Yup.object().shape({
     fName: Yup.string().required('First name is required'),
@@ -56,12 +70,14 @@ export default function UserNewForm({ isEdit, currentUser }) {
       .matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
     phoneNumber: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
-    company: Yup.string().required('Company is required'),
+    location: Yup.string().required('Location is required'),
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
     role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
+    avatarUrl: Yup.mixed()
   });
+
+  // .test('required', 'Avatar is required', (value) => value !== ''),
 
   const defaultValues = useMemo(
     () => ({
@@ -113,11 +129,8 @@ export default function UserNewForm({ isEdit, currentUser }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
-  useEffect(() => {
-    dispatch(getRoles());
-  }, [dispatch]);
-
   const onSubmit = async () => {
+    console.log("clicked")
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
@@ -180,6 +193,14 @@ export default function UserNewForm({ isEdit, currentUser }) {
                   </Typography>
                 }
               />
+              {/* <LightboxModal
+          images={imagesLightbox}
+          mainSrc={imagesLightbox[selectedImage]}
+          photoIndex={selectedImage}
+          setPhotoIndex={setSelectedImage}
+          isOpen={openLightbox}
+          onCloseRequest={() => setOpenLightbox(false)}
+        /> */}
             </Box>
 
             {isEdit && (
