@@ -1,5 +1,5 @@
 {
-  "name": "Project2",
+  "name": "Indoor-Playground-Software",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlbertRyanFonseca/Project2.git"
+    "url": "https://github.com/mcewball13/indoor-playground-software"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AlbertRyanFonseca/Project2/issues"
+    "url": "https://github.com/mcewball13/indoor-playground-software/issues"
   },
-  "homepage": "https://github.com/AlbertRyanFonseca/Project2#readme",
+  "homepage": "",
   "devDependencies": {
     "jest": "^27.0.6"
   },

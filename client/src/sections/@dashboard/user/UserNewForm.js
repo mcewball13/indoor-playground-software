@@ -18,6 +18,9 @@ import {
   FormControlLabel,
   InputAdornment,
   IconButton,
+  Collapse,
+  TextField,
+  Button,
 } from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
@@ -38,7 +41,7 @@ UserNewForm.propTypes = {
   currentUser: PropTypes.object,
 };
 
-export default function UserNewForm({ isEdit, currentUser }) {
+export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -59,7 +62,6 @@ export default function UserNewForm({ isEdit, currentUser }) {
   //   setSelectedImage(selectedImage);
   // };
 
-
   const NewUserSchema = Yup.object().shape({
     fName: Yup.string().required('First name is required'),
     lName: Yup.string().required('Last name is required'),
@@ -74,7 +76,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
     role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed()
+    avatarUrl: Yup.mixed(),
   });
 
   // .test('required', 'Avatar is required', (value) => value !== ''),
@@ -130,7 +132,7 @@ export default function UserNewForm({ isEdit, currentUser }) {
   }, [isEdit, currentUser]);
 
   const onSubmit = async () => {
-    console.log("clicked")
+    console.log('clicked');
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
@@ -303,11 +305,40 @@ export default function UserNewForm({ isEdit, currentUser }) {
               </RHFSelect>
             </Box>
 
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+            <Stack justifyContent="space-between" direction={{xs: "column", sm: "row"}}  sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!isEdit ? 'Create User' : 'Save Changes'}
               </LoadingButton>
+              {!isOpen && <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen}>
+                Add a Minor
+              </Button>}
             </Stack>
+            <Collapse in={isOpen}>
+              <Box
+                sx={{
+                  padding: 3,
+                  marginTop: 3,
+                  borderRadius: 1,
+                  bgcolor: 'background.paper',
+                }}
+              >
+                <Stack spacing={3}>
+                  <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
+                    {' '}
+                    Add a Minor
+                  </Typography>
+
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField fullWidth label="First Name" />
+                    <TextField fullWidth label="Last Name" />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <TextField fullWidth label="First Name" />
+                    <TextField fullWidth label="Last Name" />
+                  </Stack>
+                </Stack>
+              </Box>
+            </Collapse>
           </Card>
         </Grid>
       </Grid>
