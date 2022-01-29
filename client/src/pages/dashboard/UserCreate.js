@@ -31,6 +31,16 @@ export default function UserCreate() {
 
   // state for callapse component for add child
   const [open, setOpen] = useState(false);
+  // State to hold array of minors in objects
+  const [minors, setMinors] = useState([
+    {
+      firstName: '',
+      lastName: '',
+      birthDate: '',
+    }
+  ]);
+
+  function handleMinorAdd() {}
 
   useEffect(() => {
     dispatch(getRoles());
@@ -55,6 +65,8 @@ export default function UserCreate() {
           isOpen={open}
           onOpen={() => setOpen(!open)}
           onCancel={() => setOpen(false)}
+          minorArray={minors}
+          setMinorArray={setMinors}
         />
       </Container>
     </Page>

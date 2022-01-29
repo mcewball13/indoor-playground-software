@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 // form
@@ -41,7 +43,9 @@ UserNewForm.propTypes = {
   currentUser: PropTypes.object,
 };
 
-export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
+export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCancel, minorArray, handleAddMinor }) {
+  const theme = useTheme();
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -338,6 +342,12 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
                   </Stack>
                 </Stack>
               </Box>
+              <Button onClick={onCancel} color="error" size="small" startIcon={<Iconify icon={'eva:close-outline'} />}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddMinor} size="small" startIcon={<Iconify icon={'eva:close-outline'} />}>
+                Add
+              </Button>
             </Collapse>
           </Card>
         </Grid>
