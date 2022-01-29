@@ -16,6 +16,13 @@ for (let i = 0; i < 4; i++) {
     
 }
 
-const seedRoles =()=> EmployeeRoles.bulkCreate(roles);
+const seedRoles =()=> {
+    try {
+       return EmployeeRoles.bulkCreate(roles)
+        
+    } catch (error) {
+        console.log(error)        
+    }
+};
 
 module.exports = seedRoles;

@@ -30,8 +30,8 @@ const rootReducer = combineReducers({
   chat: chatReducer,
   calendar: calendarReducer,
   kanban: kanbanReducer,
-  product: persistReducer(productPersistConfig, productReducer),
   newUserForm: userFormReducer,
+  product: persistReducer(productPersistConfig, productReducer),
 });
 
 export { rootPersistConfig, rootReducer };

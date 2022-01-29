@@ -64,7 +64,7 @@
     "date-fns": "^2.24.0",
     "deck.gl": "^8.6.5",
     "emoji-mart": "^3.0.0",
-    "firebase": "^9.6.1",
+    "firebase": "^9.6.5",
     "framer-motion": "^4.1.17",
     "graphql": "^16.2.0",
     "highlight.js": "^11.3.1",
