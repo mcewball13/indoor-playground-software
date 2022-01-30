@@ -309,14 +309,18 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
               </RHFSelect>
             </Box>
 
-            <Stack justifyContent="space-between" direction={{xs: "column", sm: "row"}}  sx={{ mt: 3 }}>
+            <Stack justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!isEdit ? 'Create User' : 'Save Changes'}
               </LoadingButton>
-              {!isOpen && <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen}>
-                Add a Minor
-              </Button>}
+              
+                <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen} disabled={isOpen}>
+                  Add a Minor
+                </Button>
+             
             </Stack>
+
+            {/* Add Minor form */}
             <Collapse in={isOpen}>
               <Box
                 sx={{
@@ -337,17 +341,22 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
                     <TextField fullWidth label="Last Name" />
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField fullWidth label="First Name" />
-                    <TextField fullWidth label="Last Name" />
+                    <TextField fullWidth label="Birth Date" />
+                  </Stack>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                    <Button
+                      onClick={onCancel}
+                      color="error"
+                      startIcon={<Iconify icon={'eva:close-outline'} />}
+                    >
+                      Cancel
+                    </Button>
+                    <Button  color="success" onClick={handleAddMinor} startIcon={<Iconify icon={'eva:plus-fill'} />}>
+                      Add
+                    </Button>
                   </Stack>
                 </Stack>
               </Box>
-              <Button onClick={onCancel} color="error" size="small" startIcon={<Iconify icon={'eva:close-outline'} />}>
-                Cancel
-              </Button>
-              <Button onClick={handleAddMinor} size="small" startIcon={<Iconify icon={'eva:close-outline'} />}>
-                Add
-              </Button>
             </Collapse>
           </Card>
         </Grid>

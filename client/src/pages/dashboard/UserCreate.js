@@ -36,7 +36,8 @@ export default function UserCreate() {
     {
       firstName: '',
       lastName: '',
-      birthDate: '',
+      birthdate: '',
+      email: ''
     }
   ]);
 
