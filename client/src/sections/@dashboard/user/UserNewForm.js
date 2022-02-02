@@ -199,14 +199,6 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
                   </Typography>
                 }
               />
-              {/* <LightboxModal
-          images={imagesLightbox}
-          mainSrc={imagesLightbox[selectedImage]}
-          photoIndex={selectedImage}
-          setPhotoIndex={setSelectedImage}
-          isOpen={openLightbox}
-          onCloseRequest={() => setOpenLightbox(false)}
-        /> */}
             </Box>
 
             {isEdit && (
