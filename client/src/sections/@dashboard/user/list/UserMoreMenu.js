@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { paramCase } from 'change-case';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { MenuItem, IconButton } from '@mui/material';
@@ -17,12 +17,13 @@ UserMoreMenu.propTypes = {
   userName: PropTypes.string,
 };
 
-export default function UserMoreMenu({ onDelete, userName }) {
+export default function UserMoreMenu({ onDelete, userName, isMinor }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
+ 
 
   const handleClose = () => {
     setOpen(null);
@@ -58,10 +59,10 @@ export default function UserMoreMenu({ onDelete, userName }) {
           Delete
         </MenuItem>
 
-        <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.user.root}/${paramCase(userName)}/edit`}>
+        {!isMinor && <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.user.root}/${paramCase(userName)}/edit`}>
           <Iconify icon={'eva:edit-fill'} sx={{ ...ICON }} />
           Edit
-        </MenuItem>
+        </MenuItem>}
       </MenuPopover>
     </>
   );
