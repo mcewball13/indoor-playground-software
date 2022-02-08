@@ -10,14 +10,13 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // slices
-import { getRoles, getLocations } from '../../redux/slices/userForm';
 // _mock_
 import { _userList } from '../../_mock';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
-import UserNewForm from '../../sections/@dashboard/user/UserNewForm';
+import UserWaiverForm from '../../sections/@dashboard/user/UserWaiverForm';
 
 // ----------------------------------------------------------------------
 
@@ -33,10 +32,7 @@ export default function UserCreate() {
   // state for callapse component for add child
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    dispatch(getRoles());
-    dispatch(getLocations());
-  }, [dispatch]);
+  
 
   return (
     <Page title="User: Create a new user">
@@ -50,7 +46,7 @@ export default function UserCreate() {
           ]}
         />
 
-        <UserNewForm
+        <UserWaiverForm
           isEdit={isEdit}
           currentUser={currentUser}
           isOpen={open}

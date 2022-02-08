@@ -41,6 +41,7 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
+import { getRoles, getLocations } from '../../redux/slices/userForm';
 import { getRoles } from '../../../redux/slices/userForm';
 import LightboxModal from '../../../components/LightboxModal';
 import { UserMoreMenu } from './list';
@@ -64,18 +65,11 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
   const [showPassword, setShowPassword] = useState(false);
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
-  //  lightbox state
-  // const [openLightbox, setOpenLightbox] = useState(false);
 
-  // const [selectedImage, setSelectedImage] = useState(0);
-
-  // const imagesLightbox = gallery.map((img) => img.imageUrl);
-
-  // const handleOpenLightbox = (url) => {
-  //   const selectedImage = imagesLightbox.findIndex((index) => index === url);
-  //   setOpenLightbox(true);
-  //   setSelectedImage(selectedImage);
-  // };
+  useEffect(() => {
+    dispatch(getRoles());
+    dispatch(getLocations());
+  }, [dispatch]);
 
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
