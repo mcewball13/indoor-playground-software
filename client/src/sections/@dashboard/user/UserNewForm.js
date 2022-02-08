@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import {
+  Avatar,
   Box,
   Card,
   Grid,
@@ -23,6 +24,12 @@ import {
   Collapse,
   TextField,
   Button,
+  TableContainer,
+  TableBody,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
 } from '@mui/material';
 // utils
 import { fData } from '../../../utils/formatNumber';
@@ -35,6 +42,7 @@ import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } fro
 import { useDispatch, useSelector } from '../../../redux/store';
 import { getRoles } from '../../../redux/slices/userForm';
 import LightboxModal from '../../../components/LightboxModal';
+import { UserMoreMenu } from './list';
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +50,27 @@ UserNewForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
 };
+
+const minorsList = [
+  {
+    id: '1',
+    firstName: 'Chrissy',
+    lastName: 'Henderson',
+    birthDate: '01/01/2012',
+  },
+  {
+    id: '2',
+    firstName: 'John',
+    lastName: 'Doe',
+    birthDate: '01/01/2011',
+  },
+  {
+    id: '3',
+    firstName: 'Jane',
+    lastName: 'Doe',
+    birthDate: '01/01/2014',
+  },
+];
 
 export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCancel, minorArray, handleAddMinor }) {
   const theme = useTheme();
@@ -65,6 +94,8 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
   //   setOpenLightbox(true);
   //   setSelectedImage(selectedImage);
   // };
+
+  const [minors, setMinors] = useState(minorsList);
 
   const NewUserSchema = Yup.object().shape({
     fName: Yup.string().required('First name is required'),
@@ -163,91 +194,143 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
     [setValue]
   );
 
+  const handleRemoveMinor = (index) => {
+    const newArray = minors.filter((item, i) => item.id !== index);
+    setMinors(newArray);
+  };
+
+
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status !== 'active' ? 'error' : 'success'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
+        <Grid item container xs={12} md={4} spacing={3}>
+          {/* Avatar upload plate */}
+          <Grid item>
+            <Card sx={{ py: 10, px: 3 }}>
+              {isEdit && (
+                <Label
+                  color={values.status !== 'active' ? 'error' : 'success'}
+                  sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
+                >
+                  {values.status}
+                </Label>
+              )}
 
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                accept="image/*"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
+              <Box sx={{ mb: 5 }}>
+                <RHFUploadAvatar
+                  name="avatarUrl"
+                  accept="image/*"
+                  maxSize={3145728}
+                  onDrop={handleDrop}
+                  helperText={
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        mt: 2,
+                        mx: 'auto',
+                        display: 'block',
+                        textAlign: 'center',
+                        color: 'text.secondary',
+                      }}
+                    >
+                      Allowed *.jpeg, *.jpg, *.png, *.gif
+                      <br /> max size of {fData(3145728)}
+                    </Typography>
+                  }
+                />
+              </Box>
 
-            {isEdit && (
-              <FormControlLabel
+              {isEdit && (
+                <FormControlLabel
+                  labelPlacement="start"
+                  control={
+                    <Controller
+                      name="status"
+                      control={control}
+                      render={({ field }) => (
+                        <Switch
+                          {...field}
+                          checked={field.value !== 'active'}
+                          onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                        />
+                      )}
+                    />
+                  }
+                  label={
+                    <>
+                      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                        Banned
+                      </Typography>
+                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        Apply disable account
+                      </Typography>
+                    </>
+                  }
+                  sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                />
+              )}
+
+              <RHFSwitch
+                name="isVerified"
                 labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
-                      />
-                    )}
-                  />
-                }
                 label={
                   <>
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
+                      Email Verified
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
+                      Disabling this will automatically send the user a verification email
                     </Typography>
                   </>
                 }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
+                sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
               />
-            )}
-
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the user a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-          </Card>
-        </Grid>
+            </Card>
+          </Grid>
+          {/* Added minors list plate */}
+          {!!minors.length && (
+            <Grid item sx={{
+              position: {
+                sm: 'fixed',
+                md: 'relative',
+              }, 
+              width: {
+                sm: '100%', 
+                md: 'auto',
+              },
+              marginTop: {
+                sm: '10px',
+                md: '0px',
+              },
+              top: 0,
+              zIndex: 1,
+            
+            }} xs={12}>
+              <Card sx={{py: 2, px: 1 }}>
+                <TableContainer>
+                  <Table>
+                    <TableBody>
+                      {minors.map((minor) => (
+                        <TableRow key={minor.id} hover>
+                          <TableCell>
+                            <Typography variant="body2">{minor.firstName}</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2">{minor.birthDate}</Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <UserMoreMenu isMinor userName={minor.firstName} onDelete={() => handleRemoveMinor(minor.id)} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Card>
+            </Grid>
+          )}
+          </Grid>
 
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
@@ -305,11 +388,10 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!isEdit ? 'Create User' : 'Save Changes'}
               </LoadingButton>
-              
-                <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen} disabled={isOpen}>
-                  Add a Minor
-                </Button>
-             
+
+              <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen} disabled={isOpen}>
+                Add a Minor
+              </Button>
             </Stack>
 
             {/* Add Minor form */}
@@ -336,14 +418,10 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
                     <TextField fullWidth label="Birth Date" />
                   </Stack>
                   <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <Button
-                      onClick={onCancel}
-                      color="error"
-                      startIcon={<Iconify icon={'eva:close-outline'} />}
-                    >
+                    <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>
                       Cancel
                     </Button>
-                    <Button  color="success" onClick={handleAddMinor} startIcon={<Iconify icon={'eva:plus-fill'} />}>
+                    <Button color="success" onClick={handleAddMinor} startIcon={<Iconify icon={'eva:plus-fill'} />}>
                       Add
                     </Button>
                   </Stack>
