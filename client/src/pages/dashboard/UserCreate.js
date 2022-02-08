@@ -21,6 +21,7 @@ import UserNewForm from '../../sections/@dashboard/user/UserNewForm';
 
 // ----------------------------------------------------------------------
 
+
 export default function UserCreate() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
@@ -31,17 +32,6 @@ export default function UserCreate() {
 
   // state for callapse component for add child
   const [open, setOpen] = useState(false);
-  // State to hold array of minors in objects
-  const [minors, setMinors] = useState([
-    {
-      firstName: '',
-      lastName: '',
-      birthdate: '',
-      email: ''
-    }
-  ]);
-
-  function handleMinorAdd() {}
 
   useEffect(() => {
     dispatch(getRoles());
@@ -66,8 +56,6 @@ export default function UserCreate() {
           isOpen={open}
           onOpen={() => setOpen(!open)}
           onCancel={() => setOpen(false)}
-          minorArray={minors}
-          setMinorArray={setMinors}
         />
       </Container>
     </Page>

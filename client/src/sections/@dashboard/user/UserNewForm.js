@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 
 import { useSnackbar } from 'notistack';
@@ -32,6 +32,7 @@ import {
   TableCell,
 } from '@mui/material';
 // utils
+import uuid from 'uuid/v4';
 import { fData } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -51,28 +52,7 @@ UserNewForm.propTypes = {
   currentUser: PropTypes.object,
 };
 
-const minorsList = [
-  {
-    id: '1',
-    firstName: 'Chrissy',
-    lastName: 'Henderson',
-    birthDate: '01/01/2012',
-  },
-  {
-    id: '2',
-    firstName: 'John',
-    lastName: 'Doe',
-    birthDate: '01/01/2011',
-  },
-  {
-    id: '3',
-    firstName: 'Jane',
-    lastName: 'Doe',
-    birthDate: '01/01/2014',
-  },
-];
-
-export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCancel, minorArray, handleAddMinor }) {
+export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
   const theme = useTheme();
 
   const navigate = useNavigate();
@@ -82,6 +62,8 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
   const { enqueueSnackbar } = useSnackbar();
   //  show password local state
   const [showPassword, setShowPassword] = useState(false);
+  // State to hold array of minors in objects
+  const [minors, setMinors] = useState([]);
   //  lightbox state
   // const [openLightbox, setOpenLightbox] = useState(false);
 
@@ -95,7 +77,9 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
   //   setSelectedImage(selectedImage);
   // };
 
-  const [minors, setMinors] = useState(minorsList);
+  // capture the element to scroll to
+  const addMinorFormScrollRef = useRef(null);
+  const addedMinorScrollRef = useRef(null);
 
   const NewUserSchema = Yup.object().shape({
     fName: Yup.string().required('First name is required'),
@@ -112,6 +96,9 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
     city: Yup.string().required('City is required'),
     role: Yup.string().required('Role Number is required'),
     avatarUrl: Yup.mixed(),
+    minorFName: Yup.string(),
+    minorLName: Yup.string(),
+    minorBirthDate: Yup.date(),
   });
 
   // .test('required', 'Avatar is required', (value) => value !== ''),
@@ -132,6 +119,9 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
       status: currentUser?.status,
       company: currentUser?.company || '',
       role: currentUser?.role || '',
+      minorFName: '',
+      minorLName: '',
+      minorBirthDate: '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -153,6 +143,8 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
 
   const values = watch();
 
+  console.log('values', values);
+
   const { roles, locations } = useSelector((state) => state.newUserForm);
 
   useEffect(() => {
@@ -165,6 +157,10 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
+
+  const handleOnEntered = (ref) => {
+    ref.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const onSubmit = async () => {
     console.log('clicked');
@@ -199,14 +195,20 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
     setMinors(newArray);
   };
 
-
+  const handleSetMinors = (minor) => {
+    setMinors([...minors, minor]);
+    setTimeout(() => {
+    handleOnEntered(addMinorFormScrollRef);
+    }, 50);
+    reset({ minorFName: '', minorLName: '', minorBirthDate: '' });
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid item container xs={12} md={4} spacing={3}>
           {/* Avatar upload plate */}
-          <Grid item>
+          <Grid item xs={12}>
             <Card sx={{ py: 10, px: 3 }}>
               {isEdit && (
                 <Label
@@ -288,39 +290,142 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
               />
             </Card>
           </Grid>
+        </Grid>
+
+        <Grid container item xs={12} md={8} gap={3}>
+          <Grid item xs={12}>
+            <Card sx={{ p: 3 }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  columnGap: 2,
+                  rowGap: 3,
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                }}
+              >
+                <RHFTextField name="fName" label="First Name" />
+                <RHFTextField name="lName" label="Last Name" />
+                <RHFTextField name="email" label="Email Address" />
+                <RHFTextField
+                  name="password"
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <RHFTextField name="phoneNumber" label="Phone Number" />
+                <RHFTextField name="state" label="State/Region" />
+                <RHFTextField name="city" label="City" />
+                <RHFTextField name="address" label="Address" />
+                <RHFTextField name="zipCode" label="Zip/Code" />
+                <RHFSelect name="location" label="Location" placeholder="Location">
+                  <option value="" />
+                  {locations.length &&
+                    locations.map((location, i) => (
+                      <option value={location.locationName} key={i}>
+                        {location.locationName}
+                      </option>
+                    ))}
+                </RHFSelect>
+                <RHFSelect name="role" label="Role" placeholder="Role">
+                  <option value="" />
+                  {roles.length &&
+                    roles.map((role, i) => (
+                      <option value={role.roleTitle} key={i}>
+                        {role.roleTitle}
+                      </option>
+                    ))}
+                </RHFSelect>
+              </Box>
+
+              <Stack justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {!isEdit ? 'Create User' : 'Save Changes'}
+                </LoadingButton>
+
+                <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen} disabled={isOpen}>
+                  Add a Minor
+                </Button>
+              </Stack>
+
+              {/* Add Minor form */}
+              <Collapse onEntered={()=> handleOnEntered(addMinorFormScrollRef)} in={isOpen} ref={addMinorFormScrollRef}>
+                <Box
+                  sx={{
+                    padding: 3,
+                    marginTop: 3,
+                    borderRadius: 1,
+                    bgcolor: 'background.paper',
+                  }}
+                >
+                  <Stack spacing={3}>
+                    <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
+                      {' '}
+                      Add a Minor
+                    </Typography>
+
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <RHFTextField name="minorFName" fullWidth label="First Name" />
+                      <RHFTextField name="minorLName" fullWidth label="Last Name" />
+                    </Stack>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <RHFTextField name="minorBirthDate" fullWidth label="Birth Date" />
+                    </Stack>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>
+                        Cancel
+                      </Button>
+                      <Button
+                        color="success"
+                        onClick={() =>
+                          handleSetMinors({
+                            id: uuid(),
+                            minorFName: values.minorFName,
+                            minorLName: values.minorLName,
+                            minorBirthDate: values.minorBirthDate,
+                          })
+                        }
+                        startIcon={<Iconify icon={'eva:plus-fill'} />}
+                      >
+                        Add
+                      </Button>
+                    </Stack>
+                  </Stack>
+                </Box>
+              </Collapse>
+            </Card>
+          </Grid>
           {/* Added minors list plate */}
           {!!minors.length && (
-            <Grid item sx={{
-              position: {
-                sm: 'fixed',
-                md: 'relative',
-              }, 
-              width: {
-                sm: '100%', 
-                md: 'auto',
-              },
-              marginTop: {
-                sm: '10px',
-                md: '0px',
-              },
-              top: 0,
-              zIndex: 1,
-            
-            }} xs={12}>
-              <Card sx={{py: 2, px: 1 }}>
+            <Grid item xs={12}>
+              <Card sx={{ py: 2, px: 1 }}>
+                <Typography variant="button" sx={{ mb: 1 }}>
+                  Added minors
+                </Typography>
                 <TableContainer>
                   <Table>
                     <TableBody>
                       {minors.map((minor) => (
-                        <TableRow key={minor.id} hover>
+                        <TableRow key={minor.id} hover ref={addedMinorScrollRef}>
                           <TableCell>
-                            <Typography variant="body2">{minor.firstName}</Typography>
+                            <Typography variant="body1">{minor.minorFName}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant="body2">{minor.birthDate}</Typography>
+                            <Typography variant="body1">{minor.minorBirthDate}</Typography>
                           </TableCell>
                           <TableCell align="right">
-                            <UserMoreMenu isMinor userName={minor.firstName} onDelete={() => handleRemoveMinor(minor.id)} />
+                            <UserMoreMenu
+                              isMinor
+                              userName={minor.minorFName}
+                              onDelete={() => handleRemoveMinor(minor.id)}
+                            />
                           </TableCell>
                         </TableRow>
                       ))}
@@ -330,105 +435,6 @@ export default function UserNewForm({ isEdit, currentUser, isOpen, onOpen, onCan
               </Card>
             </Grid>
           )}
-          </Grid>
-
-        <Grid item xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
-            <Box
-              sx={{
-                display: 'grid',
-                columnGap: 2,
-                rowGap: 3,
-                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
-              }}
-            >
-              <RHFTextField name="fName" label="First Name" />
-              <RHFTextField name="lName" label="Last Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField
-                name="password"
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFSelect name="location" label="Location" placeholder="Location">
-                <option value="" />
-                {locations.length &&
-                  locations.map((location, i) => (
-                    <option value={location.locationName} key={i}>
-                      {location.locationName}
-                    </option>
-                  ))}
-              </RHFSelect>
-              <RHFSelect name="role" label="Role" placeholder="Role">
-                <option value="" />
-                {roles.length &&
-                  roles.map((role, i) => (
-                    <option value={role.roleTitle} key={i}>
-                      {role.roleTitle}
-                    </option>
-                  ))}
-              </RHFSelect>
-            </Box>
-
-            <Stack justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create User' : 'Save Changes'}
-              </LoadingButton>
-
-              <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen} disabled={isOpen}>
-                Add a Minor
-              </Button>
-            </Stack>
-
-            {/* Add Minor form */}
-            <Collapse in={isOpen}>
-              <Box
-                sx={{
-                  padding: 3,
-                  marginTop: 3,
-                  borderRadius: 1,
-                  bgcolor: 'background.paper',
-                }}
-              >
-                <Stack spacing={3}>
-                  <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
-                    {' '}
-                    Add a Minor
-                  </Typography>
-
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField fullWidth label="First Name" />
-                    <TextField fullWidth label="Last Name" />
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <TextField fullWidth label="Birth Date" />
-                  </Stack>
-                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                    <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>
-                      Cancel
-                    </Button>
-                    <Button color="success" onClick={handleAddMinor} startIcon={<Iconify icon={'eva:plus-fill'} />}>
-                      Add
-                    </Button>
-                  </Stack>
-                </Stack>
-              </Box>
-            </Collapse>
-          </Card>
         </Grid>
       </Grid>
     </FormProvider>
