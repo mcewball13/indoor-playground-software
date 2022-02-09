@@ -41,9 +41,11 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { getRoles } from '../../../redux/slices/userForm';
+import { openModal, setSelectedAvatar } from '../../../redux/slices/waiverFormSlice';
 import LightboxModal from '../../../components/LightboxModal';
 import { UserMoreMenu } from './list';
+import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
+import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 
 // ----------------------------------------------------------------------
 
@@ -64,9 +66,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const [showPassword, setShowPassword] = useState(false);
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
-  
-
-
 
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
@@ -76,20 +75,22 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     fName: Yup.string().required('First name is required'),
     lName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
+    birthDate: Yup.date().required('Birth date is required'),
     password: Yup.string()
       .required('Password is required')
       .min(8, 'Password is too short - 8 characters minimum')
       .matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
     phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    location: Yup.string().required('Location is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
+    address: Yup.string(),
+    location: Yup.string(),
+    state: Yup.string(),
+    city: Yup.string(),
+    zipCode: Yup.string().required('Zip code is required'),
+    role: Yup.string(),
     avatarUrl: Yup.mixed(),
     minorFName: Yup.string(),
     minorLName: Yup.string(),
-    minorBirthDate: Yup.date(),
+    minorBirthDate: Yup.string(),
   });
 
   // .test('required', 'Avatar is required', (value) => value !== ''),
@@ -108,8 +109,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       avatarUrl: currentUser?.avatarUrl || '',
       isVerified: currentUser?.isVerified || true,
       status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || '',
       minorFName: '',
       minorLName: '',
       minorBirthDate: '',
@@ -136,7 +135,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   console.log('values', values);
 
-  const { roles, locations } = useSelector((state) => state.newUserForm);
+  const { isOpenModal, selectedAvatar} = useSelector((state) => state.newWaiverForm);
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -189,7 +188,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const handleSetMinors = (minor) => {
     setMinors([...minors, minor]);
     setTimeout(() => {
-    handleOnEntered(addMinorFormScrollRef);
+      handleOnEntered(addMinorFormScrollRef);
     }, 50);
     reset({ minorFName: '', minorLName: '', minorBirthDate: '' });
   };
@@ -211,7 +210,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
               )}
 
               <Box sx={{ mb: 5 }}>
-                <RHFUploadAvatar
+                <RHFChooseAvatar
                   name="avatarUrl"
                   accept="image/*"
                   maxSize={3145728}
@@ -297,6 +296,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFTextField name="fName" label="First Name" />
                 <RHFTextField name="lName" label="Last Name" />
                 <RHFTextField name="email" label="Email Address" />
+                <RHFDatePicker name="bithDate" label="Birth Date" openTo="year" />
                 <RHFTextField
                   name="password"
                   label="Password"
@@ -315,7 +315,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFTextField name="state" label="State/Region" />
                 <RHFTextField name="city" label="City" />
                 <RHFTextField name="address" label="Address" />
-                <RHFTextField name="zipCode" label="Zip/Code" />
+                <RHFTextField name="zipCode" label="Zip Code" />
               </Box>
 
               <Stack justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3 }}>
@@ -329,7 +329,11 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
               </Stack>
 
               {/* Add Minor form */}
-              <Collapse onEntered={()=> handleOnEntered(addMinorFormScrollRef)} in={isOpen} ref={addMinorFormScrollRef}>
+              <Collapse
+                onEntered={() => handleOnEntered(addMinorFormScrollRef)}
+                in={isOpen}
+                ref={addMinorFormScrollRef}
+              >
                 <Box
                   sx={{
                     padding: 3,
@@ -349,7 +353,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                       <RHFTextField name="minorLName" fullWidth label="Last Name" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <RHFTextField name="minorBirthDate" fullWidth label="Birth Date" />
+                      <RHFDatePicker name="minorBithDate" label="Birth Date" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>

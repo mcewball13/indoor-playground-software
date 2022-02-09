@@ -1,25 +1,26 @@
-import { useEffect, useState } from 'react';
-import { paramCase, capitalCase } from 'change-case';
-import { useParams, useLocation } from 'react-router-dom';
 // @mui
-import { Container } from '@mui/material';
-// utils
-import { useDispatch } from '../../redux/store';
-// routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { Container, DialogTitle } from '@mui/material';
+import { capitalCase, paramCase } from 'change-case';
+import { useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import { DialogAnimate } from '../../components/animate';
+import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+// components
+import Page from '../../components/Page';
 // hooks
 import useSettings from '../../hooks/useSettings';
+// utils
+import { openModal, setSelectedAvatar, closeModal } from '../../redux/slices/waiverFormSlice';
+import { useDispatch, useSelector } from '../../redux/store';
+// routes
+import { PATH_DASHBOARD } from '../../routes/paths';
+// sections
+import UserWaiverForm from '../../sections/@dashboard/user/UserWaiverForm';
 // slices
 // _mock_
 import { _userList } from '../../_mock';
-// components
-import Page from '../../components/Page';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-// sections
-import UserWaiverForm from '../../sections/@dashboard/user/UserWaiverForm';
 
 // ----------------------------------------------------------------------
-
 
 export default function UserCreate() {
   const { themeStretch } = useSettings();
@@ -30,9 +31,13 @@ export default function UserCreate() {
   const currentUser = _userList.find((user) => paramCase(user.name) === name);
 
   // state for callapse component for add child
-  const [open, setOpen] = useState(false);
+  const [minorDrawerOpen, setMinorDrawerOpen] = useState(false);
 
-  
+  const { isOpenModal } = useSelector((state) => state.newWaiverForm);
+
+  const handleCloseModal = () => {
+    dispatch(closeModal());
+  };
 
   return (
     <Page title="User: Create a new user">
@@ -49,11 +54,14 @@ export default function UserCreate() {
         <UserWaiverForm
           isEdit={isEdit}
           currentUser={currentUser}
-          isOpen={open}
-          onOpen={() => setOpen(!open)}
-          onCancel={() => setOpen(false)}
+          isOpen={minorDrawerOpen}
+          onOpen={() => setMinorDrawerOpen(!minorDrawerOpen)}
+          onCancel={() => setMinorDrawerOpen(false)}
         />
       </Container>
+      <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
+        <DialogTitle>Select an avatar</DialogTitle>
+      </DialogAnimate>
     </Page>
   );
 }

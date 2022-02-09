@@ -41,7 +41,7 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { getRoles, getLocations } from '../../redux/slices/userForm';
+import { getRoles, getLocations } from '../../redux/slices/waiverFormSlice';
 import { getRoles } from '../../../redux/slices/userForm';
 import LightboxModal from '../../../components/LightboxModal';
 import { UserMoreMenu } from './list';
