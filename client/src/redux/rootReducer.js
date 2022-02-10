@@ -7,7 +7,7 @@ import chatReducer from './slices/chat';
 import productReducer from './slices/product';
 import calendarReducer from './slices/calendar';
 import kanbanReducer from './slices/kanban';
-import userFormReducer from './slices/userForm';
+import waiverFormReducer from './slices/waiverFormSlice';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   chat: chatReducer,
   calendar: calendarReducer,
   kanban: kanbanReducer,
-  newUserForm: userFormReducer,
+  newWaiverForm: waiverFormReducer,
   product: persistReducer(productPersistConfig, productReducer),
 });
 

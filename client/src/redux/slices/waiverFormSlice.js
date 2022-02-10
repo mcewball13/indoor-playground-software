@@ -9,6 +9,8 @@ import { dispatch } from '../store';
 const initialState = {
   isLoading: false,
   error: null,
+  isOpenModal: false,
+  selectedAvatar: null,
   roles: [],
   locations: [],
 };
@@ -16,7 +18,7 @@ const initialState = {
 // ----------------------------------------------------------------------
 
 const slice = createSlice({
-  name: 'newUserForm',
+  name: 'newWaiverForm',
   initialState,
   reducers: {
     startLoading(state) {
@@ -27,21 +29,21 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-
-    getRolesSuccess(state, action) {
-      state.isLoading = false;
-      state.roles = action.payload;
+    setSelectedAvatar(state, action) {
+      state.selectedAvatar = action.payload;
     },
-    getLocationsSuccess(state, action) {
-      state.isLoading = false;
-      state.locations = action.payload;
+    openModal(state) {
+      state.isOpenModal = true;
     },
+    closeModal(state) {
+      state.isOpenModal = false;
+    }
   },
 });
 
 export default slice.reducer
 
-export const { startLoading, hasError, getRolesSuccess, getLocationsSuccess } = slice.actions;
+export const { startLoading, hasError, openModal, closeModal, setSelectedAvatar } = slice.actions;
 
 // ----------------------------------------------------------------------
 
