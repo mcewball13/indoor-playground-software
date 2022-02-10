@@ -33,6 +33,7 @@ import {
 } from '@mui/material';
 // utils
 import uuid from 'uuid/v4';
+import { format, parseISO } from 'date-fns';
 import { fData } from '../../../utils/formatNumber';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
@@ -75,7 +76,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     fName: Yup.string().required('First name is required'),
     lName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
-    birthDate: Yup.date().required('Birth date is required'),
+    birthDate: Yup.string().required('Birth date is required'),
     password: Yup.string()
       .required('Password is required')
       .min(8, 'Password is too short - 8 characters minimum')
@@ -100,6 +101,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       fName: currentUser?.firstName || '',
       lName: currentUser?.lastName || '',
       email: currentUser?.email || '',
+      birthDate: currentUser?.birthDate || '1/1/1990',
       password: '',
       phoneNumber: currentUser?.phoneNumber || '',
       address: currentUser?.address || '',
@@ -111,7 +113,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       status: currentUser?.status,
       minorFName: '',
       minorLName: '',
-      minorBirthDate: '',
+      minorBirthDate: '1/1/2019',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -134,6 +136,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const values = watch();
 
   console.log('values', values);
+  console.log(Date(values.minorBirthDate));
 
   const { isOpenModal, selectedAvatar} = useSelector((state) => state.newWaiverForm);
 
@@ -186,6 +189,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleSetMinors = (minor) => {
+    console.log(values.minorBirthDate);
     setMinors([...minors, minor]);
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
@@ -296,7 +300,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFTextField name="fName" label="First Name" />
                 <RHFTextField name="lName" label="Last Name" />
                 <RHFTextField name="email" label="Email Address" />
-                <RHFDatePicker name="bithDate" label="Birth Date" openTo="year" />
+                <RHFDatePicker name="birthDate" clearable label="Birth Date" openTo="year" />
                 <RHFTextField
                   name="password"
                   label="Password"
@@ -353,7 +357,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                       <RHFTextField name="minorLName" fullWidth label="Last Name" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <RHFDatePicker name="minorBithDate" label="Birth Date" />
+                      <RHFDatePicker name="minorBirthDate" label="Birth Date" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>
