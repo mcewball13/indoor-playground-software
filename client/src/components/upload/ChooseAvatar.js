@@ -76,7 +76,6 @@ export default function ChooseAvatar({ error, file, helperText, sx, ...other }) 
   const {selectedAvatar} = useSelector(state => state.newWaiverForm);
   
   const handleOpenModal =() => {
-    console.log('handleOpenModal');
     dispatch(openModal(true));
   };
 
@@ -102,7 +101,7 @@ export default function ChooseAvatar({ error, file, helperText, sx, ...other }) 
             }}
           >
             <Iconify icon={'ic:round-add-a-photo'} sx={{ width: 24, height: 24, mb: 1 }} />
-            <Typography variant="caption">{file ? 'Update photo' : 'Upload photo'}</Typography>
+            <Typography variant="caption">{file ? 'Update avatar' : 'Choose Avatar'}</Typography>
           </PlaceholderStyle>
         </ThumbnailStyle>
       </RootStyle>

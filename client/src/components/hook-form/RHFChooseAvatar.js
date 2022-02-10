@@ -5,6 +5,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { FormHelperText } from '@mui/material';
 // type
 import { ChooseAvatar, UploadAvatar, UploadMultiFile, UploadSingleFile } from '../upload';
+import { useSelector } from '../../redux/store';
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +16,8 @@ RHFChooseAvatar.propTypes = {
 export function RHFChooseAvatar({ name, ...other }) {
   const { control } = useFormContext();
 
+  const { selectedAvatar } = useSelector(state => state.newWaiverForm);
+
   return (
     <Controller
       name={name}
@@ -24,7 +27,7 @@ export function RHFChooseAvatar({ name, ...other }) {
 
         return (
           <div>
-            <ChooseAvatar error={checkError} {...other} file={field.value} />
+            <ChooseAvatar error={checkError} {...other} file={selectedAvatar} />
             {checkError && (
               <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>
                 {error.message}
