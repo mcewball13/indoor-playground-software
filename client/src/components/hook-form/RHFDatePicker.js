@@ -24,6 +24,7 @@ export default function RHFDatePicker({ label = 'Select your Date', name, ...oth
           {...field}
           label={label}
           inputFormat="M/d/yyyy"
+          views={[ 'year','month', 'day']}
           renderInput={(params) => <TextField {...params} fullWidth />}
         />
       )}

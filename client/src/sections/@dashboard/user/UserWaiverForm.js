@@ -135,10 +135,11 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const values = watch();
 
+  
   console.log('values', values);
-  console.log(Date(values.minorBirthDate));
 
   const { isOpenModal, selectedAvatar} = useSelector((state) => state.newWaiverForm);
+
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -194,7 +195,12 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
-    reset({ minorFName: '', minorLName: '', minorBirthDate: '' });
+    reset({ minorFName: '', minorLName: '', minorBirthDate: '01/01/2018' });
+  };
+
+  // formate date object to string
+  const formatDate = (date) => {
+    return format(date, 'MM/dd/yyyy');
   };
 
   return (
@@ -300,7 +306,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFTextField name="fName" label="First Name" />
                 <RHFTextField name="lName" label="Last Name" />
                 <RHFTextField name="email" label="Email Address" />
-                <RHFDatePicker name="birthDate" clearable label="Birth Date" openTo="year" />
+                <RHFDatePicker name="birthDate" label="Birth Date" openTo="year"/>
                 <RHFTextField
                   name="password"
                   label="Password"
@@ -357,7 +363,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                       <RHFTextField name="minorLName" fullWidth label="Last Name" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <RHFDatePicker name="minorBirthDate" label="Birth Date" />
+                      <RHFDatePicker name="minorBirthDate" label="Birth Date" openTo="year" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>
@@ -370,7 +376,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                             id: uuid(),
                             minorFName: values.minorFName,
                             minorLName: values.minorLName,
-                            minorBirthDate: values.minorBirthDate,
+                            minorBirthDate: formatDate(values.minorBirthDate),
                           })
                         }
                         startIcon={<Iconify icon={'eva:plus-fill'} />}
