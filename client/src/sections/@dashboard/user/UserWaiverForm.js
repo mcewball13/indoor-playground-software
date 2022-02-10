@@ -101,7 +101,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       fName: currentUser?.firstName || '',
       lName: currentUser?.lastName || '',
       email: currentUser?.email || '',
-      birthDate: currentUser?.birthDate || '1/1/1990',
+      birthDate: currentUser?.birthDate || new Date('1/1/1990'),
       password: '',
       phoneNumber: currentUser?.phoneNumber || '',
       address: currentUser?.address || '',
@@ -113,7 +113,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       status: currentUser?.status,
       minorFName: '',
       minorLName: '',
-      minorBirthDate: '1/1/2019',
+      minorBirthDate: new Date('1/1/2019'),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -195,7 +195,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
-    reset({ minorFName: '', minorLName: '', minorBirthDate: '01/01/2018' });
+    reset({ minorFName: '', minorLName: '', minorBirthDate: new Date('01/01/2018') });
   };
 
   // formate date object to string
@@ -236,8 +236,8 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                         color: 'text.secondary',
                       }}
                     >
-                      Allowed *.jpeg, *.jpg, *.png, *.gif
-                      <br /> max size of {fData(3145728)}
+                      If you don't choose an avatar your 
+                      <br/>initial will be used
                     </Typography>
                   }
                 />

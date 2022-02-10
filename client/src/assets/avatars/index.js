@@ -1,11 +1,3 @@
-import avatar2 from './Asset 2.svg';
-import avatar3 from './Asset 3.svg';
-import avatar4 from './Asset 4.svg';
-import avatar5 from './Asset 5.svg';
-import avatar6 from './Asset 6.svg';
-import avatar7 from './Asset 7.svg';
-import avatar8 from './Asset 8.svg';
-import avatar9 from './Asset 9.svg';
 import avatar10 from './Asset 10.svg';
 import avatar11 from './Asset 11.svg';
 import avatar12 from './Asset 12.svg';
@@ -30,7 +22,6 @@ import avatar30 from './Asset 30.svg';
 import avatar31 from './Asset 31.svg';
 import avatar32 from './Asset 32.svg';
 import avatar33 from './Asset 33.svg';
-import avatar34 from './Asset 34.svg';
 import avatar35 from './Asset 35.svg';
 import avatar36 from './Asset 36.svg';
 import avatar37 from './Asset 37.svg';
@@ -47,7 +38,6 @@ import avatar47 from './Asset 47.svg';
 import avatar48 from './Asset 48.svg';
 import avatar49 from './Asset 49.svg';
 import avatar50 from './Asset 50.svg';
-import avatar51 from './Asset 51.svg';
 import avatar52 from './Asset 52.svg';
 import avatar53 from './Asset 53.svg';
 import avatar54 from './Asset 54.svg';
@@ -107,10 +97,6 @@ import avatar107 from './Asset 107.svg';
 import avatar108 from './Asset 108.svg';
 import avatar109 from './Asset 109.svg';
 import avatar110 from './Asset 110.svg';
-// import avatar111 from './Asset 111.svg';
-// import avatar112 from './Asset 112.svg';
-// import avatar113 from './Asset 113.svg';
-import avatar114 from './Asset 114.svg';
 import avatar115 from './Asset 115.svg';
 import avatar116 from './Asset 116.svg';
 import avatar117 from './Asset 117.svg';
@@ -138,7 +124,6 @@ import avatar138 from './Asset 138.svg';
 import avatar139 from './Asset 139.svg';
 import avatar140 from './Asset 140.svg';
 import avatar141 from './Asset 141.svg';
-import avatar142 from './Asset 142.svg';
 import avatar143 from './Asset 143.svg';
 import avatar144 from './Asset 144.svg';
 import avatar145 from './Asset 145.svg';
@@ -146,7 +131,6 @@ import avatar146 from './Asset 146.svg';
 import avatar147 from './Asset 147.svg';
 import avatar148 from './Asset 148.svg';
 import avatar149 from './Asset 149.svg';
-import avatar150 from './Asset 150.svg';
 import avatar151 from './Asset 151.svg';
 import avatar152 from './Asset 152.svg';
 import avatar153 from './Asset 153.svg';
@@ -157,10 +141,8 @@ import avatar157 from './Asset 157.svg';
 import avatar158 from './Asset 158.svg';
 import avatar159 from './Asset 159.svg';
 import avatar160 from './Asset 160.svg';
-import avatar161 from './Asset 161.svg';
 import avatar162 from './Asset 162.svg';
 import avatar163 from './Asset 163.svg';
-import avatar164 from './Asset 164.svg';
 import avatar165 from './Asset 165.svg';
 import avatar166 from './Asset 166.svg';
 import avatar167 from './Asset 167.svg';
@@ -169,29 +151,18 @@ import avatar169 from './Asset 169.svg';
 import avatar170 from './Asset 170.svg';
 import avatar171 from './Asset 171.svg';
 import avatar172 from './Asset 172.svg';
-import avatar173 from './Asset 173.svg';
 import avatar174 from './Asset 174.svg';
 import avatar175 from './Asset 175.svg';
-// import avatar176 from './Asset 176.svg';
 import avatar177 from './Asset 177.svg';
 import avatar178 from './Asset 178.svg';
 import avatar179 from './Asset 179.svg';
 import avatar180 from './Asset 180.svg';
 import avatar181 from './Asset 181.svg';
 import avatar182 from './Asset 182.svg';
-import avatar183 from './Asset 183.svg';
 import avatar184 from './Asset 184.svg';
 import avatar185 from './Asset 185.svg';
 
 export default [
-  avatar2,
-  avatar3,
-  avatar4,
-  avatar5,
-  avatar6,
-  avatar7,
-  avatar8,
-  avatar9,
   avatar10,
   avatar11,
   avatar12,
@@ -216,12 +187,31 @@ export default [
   avatar31,
   avatar32,
   avatar33,
-  avatar34,
   avatar35,
   avatar36,
   avatar37,
   avatar38,
   avatar39,
+  avatar135,
+  avatar136,
+  avatar137,
+  avatar138,
+  avatar139,
+  avatar140,
+  avatar141,
+  avatar143,
+  avatar144,
+  avatar145,
+  avatar146,
+  avatar147,
+  avatar148,
+  avatar149,
+  avatar151,
+  avatar152,
+  avatar153,
+  avatar154,
+  avatar155,
+  avatar156,
   avatar40,
   avatar41,
   avatar42,
@@ -233,34 +223,24 @@ export default [
   avatar48,
   avatar49,
   avatar50,
-  avatar51,
   avatar52,
   avatar53,
   avatar54,
   avatar55,
   avatar56,
   avatar57,
-  avatar58,
-  avatar59,
-  avatar60,
-  avatar61,
-  avatar62,
-  avatar63,
-  avatar64,
-  avatar65,
-  avatar66,
-  avatar67,
-  avatar68,
-  avatar69,
-  avatar70,
-  avatar71,
-  avatar72,
   avatar73,
   avatar74,
   avatar75,
   avatar76,
   avatar77,
   avatar78,
+  avatar167,
+  avatar168,
+  avatar169,
+  avatar170,
+  avatar171,
+  avatar172,
   avatar79,
   avatar80,
   avatar81,
@@ -293,10 +273,6 @@ export default [
   avatar108,
   avatar109,
   avatar110,
-//   avatar111,
-//   avatar112,
-//   avatar113,
-  avatar114,
   avatar115,
   avatar116,
   avatar117,
@@ -317,55 +293,37 @@ export default [
   avatar132,
   avatar133,
   avatar134,
-  avatar135,
-  avatar136,
-  avatar137,
-  avatar138,
-  avatar139,
-  avatar140,
-  avatar141,
-  avatar142,
-  avatar143,
-  avatar144,
-  avatar145,
-  avatar146,
-  avatar147,
-  avatar148,
-  avatar149,
-  avatar150,
-  avatar151,
-  avatar152,
-  avatar153,
-  avatar154,
-  avatar155,
-  avatar156,
   avatar157,
   avatar158,
   avatar159,
   avatar160,
-  avatar161,
   avatar162,
   avatar163,
-  avatar164,
   avatar165,
   avatar166,
-  avatar167,
-  avatar168,
-  avatar169,
-  avatar170,
-  avatar171,
-  avatar172,
-  avatar173,
+  avatar58,
+  avatar59,
+  avatar60,
+  avatar61,
+  avatar62,
+  avatar63,
+  avatar64,
+  avatar65,
+  avatar66,
+  avatar67,
+  avatar68,
+  avatar69,
+  avatar70,
+  avatar71,
+  avatar72,
   avatar174,
   avatar175,
-//   avatar176,
   avatar177,
   avatar178,
   avatar179,
   avatar180,
   avatar181,
   avatar182,
-  avatar183,
   avatar184,
   avatar185,
 ];

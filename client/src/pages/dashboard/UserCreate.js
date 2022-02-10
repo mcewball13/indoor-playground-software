@@ -1,12 +1,13 @@
 // @mui
-import { Container, DialogTitle } from '@mui/material';
+import { Box, Container, DialogTitle, Grid } from '@mui/material';
 import { capitalCase, paramCase } from 'change-case';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { DialogAnimate } from '../../components/animate';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // components
 import Page from '../../components/Page';
+import { DialogAnimate } from '../../components/animate';
+import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Avatar from '../../components/Avatar';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // utils
@@ -19,6 +20,8 @@ import UserWaiverForm from '../../sections/@dashboard/user/UserWaiverForm';
 // slices
 // _mock_
 import { _userList } from '../../_mock';
+// avatars
+import avatars from '../../assets/avatars';
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +40,10 @@ export default function UserCreate() {
 
   const handleCloseModal = () => {
     dispatch(closeModal());
+  };
+
+  const handleSelectAvatar = (avatar) => {
+    dispatch(setSelectedAvatar(avatar));
   };
 
   return (
@@ -59,8 +66,19 @@ export default function UserCreate() {
           onCancel={() => setMinorDrawerOpen(false)}
         />
       </Container>
-      <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-        <DialogTitle>Select an avatar</DialogTitle>
+      <DialogAnimate maxWidthMUI="lg" open={isOpenModal} onClose={handleCloseModal}>
+        <Box p={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} textAlign="center">
+              <DialogTitle>Select an avatar</DialogTitle>
+            </Grid>
+            {avatars.map((avatar, i) => (
+              <Grid sx={{'&:hover': { opacity: 0.72 },}} onClick={() => handleSelectAvatar(avatar)} item xs={6} sm={3} md={2} key={avatar}>
+                <img src={avatar} alt={avatar} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </DialogAnimate>
     </Page>
   );

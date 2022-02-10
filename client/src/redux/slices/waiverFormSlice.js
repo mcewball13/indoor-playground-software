@@ -31,6 +31,7 @@ const slice = createSlice({
     },
     setSelectedAvatar(state, action) {
       state.selectedAvatar = action.payload;
+      state.isOpenModal = false;
     },
     openModal(state) {
       state.isOpenModal = true;
