@@ -273,7 +273,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 />
               )}
 
-              <RHFSwitch
+              {/* <RHFSwitch
                 name="isVerified"
                 labelPlacement="start"
                 label={
@@ -287,7 +287,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                   </>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-              />
+              /> */}
             </Card>
           </Grid>
         </Grid>
@@ -328,12 +328,12 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFTextField name="zipCode" label="Zip Code" />
               </Box>
 
-              <Stack justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3 }}>
+              <Stack gap={3} justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!isEdit ? 'Create User' : 'Save Changes'}
+                  {!isEdit ? 'Sign Waiver' : 'Save Changes'}
                 </LoadingButton>
 
-                <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen} disabled={isOpen}>
+                <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen}  disabled={isOpen}>
                   Add a Minor
                 </Button>
               </Stack>
