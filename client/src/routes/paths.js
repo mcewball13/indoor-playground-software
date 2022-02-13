@@ -22,6 +22,7 @@ export const PATH_AUTH = {
 export const PATH_PAGE = {
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
+  signWaiver: ':id/sign-waiver',
   pricing: '/pricing',
   payment: '/payment',
   about: '/about-us',

@@ -13,10 +13,13 @@ export default function MainLayout() {
   const { pathname } = useLocation();
 
   const isHome = pathname === '/';
+  const isWaiver = pathname === '/sign-waiver';
+
+  console.log('pathname', pathname);
 
   return (
     <Stack sx={{ minHeight: 1 }}>
-      <MainHeader />
+      {!isWaiver && <MainHeader />}
 
       <Outlet />
 

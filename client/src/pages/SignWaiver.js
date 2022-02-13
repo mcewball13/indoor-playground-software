@@ -3,36 +3,43 @@ import { Box, Container, DialogTitle, Grid } from '@mui/material';
 import { capitalCase, paramCase } from 'change-case';
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+// dompurify
+import DOMPurify from 'dompurify';
 // components
-import Page from '../../components/Page';
-import { DialogAnimate } from '../../components/animate';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import Avatar from '../../components/Avatar';
-import Image from '../../components/Image';
+import Page from '../components/Page';
+import { DialogAnimate } from '../components/animate';
+import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
+import Avatar from '../components/Avatar';
+import Image from '../components/Image';
 // hooks
-import useSettings from '../../hooks/useSettings';
+import useSettings from '../hooks/useSettings';
 // utils
-import { openModal, setSelectedAvatar, closeModal } from '../../redux/slices/waiverFormSlice';
-import { useDispatch, useSelector } from '../../redux/store';
+import { openModal, setSelectedAvatar, closeModal } from '../redux/slices/waiverFormSlice';
+import { useDispatch, useSelector } from '../redux/store';
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD } from '../routes/paths';
 // sections
-import UserWaiverForm from '../../sections/@dashboard/user/UserWaiverForm';
+import UserWaiverForm from '../sections/@dashboard/user/UserWaiverForm';
 // slices
 // _mock_
-import { _userList } from '../../_mock';
+import { _userList } from '../_mock';
 // avatars
-import avatars from '../../assets/avatars';
+import avatars from '../assets/avatars';
+
+import { waiverText } from './tempWaiverText';
 
 // ----------------------------------------------------------------------
 
-export default function UserCreate() {
+const safeHTML = DOMPurify.sanitize(waiverText.content);
+
+
+export default function SignWaiver() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  const { name = '' } = useParams();
+  const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
-  const currentUser = _userList.find((user) => paramCase(user.name) === name);
+  const currentUser = _userList.find((user) => paramCase(user.id) === id);
 
   // state for callapse component for add child
   const [minorDrawerOpen, setMinorDrawerOpen] = useState(false);
@@ -54,14 +61,15 @@ export default function UserCreate() {
   
 
   return (
-    <Page title="Create a new account">
+    <Page title="User: Sign Waiver">
+      <div dangerouslySetInnerHTML={{__html: safeHTML}}/>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Create a new user' : 'Edit user'}
+          heading={!isEdit ? 'Sign Waiver' : 'Edit user'}
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'User', href: PATH_DASHBOARD.user.list },
-            { name: !isEdit ? 'New user' : capitalCase(name) },
+            { name: !isEdit ? 'New user' : capitalCase("name") },
           ]}
         />
 
