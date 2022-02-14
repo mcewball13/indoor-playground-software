@@ -92,6 +92,7 @@ export default function BlogNewPostForm() {
   } = methods;
 
   const values = watch();
+  console.log('values', values.content);
 
   const onSubmit = async () => {
     try {

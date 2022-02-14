@@ -63,6 +63,7 @@
     "d3-scale": "^4.0.2",
     "date-fns": "^2.24.0",
     "deck.gl": "^8.6.5",
+    "dompurify": "^2.3.5",
     "emoji-mart": "^3.0.0",
     "firebase": "^9.6.5",
     "framer-motion": "^4.1.17",

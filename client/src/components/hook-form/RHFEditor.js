@@ -14,6 +14,7 @@ RHFEditor.propTypes = {
 
 export default function RHFEditor({ name, ...other }) {
   const { control } = useFormContext();
+  
 
   return (
     <Controller

@@ -12,6 +12,7 @@ import AuthGuard from '../guards/AuthGuard';
 import { PATH_AFTER_LOGIN } from '../config';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import { PATH_DASHBOARD } from './paths';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,7 @@ export default function Router() {
         {
           path: 'e-commerce',
           children: [
-            { element: <Navigate to="/dashboard/e-commerce/shop" replace />, index: true },
+            { element: <Navigate to={PATH_DASHBOARD.eCommerce.shop} replace />, index: true },
             { path: 'shop', element: <EcommerceShop /> },
             { path: 'product/:name', element: <EcommerceProductDetails /> },
             { path: 'list', element: <EcommerceProductList /> },
@@ -86,7 +87,7 @@ export default function Router() {
         {
           path: 'user',
           children: [
-            { element: <Navigate to="/dashboard/user/profile" replace />, index: true },
+            { element: <Navigate to={PATH_DASHBOARD.user.profile} replace />, index: true },
             { path: 'profile', element: <UserProfile /> },
             { path: 'cards', element: <UserCards /> },
             { path: 'list', element: <UserList /> },
@@ -98,7 +99,7 @@ export default function Router() {
         {
           path: 'blog',
           children: [
-            { element: <Navigate to="/dashboard/blog/posts" replace />, index: true },
+            { element: <Navigate to={PATH_DASHBOARD.blog.posts} replace />, index: true },
             { path: 'posts', element: <BlogPosts /> },
             { path: 'post/:title', element: <BlogPost /> },
             { path: 'new-post', element: <BlogNewPost /> },
@@ -107,7 +108,7 @@ export default function Router() {
         {
           path: 'mail',
           children: [
-            { element: <Navigate to="/dashboard/mail/all" replace />, index: true },
+            { element: <Navigate to={PATH_DASHBOARD.mail.all} replace />, index: true },
             { path: 'label/:customLabel', element: <Mail /> },
             { path: 'label/:customLabel/:mailId', element: <Mail /> },
             { path: ':systemLabel', element: <Mail /> },
@@ -147,6 +148,7 @@ export default function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'about-us', element: <About /> },
+        { path: 'sign-waiver', element: <SignWaiver /> },
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <Faqs /> },
       ],
@@ -189,6 +191,7 @@ const Kanban = Loadable(lazy(() => import('../pages/dashboard/Kanban')));
 // Main
 const HomePage = Loadable(lazy(() => import('../pages/Home')));
 const About = Loadable(lazy(() => import('../pages/About')));
+const SignWaiver = Loadable(lazy(() => import('../pages/SignWaiver')));
 const Contact = Loadable(lazy(() => import('../pages/Contact')));
 const Faqs = Loadable(lazy(() => import('../pages/Faqs')));
 const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));
