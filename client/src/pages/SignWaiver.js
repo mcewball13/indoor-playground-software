@@ -32,7 +32,6 @@ import { waiverText } from './tempWaiverText';
 
 const safeHTML = DOMPurify.sanitize(waiverText.content);
 
-
 export default function SignWaiver() {
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
@@ -43,6 +42,7 @@ export default function SignWaiver() {
 
   // state for callapse component for add child
   const [minorDrawerOpen, setMinorDrawerOpen] = useState(false);
+  // load initial avatars to state when componenet mounts
   const [mappedAvatars, setMappedAvatars] = useState([]);
 
   const { isOpenModal } = useSelector((state) => state.newWaiverForm);
@@ -54,55 +54,25 @@ export default function SignWaiver() {
   const handleSelectAvatar = (avatar) => {
     dispatch(setSelectedAvatar(avatar));
   };
-
+  // load initial avatars to state when componenet mounts
   useEffect(() => {
-    setMappedAvatars(avatars)
+    setMappedAvatars(avatars);
   }, []);
-  
 
   return (
     <Page title="User: Sign Waiver">
-      <div dangerouslySetInnerHTML={{__html: safeHTML}}/>
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Sign Waiver' : 'Edit user'}
+          heading="Sign Waiver"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Edit Account Members', href: `${PATH_DASHBOARD.user}/${id}/edit` },
             { name: 'User', href: PATH_DASHBOARD.user.list },
-            { name: !isEdit ? 'New user' : capitalCase("name") },
+            { name: !isEdit ? 'New user' : capitalCase('name') },
           ]}
         />
 
-        <UserWaiverForm
-          isEdit={isEdit}
-          currentUser={currentUser}
-          isOpen={minorDrawerOpen}
-          onOpen={() => setMinorDrawerOpen(!minorDrawerOpen)}
-          onCancel={() => setMinorDrawerOpen(false)}
-        />
+        <div dangerouslySetInnerHTML={{ __html: safeHTML }} />
       </Container>
-      <DialogAnimate maxWidthMUI="lg" open={isOpenModal} onClose={handleCloseModal}>
-        <Box p={2}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} textAlign="center">
-              <DialogTitle>Select an avatar</DialogTitle>
-            </Grid>
-            {mappedAvatars.map((avatar) => (
-              <Grid
-                sx={{ '&:hover': { opacity: 0.72 } }}
-                onClick={() => handleSelectAvatar(avatar)}
-                item
-                xs={6}
-                sm={3}
-                md={2}
-                key={avatar}
-              >
-                <Image src={avatar} ratio="1/1" disabledEffect alt={avatar} />
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </DialogAnimate>
     </Page>
   );
 }

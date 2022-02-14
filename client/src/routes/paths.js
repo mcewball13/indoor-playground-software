@@ -59,7 +59,7 @@ export const PATH_DASHBOARD = {
     cards: path(ROOTS_DASHBOARD, '/user/cards'),
     list: path(ROOTS_DASHBOARD, '/user/list'),
     newUser: path(ROOTS_DASHBOARD, '/user/new'),
-    editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
+    editById: path(ROOTS_DASHBOARD, `/user/:id/edit`), // how to get param from breadcrumbs
     account: path(ROOTS_DASHBOARD, '/user/account')
   },
   eCommerce: {
