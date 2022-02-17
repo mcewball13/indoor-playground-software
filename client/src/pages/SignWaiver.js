@@ -1,16 +1,21 @@
 // @mui
 import { Box, Container, DialogTitle, Grid } from '@mui/material';
 import { capitalCase, paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-// dompurify
+// modules
 import DOMPurify from 'dompurify';
+import SignatureCanvas from 'react-signature-canvas';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from 'react-hook-form';
 // components
 import Page from '../components/Page';
 import { DialogAnimate } from '../components/animate';
 import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 import Avatar from '../components/Avatar';
 import Image from '../components/Image';
+import SignatureBlockStyle from '../components/waiver';
 // hooks
 import useSettings from '../hooks/useSettings';
 // utils
@@ -27,6 +32,8 @@ import { _userList } from '../_mock';
 import avatars from '../assets/avatars';
 
 import { waiverText } from './tempWaiverText';
+import RHFSignatureCanvas from '../components/hook-form/RHFSignatureCanvas';
+import { FormProvider } from '../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -39,29 +46,51 @@ export default function SignWaiver() {
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
   const currentUser = _userList.find((user) => paramCase(user.id) === id);
+  const signatureRef = useRef(null);
 
-  // state for callapse component for add child
-  const [minorDrawerOpen, setMinorDrawerOpen] = useState(false);
-  // load initial avatars to state when componenet mounts
-  const [mappedAvatars, setMappedAvatars] = useState([]);
+  // make styles for signature convas and signature block
+
+  const [canvasWidth, setCanvasWidth] = useState(Math.floor(window.innerWidth * 0.8));
+  console.log(canvasWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCanvasWidth(Math.floor(window.innerWidth * 0.8));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  });
+  // state to hold signature
+  const [signature, setSignature] = useState('');
 
   const { isOpenModal } = useSelector((state) => state.newWaiverForm);
 
-  const handleCloseModal = () => {
-    dispatch(closeModal());
-  };
+  // Form defaults and Method initialization
+  const signatureSchema = Yup.object().shape({
+    signature: Yup.string().required('Please sign the waiver'),
+  });
 
-  const handleSelectAvatar = (avatar) => {
-    dispatch(setSelectedAvatar(avatar));
+  const defaultValues = useMemo(() => ({
+    signature: '',
+  }));
+
+  const methods = useForm({
+    defaultValues,
+    resolver: yupResolver(signatureSchema),
+  });
+
+  // handler Funtions
+  const handleUpdateSignature = (data) => {
+    const signatureImg = signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
+    setSignature(signatureImg);
   };
-  // load initial avatars to state when componenet mounts
-  useEffect(() => {
-    setMappedAvatars(avatars);
-  }, []);
+  console.log(signature);
 
   return (
     <Page title="User: Sign Waiver">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? 'false' : 'lg'}>
         <HeaderBreadcrumbs
           heading="Sign Waiver"
           links={[
@@ -72,6 +101,20 @@ export default function SignWaiver() {
         />
 
         <div dangerouslySetInnerHTML={{ __html: safeHTML }} />
+        <FormProvider methods={methods}>
+          <SignatureBlockStyle canvasWidth={canvasWidth }>
+            <RHFSignatureCanvas
+              name={`signature`}
+              onEnd={handleUpdateSignature}
+              elementRef={signatureRef}
+              penColor="blue"
+              canvasProps={{
+                width: canvasWidth,
+                height: 200,
+              }}
+            />
+          </SignatureBlockStyle>
+        </FormProvider>
       </Container>
     </Page>
   );
