@@ -34,6 +34,7 @@ import avatars from '../assets/avatars';
 import { waiverText } from './tempWaiverText';
 import RHFSignatureCanvas from '../components/hook-form/RHFSignatureCanvas';
 import { FormProvider } from '../components/hook-form';
+import HTMLBlock from '../components/waiver/HTMLBlock';
 
 // ----------------------------------------------------------------------
 
@@ -100,7 +101,7 @@ export default function SignWaiver() {
           ]}
         />
 
-        <div dangerouslySetInnerHTML={{ __html: safeHTML }} />
+        <HTMLBlock waiverText={safeHTML} />
         <FormProvider methods={methods}>
           <SignatureBlockStyle canvasWidth={canvasWidth }>
             <RHFSignatureCanvas
