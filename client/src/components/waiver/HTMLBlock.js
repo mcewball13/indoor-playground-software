@@ -6,7 +6,8 @@ import { useTheme, styled } from '@mui/material/styles';
 import { Card } from '@mui/material';
 
 const RootStyle = styled('div')(({ theme }) => ({
-  padding: '1rem',
+  padding: theme.spacing(2),
+  
 }));
 
 const HTMLBlock = ({ waiverText, ...other }) => {

@@ -103,14 +103,13 @@ export default function SignWaiver() {
 
         <HTMLBlock waiverText={safeHTML} />
         <FormProvider methods={methods}>
-          <SignatureBlockStyle canvasWidth={canvasWidth }>
+          <SignatureBlockStyle width={canvasWidth}>
             <RHFSignatureCanvas
               name={`signature`}
               onEnd={handleUpdateSignature}
               elementRef={signatureRef}
               penColor="blue"
               canvasProps={{
-                width: canvasWidth,
                 height: 200,
               }}
             />
