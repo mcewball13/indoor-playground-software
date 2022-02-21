@@ -7,45 +7,37 @@ import SignatureCanvas from 'react-signature-canvas';
 import { FormHelperText } from '@mui/material';
 
 RHFSignatureCanvas.propTypes = {
-    name: PropTypes.string,
-    onEnd: PropTypes.func,
-    ref: PropTypes.func,
-    penColor: PropTypes.string,
-    canvasProps: PropTypes.object,
+  name: PropTypes.string,
+  onEnd: PropTypes.func,
+  ref: PropTypes.func,
+  penColor: PropTypes.string,
+  canvasProps: PropTypes.object,
 };
 
-export default function RHFSignatureCanvas({
-    name,
-    onEnd,
-    elementRef,
-    penColor,
-    canvasProps,
-    ...other
-}) {
-    const { control } = useFormContext();
+export default function RHFSignatureCanvas({ name, onEnd, elementRef, penColor, canvasProps, ...other }) {
+  const { control } = useFormContext();
 
-    return (
-        <Controller
-            name={name}
-            control={control}
-            render={({ field, fieldState: { error } }) => (
-                <SignatureCanvas
-                    id={name}
-                    value={field.value}
-                    onEnd={onEnd}
-                    ref={elementRef}
-                    penColor={penColor}
-                    canvasProps={canvasProps}
-                    error={!!error}
-                    helperText={
-                        <FormHelperText error sx={{ px: 2, textTransform: 'capitalize' }}>
-                            {error?.message}
-                        </FormHelperText>
-                    }
-                    {...other}
-                    
-                />
-            )}
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState: { error } }) => (
+        <SignatureCanvas
+          id={name}
+          value={field.value}
+          onEnd={onEnd}
+          ref={elementRef}
+          penColor={penColor}
+          canvasProps={canvasProps}
+          error={!!error}
+          helperText={
+            <FormHelperText error sx={{ px: 2, textTransform: 'capitalize' }}>
+              {error?.message}
+            </FormHelperText>
+          }
+          {...other}
         />
-    );
+      )}
+    />
+  );
 }
