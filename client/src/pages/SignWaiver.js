@@ -1,5 +1,6 @@
 // @mui
 import { Box, Container, DialogTitle, Grid } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { capitalCase, paramCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
@@ -34,12 +35,15 @@ import avatars from '../assets/avatars';
 import { waiverText } from './tempWaiverText';
 import RHFSignatureCanvas from '../components/hook-form/RHFSignatureCanvas';
 import { FormProvider } from '../components/hook-form';
+import HTMLBlock from '../components/waiver/HTMLBlock';
 
 // ----------------------------------------------------------------------
 
 const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
+  const theme = useTheme();
+  console.log('theme', theme);
   const { themeStretch } = useSettings();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
@@ -100,20 +104,24 @@ export default function SignWaiver() {
           ]}
         />
 
-        <div dangerouslySetInnerHTML={{ __html: safeHTML }} />
+        <HTMLBlock waiverText={safeHTML} />
         <FormProvider methods={methods}>
-          <SignatureBlockStyle canvasWidth={canvasWidth }>
-            <RHFSignatureCanvas
-              name={`signature`}
-              onEnd={handleUpdateSignature}
-              elementRef={signatureRef}
-              penColor="blue"
-              canvasProps={{
-                width: canvasWidth,
-                height: 200,
-              }}
-            />
-          </SignatureBlockStyle>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <RHFSignatureCanvas
+                name={`signature`}
+                onEnd={handleUpdateSignature}
+                elementRef={signatureRef}
+                backgroundColor={theme.palette.grey[200]}
+                penColor="blue"
+                canvasProps={{
+                  width: canvasWidth,
+                  height: 200,
+                  
+                }}
+              />
+            </Grid>
+          </Grid>
         </FormProvider>
       </Container>
     </Page>

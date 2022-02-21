@@ -7,7 +7,8 @@ import { styled } from '@mui/material/styles';
 
 const RootStyle = styled('div')(({ theme}) => {
   return {
-    height: 200,
+    position: 'relative',
+    margin: theme.spacing(2),
     border: `1px solid ${theme.palette.grey[600]}`,
     borderRadius: theme.shape.borderRadius,
   };
