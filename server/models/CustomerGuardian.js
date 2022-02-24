@@ -10,15 +10,15 @@ CustomerGuardian.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        firstName: {
+        guardianFirstName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        lastName: {
+        guardianLastName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        birthdate: {
+        guardianBirthdate: {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
@@ -38,10 +38,13 @@ CustomerGuardian.init(
         addressState: {
             type: DataTypes.STRING,
         },
-        addressZip: {
+        addressZipCode: {
             type: DataTypes.STRING,
         },
         addressPhone: {
+            type: DataTypes.STRING,
+        },
+        avatarUrl: {
             type: DataTypes.STRING,
         },
         storedValue: {
@@ -53,6 +56,11 @@ CustomerGuardian.init(
         isAccountOwner: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+        },
+        isBanned: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
         },
     },
     {

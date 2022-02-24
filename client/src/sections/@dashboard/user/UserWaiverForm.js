@@ -73,10 +73,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const addedMinorScrollRef = useRef(null);
 
   const NewUserSchema = Yup.object().shape({
-    fName: Yup.string().required('First name is required'),
-    lName: Yup.string().required('Last name is required'),
+    guardianFirstName: Yup.string().required('First name is required'),
+    guardianLastName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
-    birthDate: Yup.string().required('Birth date is required'),
+    guardianBirthdate: Yup.string().required('Birth date is required'),
     password: Yup.string()
       .required('Password is required')
       .min(8, 'Password is too short - 8 characters minimum')
@@ -98,22 +98,22 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const defaultValues = useMemo(
     () => ({
-      fName: currentUser?.firstName || '',
-      lName: currentUser?.lastName || '',
+      guardianFirstName: currentUser?.firstName || '',
+      guardianLastName: currentUser?.lastName || '',
       email: currentUser?.email || '',
-      birthDate: currentUser?.birthDate || new Date('1/1/1990'),
+      guardianBirthDate: currentUser?.birthDate || '',
       password: '',
       phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
+      addressStreet: currentUser?.address || '',
+      addressState: currentUser?.state || '',
+      addressCity: currentUser?.city || '',
+      addressZipCode: currentUser?.zipCode || '',
       avatarUrl: currentUser?.avatarUrl || '',
-      isVerified: currentUser?.isVerified || true,
+      isBanned: currentUser?.isBanned || false,
       status: currentUser?.status,
       minorFName: '',
       minorLName: '',
-      minorBirthDate: new Date('1/1/2019'),
+      minorBirthDate: '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -274,7 +274,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
               )}
 
               {/* <RHFSwitch
-                name="isVerified"
+                name="isBanned"
                 labelPlacement="start"
                 label={
                   <>
@@ -303,10 +303,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                 }}
               >
-                <RHFTextField name="fName" label="First Name" />
-                <RHFTextField name="lName" label="Last Name" />
+                <RHFTextField name="guardianFirstName" label="First Name" />
+                <RHFTextField name="guardianLastName" label="Last Name" />
                 <RHFTextField name="email" label="Email Address" />
-                <RHFDatePicker name="birthDate" label="Birth Date" openTo="year"/>
+                <RHFDatePicker name="guardianBirthdate" label="Birth Date" openTo="year"/>
                 <RHFTextField
                   name="password"
                   label="Password"

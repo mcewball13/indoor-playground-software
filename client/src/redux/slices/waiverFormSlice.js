@@ -13,6 +13,7 @@ const initialState = {
   selectedAvatar: null,
   roles: [],
   locations: [],
+  customers: [],
 };
 
 // ----------------------------------------------------------------------
@@ -33,6 +34,11 @@ const slice = createSlice({
       state.selectedAvatar = action.payload;
       state.isOpenModal = false;
     },
+    createNewCustomerSuccess(state, action) {
+      const newCustomer = action.payload;
+      state.isLoading = false;
+      state.customers = [...state.customers, newCustomer];
+    },
     openModal(state) {
       state.isOpenModal = true;
     },
@@ -44,7 +50,7 @@ const slice = createSlice({
 
 export default slice.reducer
 
-export const { startLoading, hasError, openModal, closeModal, setSelectedAvatar } = slice.actions;
+export const { createNewCustomerSuccess, startLoading, hasError, openModal, closeModal, setSelectedAvatar } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -69,4 +75,16 @@ export function getLocations() {
       dispatch(slice.actions.hasError(error))
     }
   };
+}
+export function createNewCustomer (newCustomer) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const respone = axios.post('/api/customers', newCustomer)
+      dispatch(slice.actions.createNewCustomerSuccess(respone.data.customer))
+      dispatch()
+    } catch (error) {
+      dispatch(slice.actions.hasError(error))
+    }
+  }
 }

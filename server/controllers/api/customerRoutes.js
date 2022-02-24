@@ -54,23 +54,14 @@ router.get("/:id", (req, res) => {
         });
 });
 
-router.post("/", (req, res) => {
-    User.create({
+router.post("/", async (req, res) => {
+    console.log(reg.body)
+   const newCustomerData =  User.create({
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
-    }).then((dbUserData) => {
-        req.session.save(() => {
-            req.session.user_id = dbUserData.id;
-            req.session.username = dbUserData.username;
-            req.session.loggedIn = true;
-
-            res.json(dbUserData);
-        });
-    }).catch((err) => {
-        res.status(500).json(err);
-        return
-    });
+    })
+    console.log(newCustomerData)
 });
 
 router.post("/login", (req, res) => {
