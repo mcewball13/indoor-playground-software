@@ -42,7 +42,7 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { openModal, setSelectedAvatar } from '../../../redux/slices/waiverFormSlice';
+import { openModal, setSelectedAvatar, createNewCustomer } from '../../../redux/slices/waiverFormSlice';
 import LightboxModal from '../../../components/LightboxModal';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
@@ -82,16 +82,11 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       .min(8, 'Password is too short - 8 characters minimum')
       .matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
     phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string(),
-    location: Yup.string(),
-    state: Yup.string(),
-    city: Yup.string(),
-    zipCode: Yup.string().required('Zip code is required'),
-    role: Yup.string(),
+    addressStreet: Yup.string(),
+    addressState: Yup.string(),
+    addressCity: Yup.string(),
+    addressZipCode: Yup.string().required('Zip code is required'),
     avatarUrl: Yup.mixed(),
-    minorFName: Yup.string(),
-    minorLName: Yup.string(),
-    minorBirthDate: Yup.string(),
   });
 
   // .test('required', 'Avatar is required', (value) => value !== ''),
@@ -113,7 +108,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       status: currentUser?.status,
       minorFName: '',
       minorLName: '',
-      minorBirthDate: '',
+      minorBirthDate: new Date('01/01/2017'),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -135,11 +130,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const values = watch();
 
-  
-  console.log('values', values);
-
-  const { isOpenModal, selectedAvatar} = useSelector((state) => state.newWaiverForm);
-
+  const { isOpenModal, selectedAvatar } = useSelector((state) => state.newWaiverForm);
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -157,12 +148,17 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const onSubmit = async () => {
-    console.log('clicked');
+    console.log('onSubmit pre-redux');
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      navigate(PATH_DASHBOARD.user.list);
+      createNewCustomer({
+        guardian_first_name: 'Johnny',
+        guardian_last_name: 'Appleseed',
+        guardian_birthdate: '04/13/1984',
+        email: 'mcewen1984@hotmail.com',
+        is_account_owner: true,
+        is_banned: false,
+        notes: 'This is a simple note showing that this particular customer is a pain in the butt',
+      });
     } catch (error) {
       console.error(error);
     }
@@ -195,7 +191,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
-    reset({ minorFName: '', minorLName: '', minorBirthDate: new Date('01/01/2018') });
+    reset({ minorFName: '', minorLName: '', minorBirthDate: '' });
   };
 
   // formate date object to string
@@ -236,8 +232,9 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                         color: 'text.secondary',
                       }}
                     >
-                      If you don't choose an avatar your 
-                      <br/>initial will be used
+                      If you don't choose an avatar your
+                      <br />
+                      initial will be used
                     </Typography>
                   }
                 />
@@ -306,7 +303,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFTextField name="guardianFirstName" label="First Name" />
                 <RHFTextField name="guardianLastName" label="Last Name" />
                 <RHFTextField name="email" label="Email Address" />
-                <RHFDatePicker name="guardianBirthdate" label="Birth Date" openTo="year"/>
+                <RHFDatePicker name="guardianBirthdate" label="Guardian Birth Date" openTo="year" />
                 <RHFTextField
                   name="password"
                   label="Password"
@@ -322,10 +319,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                   }}
                 />
                 <RHFTextField name="phoneNumber" label="Phone Number" />
-                <RHFTextField name="state" label="State/Region" />
-                <RHFTextField name="city" label="City" />
-                <RHFTextField name="address" label="Address" />
-                <RHFTextField name="zipCode" label="Zip Code" />
+                <RHFTextField name="addressState" label="State" />
+                <RHFTextField name="addressCity" label="City" />
+                <RHFTextField name="addressStreet" label="Street Address" />
+                <RHFTextField name="addressZipCode" label="Zip Code" />
               </Box>
 
               <Stack gap={3} justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ mt: 3 }}>
@@ -333,7 +330,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                   {!isEdit ? 'Sign Waiver' : 'Save Changes'}
                 </LoadingButton>
 
-                <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen}  disabled={isOpen}>
+                <Button size="small" startIcon={<Iconify icon={'eva:plus-fill'} />} onClick={onOpen} disabled={isOpen}>
                   Add a Minor
                 </Button>
               </Stack>

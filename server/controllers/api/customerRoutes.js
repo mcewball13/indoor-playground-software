@@ -55,13 +55,10 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    console.log(reg.body)
-   const newCustomerData =  User.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-    })
-    console.log(newCustomerData)
+    console.log(req.body)
+    console.log("this is the backend")
+//    const newCustomerData =  CustomerGuardian.create()
+//     console.log(newCustomerData)
 });
 
 router.post("/login", (req, res) => {

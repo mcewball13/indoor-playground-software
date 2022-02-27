@@ -77,6 +77,7 @@ export function getLocations() {
   };
 }
 export function createNewCustomer (newCustomer) {
+  console.log("inside redux")
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
