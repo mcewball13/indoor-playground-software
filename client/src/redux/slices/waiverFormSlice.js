@@ -77,14 +77,14 @@ export function getLocations() {
   };
 }
 export function createNewCustomer (newCustomer) {
-  console.log("inside redux")
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const respone = axios.post('/api/customers', newCustomer)
-      dispatch(slice.actions.createNewCustomerSuccess(respone.data.customer))
-      dispatch()
+      const response = await axios.post('/api/customers', newCustomer)
+      console.log("inside redux", newCustomer)
+console.log(response)
     } catch (error) {
+      console.log(error)
       dispatch(slice.actions.hasError(error))
     }
   }

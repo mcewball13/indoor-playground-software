@@ -130,7 +130,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const values = watch();
 
-  const { isOpenModal, selectedAvatar } = useSelector((state) => state.newWaiverForm);
+  const { isOpenModal, selectedAvatar, error } = useSelector((state) => state.newWaiverForm);
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -150,15 +150,15 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const onSubmit = async () => {
     console.log('onSubmit pre-redux');
     try {
-      createNewCustomer({
-        guardian_first_name: 'Johnny',
-        guardian_last_name: 'Appleseed',
-        guardian_birthdate: '04/13/1984',
+      dispatch(createNewCustomer({
+        guardianFirstName: 'Johnny',
+        guardianLastName: 'Appleseed',
+        guardianBirthdate: '04/13/1984',
         email: 'mcewen1984@hotmail.com',
-        is_account_owner: true,
-        is_banned: false,
+        isAccountOwner: true,
+        isBanned: false,
         notes: 'This is a simple note showing that this particular customer is a pain in the butt',
-      });
+      }));
     } catch (error) {
       console.error(error);
     }
