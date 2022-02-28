@@ -55,10 +55,9 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    console.log(req.body)
-    console.log("this is the backend")
-//    const newCustomerData =  CustomerGuardian.create()
-//     console.log(newCustomerData)
+    
+       const newCustomerData =  CustomerGuardian.create(req.body)
+        console.log(newCustomerData);
 });
 
 router.post("/login", (req, res) => {
