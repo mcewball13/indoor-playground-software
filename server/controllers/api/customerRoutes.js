@@ -4,14 +4,11 @@ const { CustomerGuardian, CustomerMinor } = require("../../models");
 // get all users
 router.get("/", async (req, res) => {
     try {
-        const guardianData = await CustomerGuardian.findAll({})
-        res.json(guardianData)
-        
+        const guardianData = await CustomerGuardian.findAll({});
+        res.json(guardianData);
     } catch (error) {
-        res.status(500).statusMessage(error)
-        
+        res.status(500).statusMessage(error);
     }
-        
 });
 
 router.get("/:id", (req, res) => {
@@ -55,10 +52,11 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    
-       const newCustomerData =  CustomerGuardian.create(req.body)
-        console.log(newCustomerData);
+    const newCustomerData = await CustomerGuardian.create({...req.body, isAccountOwner: true});
+    console.log(newCustomerData);
+    res.status(200).json(newCustomerData);
 });
+
 
 router.post("/login", (req, res) => {
     User.findOne({
@@ -100,7 +98,6 @@ router.post("/logout", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-
     User.update(req.body, {
         individualHooks: true,
         where: {

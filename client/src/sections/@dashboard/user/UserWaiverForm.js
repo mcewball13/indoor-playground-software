@@ -103,7 +103,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       addressState: currentUser?.state || '',
       addressCity: currentUser?.city || '',
       addressZipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || '',
+      avatarUrl: currentUser?.avatarUrl || null,
       isBanned: currentUser?.isBanned || false,
       status: currentUser?.status,
     }),

@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
+const bcrypt = require("bcrypt");
 
 class CustomerGuardian extends Model {}
 
@@ -27,6 +28,13 @@ CustomerGuardian.init(
             allowNull: false,
             validate: {
                 isEmail: true,
+            },
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                len: [8, 22],
             },
         },
         addressStreet: {
@@ -64,6 +72,32 @@ CustomerGuardian.init(
         },
     },
     {
+        hooks: {
+            beforeCreate: async (newCustomer) => {
+                try {
+                    newCustomer.password = await bcrypt.hash(
+                        newCustomer.password,
+                        10
+                    );
+                    return newCustomer;
+                } catch (err) {
+                    throw new Error(err);
+                }
+            },
+            beforeUpdate: async (updatedCustomer) => {
+                try {
+                    if (updatedCustomer.password) {
+                        updatedCustomer.password = await bcrypt.hash(
+                            updatedCustomer.password,
+                            10
+                        );
+                    }
+                    return updatedCustomer;
+                } catch (err) {
+                    throw new Error(err);
+                }
+            }
+        },
         sequelize,
         freezeTableName: true,
         underscored: true,
