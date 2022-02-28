@@ -126,7 +126,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   } = methods;
 
   const values = watch();
-  console.log('values', values);
 
   const { isOpenModal, selectedAvatar, error } = useSelector((state) => state.newWaiverForm);
 
@@ -148,7 +147,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const onSubmit = async () => {
     console.log('onSubmit pre-redux');
     try {
-      dispatch(createNewCustomer(values));
+      dispatch(createNewCustomer({guardians: values, minors}));
     } catch (error) {
       console.error(error);
     }
