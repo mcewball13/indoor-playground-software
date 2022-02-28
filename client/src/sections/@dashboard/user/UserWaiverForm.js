@@ -96,7 +96,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       guardianFirstName: currentUser?.firstName || '',
       guardianLastName: currentUser?.lastName || '',
       email: currentUser?.email || '',
-      guardianBirthDate: currentUser?.birthDate || '',
+      guardianBirthdate: currentUser?.birthDate || '',
       password: '',
       phoneNumber: currentUser?.phoneNumber || '',
       addressStreet: currentUser?.address || '',
@@ -106,9 +106,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       avatarUrl: currentUser?.avatarUrl || '',
       isBanned: currentUser?.isBanned || false,
       status: currentUser?.status,
-      minorFName: '',
-      minorLName: '',
-      minorBirthDate: new Date('01/01/2017'),
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -129,6 +126,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   } = methods;
 
   const values = watch();
+  console.log('values', values);
 
   const { isOpenModal, selectedAvatar, error } = useSelector((state) => state.newWaiverForm);
 
@@ -150,15 +148,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const onSubmit = async () => {
     console.log('onSubmit pre-redux');
     try {
-      dispatch(createNewCustomer({
-        guardianFirstName: 'Johnny',
-        guardianLastName: 'Appleseed',
-        guardianBirthdate: '04/13/1984',
-        email: 'mcewen1984@hotmail.com',
-        isAccountOwner: true,
-        isBanned: false,
-        notes: 'This is a simple note showing that this particular customer is a pain in the butt',
-      }));
+      dispatch(createNewCustomer(values));
     } catch (error) {
       console.error(error);
     }
