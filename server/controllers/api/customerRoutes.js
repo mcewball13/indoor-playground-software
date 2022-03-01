@@ -53,15 +53,17 @@ router.get("/:id", (req, res) => {
 
 router.post("/", async (req, res) => {
     const newCustomerData = await CustomerGuardian.create({...req.body.guardians, isAccountOwner: true});
-    console.log(newCustomerData);
+    console.log(req.body);
     // map through minor array and add customeguardian id to each minor
-    req.body.guardians.minors.map(async (minor) => {
-        await CustomerMinor.create({
+    const minorsWithId = req.body.minors.map(minor => {
+        return {
             ...minor,
             guardian_id: newCustomerData.id,
-        });
+        };
     });
-    res.status(200).json(newCustomerData);
+    console.log(minorsWithId);
+    const newcustomerMinorData = await CustomerMinor.bulkCreate(minorsWithId);
+    res.status(200).json({newCustomerData, newcustomerMinorData});
 });
 
 
