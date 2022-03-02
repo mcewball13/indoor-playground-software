@@ -1,5 +1,9 @@
 const router = require("express").Router();
-const { CustomerGuardian, CustomerMinor } = require("../../models");
+const {
+    CustomerGuardian,
+    CustomerMinor,
+    CustomerGuardianHasCustomerMinor,
+} = require("../../models");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -11,61 +15,54 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.get("/:id", (req, res) => {
-    User.findOne({
+router.get("/:id", async (req, res) => {
+    const customerGuardianData = await CustomerGuardian.findOne({
         attributes: { exclude: ["password"] },
         where: {
             id: req.params.id,
         },
         include: [
             {
-                model: Post,
-                attributes: ["id", "title", "post_url", "created_at"],
-            },
-            {
-                model: Comment,
-                attributes: ["id", "comment_text", "created_at"],
-                include: {
-                    model: Post,
-                    attributes: ["title"],
-                },
-            },
-            {
-                model: Post,
-                attributes: ["title"],
-                through: Votes,
-                as: "voted_posts",
+                model: CustomerMinor,
+                through: CustomerGuardianHasCustomerMinor,
+                as: "minors",
             },
         ],
     })
-        .then((dbUserData) => {
-            if (!dbUserData) {
-                res.status(404).json({ message: "No user found with this id" });
-                return;
-            }
-            res.json(dbUserData);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
+    res.status(200).json(customerGuardianData);
 });
 
 router.post("/", async (req, res) => {
-    const newCustomerData = await CustomerGuardian.create({...req.body.guardians, isAccountOwner: true});
-    console.log(req.body);
-    // map through minor array and add customeguardian id to each minor
-    const minorsWithId = req.body.minors.map(minor => {
-        return {
-            ...minor,
-            guardian_id: newCustomerData.id,
-        };
-    });
-    console.log(minorsWithId);
-    const newcustomerMinorData = await CustomerMinor.bulkCreate(minorsWithId);
-    res.status(200).json({newCustomerData, newcustomerMinorData});
-});
+    try {
+        const newCustomerData = await CustomerGuardian.create({
+            ...req.body.guardians,
+            isAccountOwner: true,
+        });
+        console.log(req.body);
+        // map through minor array and add customeguardian id to each minor
+        const minorsWithIdArr = req.body.minors.map((minor) => {
+            return {
+                ...minor,
+                guardian_id: newCustomerData.id,
+            };
+        });
+        console.log(minorsWithIdArr);
+        const newCustomerMinorDataArr = await CustomerMinor.bulkCreate(
+            minorsWithIdArr
+        );
+        // map through newCusomerMinoeDataArr and add customeguardian id to each minor create cusomterguardianhascustomerminor
+        newCustomerMinorDataArr.map(async (minor) => {
+            await CustomerGuardianHasCustomerMinor.create({
+                guardian_id: newCustomerData.id,
+                minor_id: minor.id,
+            });
+        });
 
+        res.status(200).json({ newCustomerData, newCustomerMinorDataArr });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
 
 router.post("/login", (req, res) => {
     User.findOne({
