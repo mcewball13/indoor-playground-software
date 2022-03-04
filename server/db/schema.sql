@@ -1,3 +1,3 @@
-DROP DATABASE IF EXISTS seq_playground_db;
+DROP DATABASE IF EXISTS bloksy_db;
 
-CREATE DATABASE seq_playground_db;
+CREATE DATABASE bloksy_db;

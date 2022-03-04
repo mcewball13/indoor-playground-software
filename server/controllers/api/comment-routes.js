@@ -1,67 +1,76 @@
 const router = require("express").Router();
-const {
-    CustomerGuardian,
-    CustomerMinor,
-    CustomerGuardianHasCustomerMinor,
-} = require("../../models");
+const { Employee } = require("../../models");
 
 // get all users
 router.get("/", async (req, res) => {
     try {
-        const guardianData = await CustomerGuardian.findAll({});
-        res.json(guardianData);
+        const employeeData = await Employee.findAll({})
+        
+        
     } catch (error) {
-        res.status(500).statusMessage(error);
+        res.status(500).statusMessage(error)
+        
     }
+        
 });
 
-router.get("/:id", async (req, res) => {
-    const customerGuardianData = await CustomerGuardian.findOne({
+router.get("/:id", (req, res) => {
+    User.findOne({
         attributes: { exclude: ["password"] },
         where: {
             id: req.params.id,
         },
         include: [
             {
-                model: CustomerMinor,
-                through: CustomerGuardianHasCustomerMinor,
-                as: "minors",
+                model: Post,
+                attributes: ["id", "title", "post_url", "created_at"],
+            },
+            {
+                model: Comment,
+                attributes: ["id", "comment_text", "created_at"],
+                include: {
+                    model: Post,
+                    attributes: ["title"],
+                },
+            },
+            {
+                model: Post,
+                attributes: ["title"],
+                through: Votes,
+                as: "voted_posts",
             },
         ],
     })
-    res.status(200).json(customerGuardianData);
+        .then((dbUserData) => {
+            if (!dbUserData) {
+                res.status(404).json({ message: "No user found with this id" });
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+        });
 });
 
-router.post("/", async (req, res) => {
-    try {
-        const newCustomerData = await CustomerGuardian.create({
-            ...req.body.guardians,
-            isAccountOwner: true,
-        });
-        console.log(req.body);
-        // map through minor array and add customeguardian id to each minor
-        const minorsWithIdArr = req.body.minors.map((minor) => {
-            return {
-                ...minor,
-                guardian_id: newCustomerData.id,
-            };
-        });
-        console.log(minorsWithIdArr);
-        const newCustomerMinorDataArr = await CustomerMinor.bulkCreate(
-            minorsWithIdArr
-        );
-        // map through newCusomerMinoeDataArr and add customeguardian id to each minor create cusomterguardianhascustomerminor
-        newCustomerMinorDataArr.map(async (minor) => {
-            await CustomerGuardianHasCustomerMinor.create({
-                guardian_id: newCustomerData.id,
-                minor_id: minor.id,
-            });
-        });
+router.post("/", (req, res) => {
+    User.create({
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+    }).then((dbUserData) => {
+        req.session.save(() => {
+            req.session.user_id = dbUserData.id;
+            req.session.username = dbUserData.username;
+            req.session.loggedIn = true;
 
-        res.status(200).json({ newCustomerData, newCustomerMinorDataArr });
-    } catch (error) {
-        res.status(500).json(error);
-    }
+            res.json(dbUserData);
+        });
+    }).catch((err) => {
+        res.status(500).json(err);
+        return
+    });
 });
 
 router.post("/login", (req, res) => {
@@ -104,6 +113,7 @@ router.post("/logout", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
+
     User.update(req.body, {
         individualHooks: true,
         where: {

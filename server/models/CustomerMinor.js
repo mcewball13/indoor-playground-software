@@ -10,15 +10,15 @@ CustomerMinor.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        firstName: {
+        minorFirstName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        lastName: {
+        minorLastName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        birthdate: {
+        minorBirthdate: {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },

@@ -56,7 +56,7 @@ CustomerGuardian.belongsToMany(CustomerMinor, {
         model: "customer_guardian_has_customer_minor",
         unique: false,
     },
-    as: "guardians",
+    as: "minors",
     foreignKey: "guardian_id",
 });
 CustomerMinor.belongsToMany(CustomerGuardian, {
@@ -64,7 +64,7 @@ CustomerMinor.belongsToMany(CustomerGuardian, {
         model: "customer_guardian_has_customer_minor",
         unique: false,
     },
-    as: "minors",
+    as: "guardians",
     foreignKey: "minor_id",
 });
 

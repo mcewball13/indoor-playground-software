@@ -6,6 +6,7 @@ const locationRoutes = require('./locationRoutes');
 
 
 router.use('/employees', employeeRoutes);
+router.use('/customers', customerRoutes);
 router.use('/locations', locationRoutes);
 
 

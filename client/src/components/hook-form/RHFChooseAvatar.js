@@ -23,11 +23,7 @@ export function RHFChooseAvatar({ name, ...other }) {
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => {
-        console.log('field', field);
-        console.log('error', error);
-        console.log("control", control);
         const checkError = !!error && !field.value;
-        console.log(checkError);
         
 
         return (
