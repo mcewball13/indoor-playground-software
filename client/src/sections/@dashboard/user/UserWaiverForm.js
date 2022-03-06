@@ -76,7 +76,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     guardianFirstName: Yup.string().required('First name is required'),
     guardianLastName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
-    guardianBirthdate: Yup.string().required('Birth date is required'),
+    guardianBirthday: Yup.string().required('Birth date is required'),
     password: Yup.string()
       .required('Password is required')
       .min(8, 'Password is too short - 8 characters minimum')
@@ -96,7 +96,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       guardianFirstName: currentUser?.firstName || '',
       guardianLastName: currentUser?.lastName || '',
       email: currentUser?.email || '',
-      guardianBirthdate: currentUser?.birthDate || '',
+      guardianBirthday: currentUser?.birthDate || '',
       password: '',
       phoneNumber: currentUser?.phoneNumber || '',
       addressStreet: currentUser?.address || '',
@@ -106,6 +106,9 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       avatarUrl: currentUser?.avatarUrl || null,
       isBanned: currentUser?.isBanned || false,
       status: currentUser?.status,
+      minorFirstName: '',
+      minorLastName: '',
+      minorBirthday: '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -147,7 +150,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const onSubmit = async () => {
     console.log('onSubmit pre-redux');
     try {
-      dispatch(createNewCustomer({guardians: values, minors}));
+      dispatch(createNewCustomer({ guardians: values, minors }));
     } catch (error) {
       console.error(error);
     }
@@ -175,12 +178,18 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleSetMinors = (minor) => {
-    console.log(values.minorBirthDate);
+    console.log(values.minorBirthday);
     setMinors([...minors, minor]);
+    // wait a bit to scroll to the new minor
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
-    reset({ minorFName: '', minorLName: '', minorBirthDate: '' });
+    reset({
+      ...values,
+      minorFirstName: '',
+      minorLastName: '',
+      minorBirthday: '',
+    });
   };
 
   // formate date object to string
@@ -292,7 +301,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFTextField name="guardianFirstName" label="First Name" />
                 <RHFTextField name="guardianLastName" label="Last Name" />
                 <RHFTextField name="email" label="Email Address" />
-                <RHFDatePicker name="guardianBirthdate" label="Guardian Birth Date" openTo="year" />
+                <RHFDatePicker name="guardianBirthday" label="Guardian Birth Date" openTo="year" />
                 <RHFTextField
                   name="password"
                   label="Password"
@@ -345,11 +354,11 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                     </Typography>
 
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <RHFTextField name="minorFName" fullWidth label="First Name" />
-                      <RHFTextField name="minorLName" fullWidth label="Last Name" />
+                      <RHFTextField name="minorFirstName" fullWidth label="First Name" />
+                      <RHFTextField name="minorLastName" fullWidth label="Last Name" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                      <RHFDatePicker name="minorBirthDate" label="Birth Date" openTo="year" />
+                      <RHFDatePicker name="minorBirthday" label="Birth Date" openTo="year" />
                     </Stack>
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                       <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>
@@ -360,9 +369,9 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                         onClick={() =>
                           handleSetMinors({
                             id: uuid(),
-                            minorFName: values.minorFName,
-                            minorLName: values.minorLName,
-                            minorBirthDate: formatDate(values.minorBirthDate),
+                            minorFirstName: values.minorFirstName,
+                            minorLastName: values.minorLastName,
+                            minorBirthday: formatDate(values.minorBirthday),
                           })
                         }
                         startIcon={<Iconify icon={'eva:plus-fill'} />}
@@ -388,15 +397,15 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                       {minors.map((minor) => (
                         <TableRow key={minor.id} hover ref={addedMinorScrollRef}>
                           <TableCell>
-                            <Typography variant="body1">{minor.minorFName}</Typography>
+                            <Typography variant="body1">{minor.minorFirstName}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant="body1">{minor.minorBirthDate}</Typography>
+                            <Typography variant="body1">{minor.minorBirthday}</Typography>
                           </TableCell>
                           <TableCell align="right">
                             <UserMoreMenu
                               isMinor
-                              userName={minor.minorFName}
+                              userName={minor.minorFirstName}
                               onDelete={() => handleRemoveMinor(minor.id)}
                             />
                           </TableCell>

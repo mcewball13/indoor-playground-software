@@ -19,7 +19,7 @@ CustomerGuardian.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        guardianBirthdate: {
+        guardianBirthday: {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
