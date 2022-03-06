@@ -143,12 +143,20 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
+  useEffect(() => {
+    reset({
+      ...values,
+      minorFirstName: '',
+      minorLastName: '',
+      minorBirthday: '',
+    });
+  }, [minors, reset]);
+
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const onSubmit = async () => {
-    console.log('onSubmit pre-redux');
     try {
       dispatch(createNewCustomer({ guardians: values, minors }));
     } catch (error) {
@@ -184,12 +192,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
-    reset({
-      ...values,
-      minorFirstName: '',
-      minorLastName: '',
-      minorBirthday: '',
-    });
+    
   };
 
   // formate date object to string
@@ -368,10 +371,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                         color="success"
                         onClick={() =>
                           handleSetMinors({
-                            id: uuid(),
                             minorFirstName: values.minorFirstName,
                             minorLastName: values.minorLastName,
                             minorBirthday: formatDate(values.minorBirthday),
+                            email: values.email,
                           })
                         }
                         startIcon={<Iconify icon={'eva:plus-fill'} />}

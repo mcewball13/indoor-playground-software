@@ -18,7 +18,7 @@ CustomerMinor.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        minorBirthdate: {
+        minorBirthday: {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
