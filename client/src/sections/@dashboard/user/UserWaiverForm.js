@@ -42,7 +42,12 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { openModal, setSelectedAvatar, createNewCustomer } from '../../../redux/slices/waiverFormSlice';
+import {
+  openModal,
+  setSelectedAvatar,
+  resetSelectedAvatar,
+  createNewCustomer,
+} from '../../../redux/slices/waiverFormSlice';
 import LightboxModal from '../../../components/LightboxModal';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
@@ -155,10 +160,13 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
-
   const onSubmit = async () => {
     try {
-      dispatch(createNewCustomer({ guardians: values, minors }));
+      // navigate(PATH_DASHBOARD.user.list);
+      dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors }));
+      resetSelectedAvatar();
+      reset();
+      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
     } catch (error) {
       console.error(error);
     }
@@ -192,7 +200,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
-    
   };
 
   // formate date object to string
@@ -373,7 +380,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                           handleSetMinors({
                             minorFirstName: values.minorFirstName,
                             minorLastName: values.minorLastName,
-                            minorBirthday: formatDate(values.minorBirthday),
+                            minorBirthday: values.minorBirthday,
                             email: values.email,
                           })
                         }
@@ -403,7 +410,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                             <Typography variant="body1">{minor.minorFirstName}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant="body1">{minor.minorBirthday}</Typography>
+                            <Typography variant="body1">{formatDate(minor.minorBirthday)}</Typography>
                           </TableCell>
                           <TableCell align="right">
                             <UserMoreMenu

@@ -34,6 +34,10 @@ const slice = createSlice({
       state.selectedAvatar = action.payload;
       state.isOpenModal = false;
     },
+    resetSelectedAvatar(state) {
+      state.isLoading = false;
+      state.selectedAvatar = null;
+    },
     createNewCustomerSuccess(state, action) {
       const newCustomer = action.payload;
       state.isLoading = false;
@@ -50,7 +54,7 @@ const slice = createSlice({
 
 export default slice.reducer
 
-export const { createNewCustomerSuccess, startLoading, hasError, openModal, closeModal, setSelectedAvatar } = slice.actions;
+export const {resetSelectedAvatar, createNewCustomerSuccess, startLoading, hasError, openModal, closeModal, setSelectedAvatar } = slice.actions;
 
 // ----------------------------------------------------------------------
 
