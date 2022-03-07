@@ -105,6 +105,7 @@ export default function SignWaiver() {
         />
 
         <HTMLBlock waiverText={safeHTML} />
+        
         <FormProvider methods={methods}>
           <Grid container spacing={2}>
             <Grid item xs={6}>

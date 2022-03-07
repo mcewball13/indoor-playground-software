@@ -14,6 +14,7 @@ const initialState = {
   roles: [],
   locations: [],
   customers: [],
+  currentCustomer: {},
 };
 
 // ----------------------------------------------------------------------
@@ -41,20 +42,20 @@ const slice = createSlice({
     createNewCustomerSuccess(state, action) {
       const newCustomer = action.payload;
       state.isLoading = false;
-      state.customers = [...state.customers, newCustomer];
+      state.currentCustomer = newCustomer;
     },
     openModal(state) {
       state.isOpenModal = true;
     },
     closeModal(state) {
       state.isOpenModal = false;
-    }
+    },
   },
 });
 
-export default slice.reducer
+export default slice.reducer;
 
-export const {resetSelectedAvatar, createNewCustomerSuccess, startLoading, hasError, openModal, closeModal, setSelectedAvatar } = slice.actions;
+export const { startLoading, hasError, openModal, closeModal, setSelectedAvatar, resetSelectedAvatar } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -62,10 +63,10 @@ export function getRoles() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/employees/roles")
+      const response = await axios.get('/api/employees/roles');
       dispatch(slice.actions.getRolesSuccess(response.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error))
+      dispatch(slice.actions.hasError(error));
     }
   };
 }
@@ -73,23 +74,24 @@ export function getLocations() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/locations")
+      const response = await axios.get('/api/locations');
       dispatch(slice.actions.getLocationsSuccess(response.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error))
+      dispatch(slice.actions.hasError(error));
     }
   };
 }
-export function createNewCustomer (newCustomer) {
+export function createNewCustomer(newCustomer) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post('/api/customers', newCustomer)
-      console.log("inside redux", newCustomer)
-console.log(response)
+      const response = await axios.post('/api/customers', newCustomer);
+      console.log(response.data);
+      dispatch(slice.actions.createNewCustomerSuccess(response.data));
+      console.log(response);
     } catch (error) {
-      console.log(error)
-      dispatch(slice.actions.hasError(error))
+      console.log(error);
+      dispatch(slice.actions.hasError(error));
     }
-  }
+  };
 }
