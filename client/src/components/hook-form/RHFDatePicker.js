@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 import PropTypes from 'prop-types';
+
 // form
 import { useFormContext, Controller } from 'react-hook-form';
 // @mui
@@ -14,6 +17,8 @@ RHFDatePicker.propTypes = {
 export default function RHFDatePicker({ label = 'Select your Date', name, ...other }) {
   const { control } = useFormContext();
 
+  const [value, setValue] = useState(null);
+
   return (
     <Controller
       name={name}
@@ -23,8 +28,12 @@ export default function RHFDatePicker({ label = 'Select your Date', name, ...oth
           {...other}
           {...field}
           label={label}
+          value={value}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
           inputFormat="M/d/yyyy"
-          views={[ 'year','month', 'day']}
+          views={['year', 'month', 'day']}
           renderInput={(params) => <TextField {...params} fullWidth />}
         />
       )}

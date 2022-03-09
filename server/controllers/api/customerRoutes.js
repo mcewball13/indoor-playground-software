@@ -31,6 +31,23 @@ router.get("/:id", async (req, res) => {
     })
     res.status(200).json(customerGuardianData);
 });
+// check to see if email exists on blur from email field
+router.get("/email/:email", async (req, res) => {
+    const customerGuardianData = await CustomerGuardian.findOne({
+        attributes: { exclude: ["password"] },
+        where: {
+            email: req.params.email,
+        },
+        include: [
+            {
+                model: CustomerMinor,
+                through: CustomerGuardianHasCustomerMinor,
+                as: "minors",
+            },
+        ],
+    })
+    res.status(200).json(customerGuardianData);
+});
 
 router.post("/", async (req, res) => {
     try {
@@ -60,6 +77,7 @@ router.post("/", async (req, res) => {
 
         res.status(200).json({ newCustomerData, newCustomerMinorDataArr });
     } catch (error) {
+        console.log(error)
         res.status(500).json(error);
     }
 });

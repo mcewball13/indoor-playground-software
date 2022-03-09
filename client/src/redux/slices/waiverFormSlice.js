@@ -14,6 +14,8 @@ const initialState = {
   roles: [],
   locations: [],
   customers: [],
+  currentCustomer: {},
+  emailExists: false,
 };
 
 // ----------------------------------------------------------------------
@@ -37,20 +39,26 @@ const slice = createSlice({
     createNewCustomerSuccess(state, action) {
       const newCustomer = action.payload;
       state.isLoading = false;
-      state.customers = [...state.customers, newCustomer];
+      state.currentCustomer = newCustomer;
+      state.selectedAvatar = null;
+    },
+    checkEmailSuccess(state, action) {
+      state.isLoading = false;
+      state.emailExists = true;
+      state.currentCustomer = action.payload;
     },
     openModal(state) {
       state.isOpenModal = true;
     },
     closeModal(state) {
       state.isOpenModal = false;
-    }
+    },
   },
 });
 
-export default slice.reducer
+export default slice.reducer;
 
-export const { createNewCustomerSuccess, startLoading, hasError, openModal, closeModal, setSelectedAvatar } = slice.actions;
+export const { startLoading, hasError, openModal, closeModal, setSelectedAvatar, currentCustomer } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -58,10 +66,10 @@ export function getRoles() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/employees/roles")
+      const response = await axios.get('/api/employees/roles');
       dispatch(slice.actions.getRolesSuccess(response.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error))
+      dispatch(slice.actions.hasError(error));
     }
   };
 }
@@ -69,23 +77,34 @@ export function getLocations() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get("/api/locations")
+      const response = await axios.get('/api/locations');
       dispatch(slice.actions.getLocationsSuccess(response.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error))
+      dispatch(slice.actions.hasError(error));
     }
   };
 }
-export function createNewCustomer (newCustomer) {
+export function createNewCustomer(newCustomer) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post('/api/customers', newCustomer)
-      console.log("inside redux", newCustomer)
-console.log(response)
+      const response = await axios.post('/api/customers', newCustomer);
+      dispatch(slice.actions.createNewCustomerSuccess(response.data));
     } catch (error) {
-      console.log(error)
-      dispatch(slice.actions.hasError(error))
+      console.log(error);
+      dispatch(slice.actions.hasError(error));
     }
-  }
+  };
+}
+// check to see if email is in the database
+export function checkEmail(email) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/customers/email/${email}`);
+      dispatch(slice.actions.checkEmailSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
 }
