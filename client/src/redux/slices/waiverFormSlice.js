@@ -15,6 +15,7 @@ const initialState = {
   locations: [],
   customers: [],
   currentCustomer: {},
+  emailExists: false,
 };
 
 // ----------------------------------------------------------------------
@@ -35,14 +36,16 @@ const slice = createSlice({
       state.selectedAvatar = action.payload;
       state.isOpenModal = false;
     },
-    resetSelectedAvatar(state) {
-      state.isLoading = false;
-      state.selectedAvatar = null;
-    },
     createNewCustomerSuccess(state, action) {
       const newCustomer = action.payload;
       state.isLoading = false;
       state.currentCustomer = newCustomer;
+      state.selectedAvatar = null;
+    },
+    checkEmailSuccess(state, action) {
+      state.isLoading = false;
+      state.emailExists = true;
+      state.currentCustomer = action.payload;
     },
     openModal(state) {
       state.isOpenModal = true;
@@ -55,7 +58,7 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export const { startLoading, hasError, openModal, closeModal, setSelectedAvatar, resetSelectedAvatar } = slice.actions;
+export const { startLoading, hasError, openModal, closeModal, setSelectedAvatar, currentCustomer } = slice.actions;
 
 // ----------------------------------------------------------------------
 
@@ -86,11 +89,21 @@ export function createNewCustomer(newCustomer) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post('/api/customers', newCustomer);
-      console.log(response.data);
       dispatch(slice.actions.createNewCustomerSuccess(response.data));
-      console.log(response);
     } catch (error) {
       console.log(error);
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+// check to see if email is in the database
+export function checkEmail(email) {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/customers/email/${email}`);
+      dispatch(slice.actions.checkEmailSuccess(response.data));
+    } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
   };

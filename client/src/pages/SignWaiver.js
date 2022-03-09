@@ -1,5 +1,5 @@
 // @mui
-import { Box, Container, DialogTitle, Grid } from '@mui/material';
+import { Box, Card, Container, DialogTitle, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { capitalCase, paramCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
@@ -49,7 +49,6 @@ export default function SignWaiver() {
   const { pathname } = useLocation();
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
-  const currentUser = _userList.find((user) => paramCase(user.id) === id);
   const signatureRef = useRef(null);
 
   // make styles for signature convas and signature block
@@ -69,7 +68,8 @@ export default function SignWaiver() {
   // state to hold signature
   const [signature, setSignature] = useState('');
 
-  const { isOpenModal } = useSelector((state) => state.newWaiverForm);
+  const { currentCustomer } = useSelector((state) => state.newWaiverForm);
+  console.log('currentCustomer', currentCustomer);
 
   // Form defaults and Method initialization
   const signatureSchema = Yup.object().shape({
@@ -104,26 +104,48 @@ export default function SignWaiver() {
           ]}
         />
 
-        <HTMLBlock waiverText={safeHTML} />
-        
-        <FormProvider methods={methods}>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <RHFSignatureCanvas
-                name={`signature`}
-                onEnd={handleUpdateSignature}
-                elementRef={signatureRef}
-                backgroundColor={theme.palette.grey[200]}
-                penColor="blue"
-                canvasProps={{
-                  width: canvasWidth,
-                  height: 200,
-                  
-                }}
-              />
-            </Grid>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <HTMLBlock waiverText={safeHTML} />
           </Grid>
-        </FormProvider>
+          <Grid item xs={6}>
+            <Typography variant="h4" component="h4">
+              Signing for: {currentCustomer.newCustomerData?.guardianFirstName}{' '}
+              {currentCustomer.newCustomerData?.guardianLastName}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography variant="h4" component="h4">
+              Minors:
+            </Typography>
+
+            {currentCustomer.newCustomerMinorDataArr &&
+              currentCustomer.newCustomerMinorDataArr.map((minor) => {
+                return (
+                  <Typography variant="h4" component="h4">
+                    {minor.minorFirstName} {minor.minorLastName}
+                  </Typography>
+                );
+              })}
+          </Grid>
+          <Grid item xs={12}>
+            <FormProvider methods={methods}>
+              <Card>
+                <RHFSignatureCanvas
+                  name={`signature`}
+                  onEnd={handleUpdateSignature}
+                  elementRef={signatureRef}
+                  backgroundColor={theme.palette.grey[200]}
+                  penColor="blue"
+                  canvasProps={{
+                    width: canvasWidth,
+                    height: 200,
+                  }}
+                />
+              </Card>
+            </FormProvider>
+          </Grid>
+        </Grid>
       </Container>
     </Page>
   );

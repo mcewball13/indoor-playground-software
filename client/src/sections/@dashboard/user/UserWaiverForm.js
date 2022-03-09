@@ -36,19 +36,13 @@ import uuid from 'uuid/v4';
 import { format, parseISO } from 'date-fns';
 import { fData } from '../../../utils/formatNumber';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_PAGE } from '../../../routes/paths';
 // components
 import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
-import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import {
-  openModal,
-  setSelectedAvatar,
-  resetSelectedAvatar,
-  createNewCustomer,
-} from '../../../redux/slices/waiverFormSlice';
-import LightboxModal from '../../../components/LightboxModal';
+import { createNewCustomer, checkEmail} from '../../../redux/slices/waiverFormSlice';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
@@ -73,6 +67,9 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
+  const { isOpenModal, selectedAvatar, error, currentCustomer  } = useSelector((state) => state.newWaiverForm);
+
+
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
   const addedMinorScrollRef = useRef(null);
@@ -86,7 +83,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       .required('Password is required')
       .min(8, 'Password is too short - 8 characters minimum')
       .matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
-    phoneNumber: Yup.string().required('Phone number is required'),
+    addressPhone: Yup.string().required('Phone number is required'),
     addressStreet: Yup.string(),
     addressState: Yup.string(),
     addressCity: Yup.string(),
@@ -98,25 +95,25 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const defaultValues = useMemo(
     () => ({
-      guardianFirstName: currentUser?.firstName || '',
-      guardianLastName: currentUser?.lastName || '',
-      email: currentUser?.email || '',
-      guardianBirthday: currentUser?.birthDate || '',
+      guardianFirstName: currentCustomer?.guardianFirstName || '',
+      guardianLastName: currentCustomer?.guardianLastName || '',
+      email: currentCustomer?.email || '',
+      guardianBirthday: currentCustomer?.guardianBirthday || null,
       password: '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      addressStreet: currentUser?.address || '',
-      addressState: currentUser?.state || '',
-      addressCity: currentUser?.city || '',
-      addressZipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      isBanned: currentUser?.isBanned || false,
-      status: currentUser?.status,
+      addressPhone: currentCustomer?.addressPhone || '',
+      addressStreet: currentCustomer?.addressStreet || '',
+      addressState: currentCustomer?.addressState || '',
+      addressCity: currentCustomer?.addressCity || '',
+      addressZipCode: currentCustomer?.addressZipCode || '',
+      avatarUrl: currentCustomer?.avatarUrl || null,
+      isBanned: currentCustomer?.isBanned || false,
+      status: currentCustomer?.status,
       minorFirstName: '',
       minorLastName: '',
       minorBirthday: '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentUser]
+    [currentCustomer]
   );
 
   const methods = useForm({
@@ -130,12 +127,12 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = methods;
 
   const values = watch();
+  console.log('methods', values);
 
-  const { isOpenModal, selectedAvatar, error } = useSelector((state) => state.newWaiverForm);
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -162,10 +159,9 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
   const onSubmit = async () => {
     try {
-      // navigate(PATH_DASHBOARD.user.list);
       dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors }));
-      resetSelectedAvatar();
       reset();
+      navigate(PATH_PAGE.signWaiver);
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
     } catch (error) {
       console.error(error);
@@ -202,10 +198,29 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     }, 50);
   };
 
+  const handleBlur =  () => {
+    dispatch(checkEmail(values.email));
+  }
+
+  useEffect(() => {
+
+    setValue('guardianFirstName', currentCustomer?.guardianFirstName  || '')
+    setValue('guardianLastName', currentCustomer?.guardianLastName  || '')
+    setValue('email', currentCustomer?.email  || '')
+    setValue('guardianBirthday', currentCustomer?.guardianBirthday  || null)
+    setValue('addressPhone', currentCustomer?.addressPhone  || '')
+    setValue('addressStreet', currentCustomer?.addressStreet  || '')
+    setValue('addressState', currentCustomer?.addressState  || '')
+    setValue('addressCity', currentCustomer?.addressCity  || '')
+    setValue('addressZipCode', currentCustomer?.addressZipCode  || '')
+    
+  }, [currentCustomer])
+
   // formate date object to string
   const formatDate = (date) => {
     return format(date, 'MM/dd/yyyy');
   };
+
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -308,9 +323,9 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                 }}
               >
+                <RHFTextField onBlur={handleBlur} name="email" label="Email Address" />
                 <RHFTextField name="guardianFirstName" label="First Name" />
                 <RHFTextField name="guardianLastName" label="Last Name" />
-                <RHFTextField name="email" label="Email Address" />
                 <RHFDatePicker name="guardianBirthday" label="Guardian Birth Date" openTo="year" />
                 <RHFTextField
                   name="password"
@@ -326,7 +341,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                     ),
                   }}
                 />
-                <RHFTextField name="phoneNumber" label="Phone Number" />
+                <RHFTextField name="addressPhone" label="Phone Number" />
                 <RHFTextField name="addressState" label="State" />
                 <RHFTextField name="addressCity" label="City" />
                 <RHFTextField name="addressStreet" label="Street Address" />
