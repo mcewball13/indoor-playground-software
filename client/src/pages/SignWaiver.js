@@ -110,8 +110,10 @@ export default function SignWaiver() {
           </Grid>
           <Grid item xs={6}>
             <Typography variant="h4" component="h4">
-              Signing for: {currentCustomer.newCustomerData?.guardianFirstName}{' '}
-              {currentCustomer.newCustomerData?.guardianLastName}
+              Signing for:
+              <Typography variant="h6" component="h6">
+                {currentCustomer.newCustomerData?.guardianFirstName} {currentCustomer.newCustomerData?.guardianLastName}
+              </Typography>
             </Typography>
           </Grid>
           <Grid item xs={6}>
@@ -122,7 +124,7 @@ export default function SignWaiver() {
             {currentCustomer.newCustomerMinorDataArr &&
               currentCustomer.newCustomerMinorDataArr.map((minor) => {
                 return (
-                  <Typography variant="h4" component="h4">
+                  <Typography variant="h6" component="h6">
                     {minor.minorFirstName} {minor.minorLastName}
                   </Typography>
                 );

@@ -29,8 +29,8 @@ const slice = createSlice({
     },
 
     hasError(state, action) {
-      state.isLoading = false;
       state.error = action.payload;
+      state.isLoading = false;
     },
     setSelectedAvatar(state, action) {
       state.selectedAvatar = action.payload;
@@ -38,14 +38,14 @@ const slice = createSlice({
     },
     createNewCustomerSuccess(state, action) {
       const newCustomer = action.payload;
-      state.isLoading = false;
       state.currentCustomer = newCustomer;
       state.selectedAvatar = null;
+      state.isLoading = false;
     },
     checkEmailSuccess(state, action) {
-      state.isLoading = false;
       state.emailExists = true;
       state.currentCustomer = action.payload;
+      state.isLoading = false;
     },
     openModal(state) {
       state.isOpenModal = true;
@@ -89,6 +89,7 @@ export function createNewCustomer(newCustomer) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post('/api/customers', newCustomer);
+      console.log(response.data)
       dispatch(slice.actions.createNewCustomerSuccess(response.data));
     } catch (error) {
       console.log(error);

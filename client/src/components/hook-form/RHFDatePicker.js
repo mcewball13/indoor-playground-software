@@ -17,7 +17,7 @@ RHFDatePicker.propTypes = {
 export default function RHFDatePicker({ label = 'Select your Date', name, ...other }) {
   const { control } = useFormContext();
 
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState();
 
   return (
     <Controller
@@ -28,10 +28,6 @@ export default function RHFDatePicker({ label = 'Select your Date', name, ...oth
           {...other}
           {...field}
           label={label}
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
           inputFormat="M/d/yyyy"
           views={['year', 'month', 'day']}
           renderInput={(params) => <TextField {...params} fullWidth />}

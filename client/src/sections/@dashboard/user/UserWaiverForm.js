@@ -42,7 +42,7 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { createNewCustomer, checkEmail} from '../../../redux/slices/waiverFormSlice';
+import { createNewCustomer, checkEmail } from '../../../redux/slices/waiverFormSlice';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
@@ -67,8 +67,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
-  const { isOpenModal, selectedAvatar, error, currentCustomer  } = useSelector((state) => state.newWaiverForm);
-
+  const { isLoading, selectedAvatar, error, currentCustomer } = useSelector((state) => state.newWaiverForm);
 
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
@@ -110,7 +109,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       status: currentCustomer?.status,
       minorFirstName: '',
       minorLastName: '',
-      minorBirthday: '',
+      minorBirthday: null,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentCustomer]
@@ -127,11 +126,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting},
   } = methods;
 
   const values = watch();
-  console.log('methods', values);
 
 
   useEffect(() => {
@@ -145,14 +143,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
-  useEffect(() => {
-    reset({
-      ...values,
-      minorFirstName: '',
-      minorLastName: '',
-      minorBirthday: '',
-    });
-  }, [minors, reset]);
 
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
@@ -161,12 +151,13 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     try {
       dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors }));
       reset();
-      navigate(PATH_PAGE.signWaiver);
+      navigate(`${PATH_PAGE.signWaiver}/${currentCustomer.newCustomerData.id}`);
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
     } catch (error) {
       console.error(error);
     }
   };
+  
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -192,35 +183,26 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const handleSetMinors = (minor) => {
     console.log(values.minorBirthday);
     setMinors([...minors, minor]);
+    reset({
+      ...values,
+      minorFirstName: '',
+      minorLastName: '',
+      minorBirthday: null,
+    });
     // wait a bit to scroll to the new minor
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
   };
 
-  const handleBlur =  () => {
+  const handleBlur = () => {
     dispatch(checkEmail(values.email));
-  }
-
-  useEffect(() => {
-
-    setValue('guardianFirstName', currentCustomer?.guardianFirstName  || '')
-    setValue('guardianLastName', currentCustomer?.guardianLastName  || '')
-    setValue('email', currentCustomer?.email  || '')
-    setValue('guardianBirthday', currentCustomer?.guardianBirthday  || null)
-    setValue('addressPhone', currentCustomer?.addressPhone  || '')
-    setValue('addressStreet', currentCustomer?.addressStreet  || '')
-    setValue('addressState', currentCustomer?.addressState  || '')
-    setValue('addressCity', currentCustomer?.addressCity  || '')
-    setValue('addressZipCode', currentCustomer?.addressZipCode  || '')
-    
-  }, [currentCustomer])
+  };
 
   // formate date object to string
   const formatDate = (date) => {
     return format(date, 'MM/dd/yyyy');
   };
-
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -419,8 +401,8 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <TableContainer>
                   <Table>
                     <TableBody>
-                      {minors.map((minor) => (
-                        <TableRow key={minor.id} hover ref={addedMinorScrollRef}>
+                      {minors.map((minor, i) => (
+                        <TableRow key={`${minor.minorFirstName}_${i}`} hover ref={addedMinorScrollRef}>
                           <TableCell>
                             <Typography variant="body1">{minor.minorFirstName}</Typography>
                           </TableCell>
