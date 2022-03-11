@@ -38,6 +38,7 @@ const slice = createSlice({
     },
     createNewCustomerSuccess(state, action) {
       const newCustomer = action.payload;
+      console.log('newCustomer', newCustomer);
       state.currentCustomer = newCustomer;
       state.selectedAvatar = null;
       state.isLoading = false;
@@ -103,7 +104,7 @@ export function checkEmail(email) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`/api/customers/email/${email}`);
-      dispatch(slice.actions.checkEmailSuccess(response.data));
+     if (response.data) dispatch(slice.actions.checkEmailSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -68,7 +68,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const [minors, setMinors] = useState([]);
 
   const { isLoading, selectedAvatar, error, currentCustomer } = useSelector((state) => state.newWaiverForm);
-
+  console.log(currentCustomer);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
   const addedMinorScrollRef = useRef(null);
@@ -94,16 +94,16 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const defaultValues = useMemo(
     () => ({
-      guardianFirstName: currentCustomer?.guardianFirstName || '',
-      guardianLastName: currentCustomer?.guardianLastName || '',
-      email: currentCustomer?.email || '',
-      guardianBirthday: currentCustomer?.guardianBirthday || null,
+      guardianFirstName: currentCustomer.newCustomerData?.guardianFirstName || '',
+      guardianLastName: currentCustomer.newCustomerData?.guardianLastName || '',
+      email: currentCustomer.newCustomerData?.email || '',
+      guardianBirthday: currentCustomer.newCustomerData?.guardianBirthday || null,
       password: '',
-      addressPhone: currentCustomer?.addressPhone || '',
-      addressStreet: currentCustomer?.addressStreet || '',
-      addressState: currentCustomer?.addressState || '',
-      addressCity: currentCustomer?.addressCity || '',
-      addressZipCode: currentCustomer?.addressZipCode || '',
+      addressPhone: currentCustomer.newCustomerData?.addressPhone || '',
+      addressStreet: currentCustomer.newCustomerData?.addressStreet || '',
+      addressState: currentCustomer.newCustomerData?.addressState || '',
+      addressCity: currentCustomer.newCustomerData?.addressCity || '',
+      addressZipCode: currentCustomer.newCustomerData?.addressZipCode || '',
       avatarUrl: currentCustomer?.avatarUrl || null,
       isBanned: currentCustomer?.isBanned || false,
       status: currentCustomer?.status,
@@ -126,11 +126,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting},
+    formState: { isSubmitting, isSubmitSuccessful },
   } = methods;
 
   const values = watch();
-
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -143,21 +142,23 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
-
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
   const onSubmit = async () => {
     try {
-      dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors }));
-      reset();
-      navigate(`${PATH_PAGE.signWaiver}/${currentCustomer.newCustomerData.id}`);
+      await new Promise((resolve) =>
+        resolve(dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors })))
+      );
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+      console.log(currentCustomer);
+      navigate(`${PATH_PAGE.signWaiver}`);
+ // reset();
     } catch (error) {
       console.error(error);
     }
   };
-  
+
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
