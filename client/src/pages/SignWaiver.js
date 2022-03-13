@@ -50,15 +50,22 @@ export default function SignWaiver() {
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
   const signatureRef = useRef(null);
+  const signatureBlockCardRef = useRef(null);
 
-  // make styles for signature convas and signature block
+  // only update signature width when the signature block is visible
+  useEffect(() => {
+    if (signatureBlockCardRef.current) {
+      setCanvasWidth(signatureBlockCardRef.current.clientWidth);
+    }
+  }, [signatureBlockCardRef]);
 
-  const [canvasWidth, setCanvasWidth] = useState(Math.floor(window.innerWidth * 0.8));
-  console.log(canvasWidth);
+  // set inital canvas width to null on load
+  const [canvasWidth, setCanvasWidth] = useState(null);
 
+  // set the canvas width to the signature block width on resize
   useEffect(() => {
     const handleResize = () => {
-      setCanvasWidth(Math.floor(window.innerWidth * 0.8));
+      setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
     };
     window.addEventListener('resize', handleResize);
     return () => {
@@ -108,37 +115,50 @@ export default function SignWaiver() {
           <Grid item xs={12}>
             <HTMLBlock waiverText={safeHTML} />
           </Grid>
-          <Grid item xs={6}>
-            <Typography variant="h4" component="h4">
-              Signing for:
-              <Typography variant="h6" component="h6">
-                {currentCustomer.newCustomerData?.guardianFirstName} {currentCustomer.newCustomerData?.guardianLastName}
+          <Grid alignItems="center" container item xs={6}>
+            <Grid item>
+              <Typography variant="h4" component="h4">
+                Signing for:
               </Typography>
-            </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                textAlign="left"
+                variant="p"
+                component="p"
+                sx={{
+                  marginLeft: '1rem',
+                }}
+              >
+                Mike McEwen
+                {/* {currentCustomer.newCustomerData?.guardianFirstName} {currentCustomer.newCustomerData?.guardianLastName} */}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={6}>
+          <Grid alignItems="center" container item xs={6}>
             <Typography variant="h4" component="h4">
               Minors:
             </Typography>
 
             {currentCustomer.newCustomerMinorDataArr &&
-              currentCustomer.newCustomerMinorDataArr.map((minor) => {
+              currentCustomer.newCustomerMinorDataArr.map((minor, i) => {
                 return (
-                  <Typography variant="h6" component="h6">
-                    {minor.minorFirstName} {minor.minorLastName}
-                  </Typography>
+                  <Grid item key={minor + i}>
+                    <Typography variant="p" component="p" sx={{ marginLeft: '1rem' }}>
+                      currentCustomer.newCustomerMinorDataArr.length - 1 !== i ? {minor.minorFirstName}{' '}
+                      {minor.minorLastName}, : {minor.minorFirstName} {minor.minorLastName}
+                    </Typography>
+                  </Grid>
                 );
               })}
           </Grid>
           <Grid item xs={12}>
             <FormProvider methods={methods}>
-              <Card>
+              <Card sx={{ border: 2 }} ref={signatureBlockCardRef}>
                 <RHFSignatureCanvas
                   name={`signature`}
                   onEnd={handleUpdateSignature}
                   elementRef={signatureRef}
-                  backgroundColor={theme.palette.grey[200]}
-                  penColor="blue"
                   canvasProps={{
                     width: canvasWidth,
                     height: 200,

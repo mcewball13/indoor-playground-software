@@ -147,7 +147,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
   const onSubmit = async () => {
     try {
-      await new Promise((resolve) =>
+      if (!currentCustomer.newCustomerData) await new Promise((resolve) =>
         resolve(dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors })))
       );
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
