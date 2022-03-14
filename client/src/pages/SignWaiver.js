@@ -1,8 +1,11 @@
 // @mui
+import { useTheme } from '@mui/system';
 import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { capitalCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import SignatureCanvas from 'react-signature-canvas';
 // modules
 import DOMPurify from 'dompurify';
 
@@ -10,7 +13,6 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // components
-import { LoadingButton } from '@mui/lab';
 import Page from '../components/Page';
 import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 // hooks
@@ -29,18 +31,21 @@ import RHFSignatureCanvas from '../components/hook-form/RHFSignatureCanvas';
 import { FormProvider } from '../components/hook-form';
 import HTMLBlock from '../components/waiver/HTMLBlock';
 
+
 // ----------------------------------------------------------------------
 
 const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
+ const theme = useTheme();
+
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
   const signatureRef = useRef({});
   const signatureBlockCardRef = useRef(null);
-  console.log(id);
+  console.log(theme);
 
   // only update signature width when the signature block is visible
   useEffect(() => {
@@ -101,7 +106,6 @@ export default function SignWaiver() {
     console.log('data');
   };
   const handleClearSignature = () => signatureRef.current.clear();
-  
 
   return (
     <Page title="User: Sign Waiver">
@@ -158,10 +162,10 @@ export default function SignWaiver() {
           <Grid item xs={12}>
             <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
               <Card sx={{ border: 1, marginBottom: 3 }} ref={signatureBlockCardRef}>
-                <RHFSignatureCanvas
-                  name={`signature`}
+                <SignatureCanvas
+                  id={`signature`}
                   onEnd={handleUpdateSignature}
-                  elementRef={signatureRef}
+                  ref={signatureRef}
                   canvasProps={{
                     width: canvasWidth,
                     height: 200,
@@ -169,7 +173,9 @@ export default function SignWaiver() {
                 />
               </Card>
               <Stack gap={3} justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ my: 3 }}>
-                <Button variant='contained' onClick={() => handleClearSignature()}>Clear Signature</Button>
+                <Button color="inherit" variant="outlined" onClick={() => handleClearSignature()}>
+                  Clear Signature
+                </Button>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Submit Waiver
                 </LoadingButton>
