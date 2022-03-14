@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
-import { useTheme } from '@mui/material/styles';
 
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +10,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import {
-  Avatar,
   Box,
   Card,
   Grid,
@@ -22,27 +20,23 @@ import {
   InputAdornment,
   IconButton,
   Collapse,
-  TextField,
   Button,
   TableContainer,
   TableBody,
   Table,
-  TableHead,
   TableRow,
   TableCell,
 } from '@mui/material';
 // utils
-import uuid from 'uuid/v4';
-import { format, parseISO } from 'date-fns';
-import { fData } from '../../../utils/formatNumber';
+import { format} from 'date-fns';
 // routes
-import { PATH_DASHBOARD, PATH_PAGE } from '../../../routes/paths';
+import {  PATH_PAGE } from '../../../routes/paths';
 // components
 import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { createNewCustomer, checkEmail} from '../../../redux/slices/waiverFormSlice';
+import { createNewCustomer, checkEmail } from '../../../redux/slices/waiverFormSlice';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
@@ -52,10 +46,12 @@ import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 UserWaiverForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
+  isOpen: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onCancel: PropTypes.func,
 };
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
-  const theme = useTheme();
 
   const navigate = useNavigate();
 
@@ -67,9 +63,8 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
-  const { isOpenModal, selectedAvatar, error, currentCustomer  } = useSelector((state) => state.newWaiverForm);
-
-
+  const {  selectedAvatar, currentCustomer } = useSelector((state) => state.newWaiverForm);
+  console.log(currentCustomer);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
   const addedMinorScrollRef = useRef(null);
@@ -95,22 +90,22 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const defaultValues = useMemo(
     () => ({
-      guardianFirstName: currentCustomer?.guardianFirstName || '',
-      guardianLastName: currentCustomer?.guardianLastName || '',
-      email: currentCustomer?.email || '',
-      guardianBirthday: currentCustomer?.guardianBirthday || null,
+      guardianFirstName: currentCustomer.newCustomerData?.guardianFirstName || '',
+      guardianLastName: currentCustomer.newCustomerData?.guardianLastName || '',
+      email: currentCustomer.newCustomerData?.email || '',
+      guardianBirthday: currentCustomer.newCustomerData?.guardianBirthday || null,
       password: '',
-      addressPhone: currentCustomer?.addressPhone || '',
-      addressStreet: currentCustomer?.addressStreet || '',
-      addressState: currentCustomer?.addressState || '',
-      addressCity: currentCustomer?.addressCity || '',
-      addressZipCode: currentCustomer?.addressZipCode || '',
+      addressPhone: currentCustomer.newCustomerData?.addressPhone || '',
+      addressStreet: currentCustomer.newCustomerData?.addressStreet || '',
+      addressState: currentCustomer.newCustomerData?.addressState || '',
+      addressCity: currentCustomer.newCustomerData?.addressCity || '',
+      addressZipCode: currentCustomer.newCustomerData?.addressZipCode || '',
       avatarUrl: currentCustomer?.avatarUrl || null,
       isBanned: currentCustomer?.isBanned || false,
       status: currentCustomer?.status,
       minorFirstName: '',
       minorLastName: '',
-      minorBirthday: '',
+      minorBirthday: null,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentCustomer]
@@ -127,12 +122,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting },
   } = methods;
 
   const values = watch();
-  console.log('methods', values);
-
 
   useEffect(() => {
     if (isEdit && currentUser) {
@@ -145,28 +138,23 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
-  useEffect(() => {
-    reset({
-      ...values,
-      minorFirstName: '',
-      minorLastName: '',
-      minorBirthday: '',
-    });
-  }, [minors, reset]);
-
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
   const onSubmit = async () => {
     try {
-      dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors }));
-      reset();
-      navigate(PATH_PAGE.signWaiver);
+      if (!currentCustomer.newCustomerData) await new Promise((resolve) =>
+        resolve(dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors })))
+      );
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+      console.log(currentCustomer);
+      navigate(`${PATH_PAGE.signWaiver}/${currentCustomer.newCustomerData?.id}`);
+ // reset();
     } catch (error) {
       console.error(error);
     }
   };
+
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -185,42 +173,31 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   );
 
   const handleRemoveMinor = (index) => {
-    const newArray = minors.filter((item, i) => item.id !== index);
+    const newArray = minors.filter((item) => item.id !== index);
     setMinors(newArray);
   };
 
   const handleSetMinors = (minor) => {
     console.log(values.minorBirthday);
     setMinors([...minors, minor]);
+    reset({
+      ...values,
+      minorFirstName: '',
+      minorLastName: '',
+      minorBirthday: null,
+    });
     // wait a bit to scroll to the new minor
     setTimeout(() => {
       handleOnEntered(addMinorFormScrollRef);
     }, 50);
   };
 
-  const handleBlur =  () => {
+  const handleBlur = () => {
     dispatch(checkEmail(values.email));
-  }
-
-  useEffect(() => {
-
-    setValue('guardianFirstName', currentCustomer?.guardianFirstName  || '')
-    setValue('guardianLastName', currentCustomer?.guardianLastName  || '')
-    setValue('email', currentCustomer?.email  || '')
-    setValue('guardianBirthday', currentCustomer?.guardianBirthday  || null)
-    setValue('addressPhone', currentCustomer?.addressPhone  || '')
-    setValue('addressStreet', currentCustomer?.addressStreet  || '')
-    setValue('addressState', currentCustomer?.addressState  || '')
-    setValue('addressCity', currentCustomer?.addressCity  || '')
-    setValue('addressZipCode', currentCustomer?.addressZipCode  || '')
-    
-  }, [currentCustomer])
-
-  // formate date object to string
-  const formatDate = (date) => {
-    return format(date, 'MM/dd/yyyy');
   };
 
+  // formate date object to string
+  const formatDate = (date) => format(date, 'MM/dd/yyyy');
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -419,8 +396,8 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <TableContainer>
                   <Table>
                     <TableBody>
-                      {minors.map((minor) => (
-                        <TableRow key={minor.id} hover ref={addedMinorScrollRef}>
+                      {minors.map((minor, i) => (
+                        <TableRow key={`${minor.minorFirstName}_${i}`} hover ref={addedMinorScrollRef}>
                           <TableCell>
                             <Typography variant="body1">{minor.minorFirstName}</Typography>
                           </TableCell>

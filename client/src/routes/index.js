@@ -148,7 +148,8 @@ export default function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'about-us', element: <About /> },
-        { path: 'sign-waiver', element: <SignWaiver /> },
+        { path: 'sign-waiver/', element: <SignWaiver /> },
+        { path: 'sign-waiver/:id', element: <SignWaiver /> },
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <Faqs /> },
       ],

@@ -12,8 +12,9 @@ import MainHeader from './MainHeader';
 export default function MainLayout() {
   const { pathname } = useLocation();
 
+
   const isHome = pathname === '/';
-  const isWaiver = pathname === '/sign-waiver';
+  const isWaiver = pathname.indexOf('sign-waiver') > -1;
 
   console.log('pathname', pathname);
 

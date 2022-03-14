@@ -12,6 +12,7 @@ RHFSignatureCanvas.propTypes = {
   ref: PropTypes.func,
   penColor: PropTypes.string,
   canvasProps: PropTypes.object,
+  elementRef: PropTypes.object,
 };
 
 export default function RHFSignatureCanvas({ name, onEnd, elementRef, penColor, canvasProps, ...other }) {

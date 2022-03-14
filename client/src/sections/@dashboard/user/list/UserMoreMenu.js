@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { paramCase } from 'change-case';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { MenuItem, IconButton } from '@mui/material';
@@ -15,6 +15,7 @@ import MenuPopover from '../../../../components/MenuPopover';
 UserMoreMenu.propTypes = {
   onDelete: PropTypes.func,
   userName: PropTypes.string,
+  isMinor: PropTypes.bool,
 };
 
 export default function UserMoreMenu({ onDelete, userName, isMinor }) {
