@@ -7,12 +7,11 @@ import { useLocation, useParams } from 'react-router-dom';
 import Page from '../../components/Page';
 import { DialogAnimate } from '../../components/animate';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import Avatar from '../../components/Avatar';
 import Image from '../../components/Image';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // utils
-import { openModal, setSelectedAvatar, closeModal } from '../../redux/slices/waiverFormSlice';
+import { setSelectedAvatar, closeModal } from '../../redux/slices/waiverFormSlice';
 import { useDispatch, useSelector } from '../../redux/store';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';

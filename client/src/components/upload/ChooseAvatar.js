@@ -1,17 +1,15 @@
 import PropTypes from 'prop-types';
 import isString from 'lodash/isString';
-import { useDropzone } from 'react-dropzone';
 // @mui
 import { Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 //
 // usedispatch from store
-import { useDispatch, useSelector } from '../../redux/store';
+import { useDispatch } from '../../redux/store';
 //
 
 import Image from '../Image';
 import Iconify from '../Iconify';
-import RejectionFiles from './RejectionFiles';
 import { openModal } from '../../redux/slices/waiverFormSlice';
 
 // ----------------------------------------------------------------------
@@ -71,9 +69,8 @@ ChooseAvatar.propTypes = {
 
 
 
-export default function ChooseAvatar({ error, file, helperText, sx, ...other }) {
+export default function ChooseAvatar({ file, helperText, sx, ...other }) {
   const dispatch = useDispatch();
-  const {selectedAvatar} = useSelector(state => state.newWaiverForm);
   
   const handleOpenModal =() => {
     dispatch(openModal(true));
@@ -85,6 +82,8 @@ export default function ChooseAvatar({ error, file, helperText, sx, ...other }) 
         sx={{
           ...sx,
         }}
+        {...other}
+        
       >
         <ThumbnailStyle onClick={handleOpenModal}>
           {file && <Image alt="avatar" src={isString(file) ? file : file.preview} sx={{ zIndex: 8 }} />}

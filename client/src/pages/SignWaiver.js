@@ -1,36 +1,28 @@
 // @mui
-import { Box, Card, Container, DialogTitle, Grid, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { capitalCase, paramCase } from 'change-case';
+import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
+import { capitalCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 // modules
 import DOMPurify from 'dompurify';
-import SignatureCanvas from 'react-signature-canvas';
+
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 // components
+import { LoadingButton } from '@mui/lab';
 import Page from '../components/Page';
-import { DialogAnimate } from '../components/animate';
 import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
-import Avatar from '../components/Avatar';
-import Image from '../components/Image';
-import SignatureBlockStyle from '../components/waiver';
 // hooks
 import useSettings from '../hooks/useSettings';
 // utils
-import { openModal, setSelectedAvatar, closeModal } from '../redux/slices/waiverFormSlice';
-import { useDispatch, useSelector } from '../redux/store';
+import { useSelector } from '../redux/store';
 // routes
 import { PATH_DASHBOARD } from '../routes/paths';
 // sections
-import UserWaiverForm from '../sections/@dashboard/user/UserWaiverForm';
 // slices
 // _mock_
-import { _userList } from '../_mock';
 // avatars
-import avatars from '../assets/avatars';
 
 import { waiverText } from './tempWaiverText';
 import RHFSignatureCanvas from '../components/hook-form/RHFSignatureCanvas';
@@ -42,15 +34,13 @@ import HTMLBlock from '../components/waiver/HTMLBlock';
 const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
-  const theme = useTheme();
-  console.log('theme', theme);
   const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
   const { pathname } = useLocation();
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
-  const signatureRef = useRef(null);
+  const signatureRef = useRef({});
   const signatureBlockCardRef = useRef(null);
+  console.log(id);
 
   // only update signature width when the signature block is visible
   useEffect(() => {
@@ -74,6 +64,7 @@ export default function SignWaiver() {
   });
   // state to hold signature
   const [signature, setSignature] = useState('');
+  console.log(signature);
 
   const { currentCustomer } = useSelector((state) => state.newWaiverForm);
   console.log('currentCustomer', currentCustomer);
@@ -83,21 +74,34 @@ export default function SignWaiver() {
     signature: Yup.string().required('Please sign the waiver'),
   });
 
-  const defaultValues = useMemo(() => ({
-    signature: '',
-  }));
+  const defaultValues = useMemo(
+    () => ({
+      signature: '',
+    }),
+    []
+  );
 
   const methods = useForm({
     defaultValues,
     resolver: yupResolver(signatureSchema),
   });
 
+  // deconstruct form methods
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
   // handler Funtions
-  const handleUpdateSignature = (data) => {
-    const signatureImg = signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
+  const handleUpdateSignature = async () => {
+    const signatureImg = await signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
     setSignature(signatureImg);
   };
-  console.log(signature);
+  const onSubmit = async () => {
+    console.log('data');
+  };
+  const handleClearSignature = () => signatureRef.current.clear();
+  
 
   return (
     <Page title="User: Sign Waiver">
@@ -115,7 +119,7 @@ export default function SignWaiver() {
           <Grid item xs={12}>
             <HTMLBlock waiverText={safeHTML} />
           </Grid>
-          <Grid alignItems="center" container item xs={6}>
+          <Grid alignItems="center" container spacing={2} item xs={6}>
             <Grid item>
               <Typography variant="h4" component="h4">
                 Signing for:
@@ -130,8 +134,7 @@ export default function SignWaiver() {
                   marginLeft: '1rem',
                 }}
               >
-                Mike McEwen
-                {/* {currentCustomer.newCustomerData?.guardianFirstName} {currentCustomer.newCustomerData?.guardianLastName} */}
+                {currentCustomer.newCustomerData?.guardianFirstName} {currentCustomer.newCustomerData?.guardianLastName}
               </Typography>
             </Grid>
           </Grid>
@@ -141,20 +144,20 @@ export default function SignWaiver() {
             </Typography>
 
             {currentCustomer.newCustomerMinorDataArr &&
-              currentCustomer.newCustomerMinorDataArr.map((minor, i) => {
-                return (
-                  <Grid item key={minor + i}>
-                    <Typography variant="p" component="p" sx={{ marginLeft: '1rem' }}>
-                      currentCustomer.newCustomerMinorDataArr.length - 1 !== i ? {minor.minorFirstName}{' '}
-                      {minor.minorLastName}, : {minor.minorFirstName} {minor.minorLastName}
-                    </Typography>
-                  </Grid>
-                );
-              })}
+              currentCustomer.newCustomerMinorDataArr.map((minor, i) => (
+                <Grid item key={minor + i}>
+                  <Typography variant="p" component="p" sx={{ marginLeft: '1rem' }}>
+                    {currentCustomer.newCustomerMinorDataArr.length - 1 !== i
+                      ? `${minor.minorFirstName}
+                      ${minor.minorLastName},`
+                      : `${minor.minorFirstName} ${minor.minorLastName}`}
+                  </Typography>
+                </Grid>
+              ))}
           </Grid>
           <Grid item xs={12}>
-            <FormProvider methods={methods}>
-              <Card sx={{ border: 2 }} ref={signatureBlockCardRef}>
+            <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+              <Card sx={{ border: 1, marginBottom: 3 }} ref={signatureBlockCardRef}>
                 <RHFSignatureCanvas
                   name={`signature`}
                   onEnd={handleUpdateSignature}
@@ -165,6 +168,12 @@ export default function SignWaiver() {
                   }}
                 />
               </Card>
+              <Stack gap={3} justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ my: 3 }}>
+                <Button variant='contained' onClick={() => handleClearSignature()}>Clear Signature</Button>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  Submit Waiver
+                </LoadingButton>
+              </Stack>
             </FormProvider>
           </Grid>
         </Grid>

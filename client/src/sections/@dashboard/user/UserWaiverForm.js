@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
-import { useTheme } from '@mui/material/styles';
 
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +10,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import {
-  Avatar,
   Box,
   Card,
   Grid,
@@ -22,21 +20,17 @@ import {
   InputAdornment,
   IconButton,
   Collapse,
-  TextField,
   Button,
   TableContainer,
   TableBody,
   Table,
-  TableHead,
   TableRow,
   TableCell,
 } from '@mui/material';
 // utils
-import uuid from 'uuid/v4';
-import { format, parseISO } from 'date-fns';
-import { fData } from '../../../utils/formatNumber';
+import { format} from 'date-fns';
 // routes
-import { PATH_DASHBOARD, PATH_PAGE } from '../../../routes/paths';
+import {  PATH_PAGE } from '../../../routes/paths';
 // components
 import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
@@ -52,10 +46,12 @@ import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 UserWaiverForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
+  isOpen: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onCancel: PropTypes.func,
 };
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
-  const theme = useTheme();
 
   const navigate = useNavigate();
 
@@ -67,7 +63,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
-  const { isLoading, selectedAvatar, error, currentCustomer } = useSelector((state) => state.newWaiverForm);
+  const {  selectedAvatar, currentCustomer } = useSelector((state) => state.newWaiverForm);
   console.log(currentCustomer);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
@@ -126,7 +122,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting },
   } = methods;
 
   const values = watch();
@@ -152,7 +148,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       );
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       console.log(currentCustomer);
-      navigate(`${PATH_PAGE.signWaiver}`);
+      navigate(`${PATH_PAGE.signWaiver}/${currentCustomer.newCustomerData?.id}`);
  // reset();
     } catch (error) {
       console.error(error);
@@ -177,7 +173,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   );
 
   const handleRemoveMinor = (index) => {
-    const newArray = minors.filter((item, i) => item.id !== index);
+    const newArray = minors.filter((item) => item.id !== index);
     setMinors(newArray);
   };
 
@@ -201,9 +197,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   // formate date object to string
-  const formatDate = (date) => {
-    return format(date, 'MM/dd/yyyy');
-  };
+  const formatDate = (date) => format(date, 'MM/dd/yyyy');
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 
 import PropTypes from 'prop-types';
 
@@ -12,12 +11,12 @@ import { MobileDatePicker } from '@mui/lab';
 
 RHFDatePicker.propTypes = {
   name: PropTypes.string,
+  label: PropTypes.string,
 };
 
 export default function RHFDatePicker({ label = 'Select your Date', name, ...other }) {
   const { control } = useFormContext();
 
-  const [value, setValue] = useState();
 
   return (
     <Controller

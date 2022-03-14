@@ -4,7 +4,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 // @mui
 import { FormHelperText } from '@mui/material';
 // type
-import { ChooseAvatar, UploadAvatar, UploadMultiFile, UploadSingleFile } from '../upload';
+import { ChooseAvatar, UploadMultiFile, UploadSingleFile } from '../upload';
 import { useSelector } from '../../redux/store';
 
 // ----------------------------------------------------------------------
