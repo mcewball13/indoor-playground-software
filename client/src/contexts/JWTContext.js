@@ -115,7 +115,7 @@ function AuthProvider({ children }) {
     });
     const { accessToken, user } = response.data;
 
-    setSession(accessToken);
+    
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -124,13 +124,9 @@ function AuthProvider({ children }) {
     });
   };
 
-  const register = async (email, password, firstName, lastName) => {
-    const response = await axios.post('/api/account/register', {
-      email,
-      password,
-      firstName,
-      lastName,
-    });
+  const register = async (newCustomer) => {
+    const response = await axios.post('/api/account/new', newCustomer);
+
     const { accessToken, user } = response.data;
 
     window.localStorage.setItem('accessToken', accessToken);
