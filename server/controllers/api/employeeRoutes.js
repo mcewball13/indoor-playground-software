@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { Employees, EmployeeRoles } = require("../../models");
+const { signToken } = require("../../utils/auth");
 
 // get all employees
 router.get("/", async (req, res) => {
@@ -97,10 +98,9 @@ router.post("/login", async (req, res) => {
         res.status(400).json({ message: "Username or password is incorrect" });
         return;
     }
-
     const token = signToken({
-        id: newCustomerData.id,
-        email: newCustomerData.email,
+        id: employeeData.id,
+        email: employeeData.email,
     });
 
     res.status(200).json({ token, user: employeeData });
