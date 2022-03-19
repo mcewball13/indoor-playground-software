@@ -6,9 +6,9 @@ const minors = []
 for (let i = 0; i < 50; i++) {
     minors.push(
         {
-            firstName: faker.name.firstName(),
-            lastName: faker.name.lastName(),
-            birthdate: faker.date.past(12, new Date()),
+            minorFirstName: faker.name.firstName(),
+            minorLastName: faker.name.lastName(),
+            minorBirthday: faker.date.past(12, new Date()),
             email: faker.internet.email(),
             notes: faker.lorem.paragraph(3),
             company_id: Math.floor((Math.random() * 7)+1),

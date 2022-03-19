@@ -1,28 +1,22 @@
 const router = require("express").Router();
 const { Employees, EmployeeRoles } = require("../../models");
+const { signToken } = require("../../utils/auth");
 
 // get all employees
 router.get("/", async (req, res) => {
     try {
-        const employeeData = await Employee.findAll({})
-        
-        
+        const employeeData = await Employee.findAll({});
     } catch (error) {
-        res.status(500).statusMessage(error)
-        
+        res.status(500).statusMessage(error);
     }
-        
 });
 router.get("/roles", async (req, res) => {
     try {
-        const roleData = await EmployeeRoles.findAll()
-        res.status(200).json(roleData)
-        
-        
+        const roleData = await EmployeeRoles.findAll();
+        res.status(200).json(roleData);
     } catch (error) {
-        res.status(500).statusMessage(error)
+        res.status(500).statusMessage(error);
     }
-        
 });
 
 // router.get("/:id", (req, res) => {
@@ -84,35 +78,33 @@ router.get("/roles", async (req, res) => {
 //     });
 // });
 
-// router.post("/login", (req, res) => {
-//     User.findOne({
-//         where: {
-//             email: req.body.email,
-//         },
-//     }).then((dbUserData) => {
-//         if (!dbUserData) {
-//             res.status(400).json({
-//                 message: "No user with that email address!",
-//             });
-//             return;
-//         }
+router.post("/login", async (req, res) => {
+    console.log(req.body);
+    const employeeData = await Employees.findOne({
+        where: {
+            email: req.body.email,
+        },
+    });
+    console.log(employeeData);
+    if (!employeeData) {
+        res.status(404).json({
+            message: "Username or password is incorrect.",
+        });
+        return;
+    }
+    const validPassword = employeeData.checkPassword(req.body.password);
 
-//         const validPassword = dbUserData.checkPassword(req.body.password);
+    if (!validPassword) {
+        res.status(400).json({ message: "Username or password is incorrect" });
+        return;
+    }
+    const token = signToken({
+        id: employeeData.id,
+        email: employeeData.email,
+    });
 
-//         if (!validPassword) {
-//             res.status(400).json({ message: "Incorrect password!" });
-//             return;
-//         }
-
-//         req.session.save(() => {
-//             req.session.user_id = dbUserData.id;
-//             req.session.username = dbUserData.username;
-//             req.session.loggedIn = true;
-
-//             res.json({ user: dbUserData, message: "You are now logged in!" });
-//         });
-//     });
-// });
+    res.status(200).json({ token, user: employeeData });
+});
 // router.post("/logout", (req, res) => {
 //     if (req.session.loggedIn) {
 //         req.session.destroy(() => {

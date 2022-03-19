@@ -50,10 +50,11 @@ router.get("/email/:email", async (req, res) => {
     res.status(200).json(customerGuardianData);
 });
 
-router.post("/", async (req, res) => {
+router.post("/new", async (req, res) => {
     try {
         const newCustomerData = await CustomerGuardian.create({
             ...req.body.guardians,
+            // added isAccountOwner: true, move this if you want to allow multiple account owners
             isAccountOwner: true,
         });
         console.log(req.body);
@@ -75,9 +76,16 @@ router.post("/", async (req, res) => {
                 minor_id: minor.id,
             });
         });
-        const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
+        // sign token
+        const token = signToken({
+            id: newCustomerData.id,
+            email: newCustomerData.email,
+        });
 
-        res.status(200).json({ newCustomerData, newCustomerMinorDataArr });
+        res.status(200).json({
+            user: { newCustomerData, newCustomerMinorDataArr },
+            token,
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json(error);

@@ -6,9 +6,10 @@ const guardians = []
 for (let i = 0; i < 50; i++) {
     guardians.push(
         {
-            firstName: faker.name.firstName(),
-            lastName: faker.name.lastName(),
-            birthdate: faker.date.past(50, new Date("04/04/2000")),
+            guardianFirstName: faker.name.firstName(),
+            guardianLastName: faker.name.lastName(),
+            guardianBirthday: faker.date.past(50, new Date("04/04/2000")),
+            password: faker.internet.password(),
             email: faker.internet.email(),
             addressStreet: faker.address.streetAddress(),
             addressCity: faker.address.cityName(),

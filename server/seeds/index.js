@@ -4,6 +4,7 @@ const seedLocations = require("./locationSeed")
 const seedMinors = require("./minorSeed")
 const seedGuardiansMinors = require("./guardianMinorSeed")
 const seedRoles = require("./rolesSeed")
+const seedEmployees = require("./employeeSeed")
 
 const sequelize = require("../config/connection");
 
@@ -21,6 +22,8 @@ const seedAll = async () => {
     await seedGuardiansMinors();
     console.log("=============");
     await seedRoles();
+    console.log("=============");
+    await seedEmployees();
     console.log("=============");
     
     process.exit(0);
