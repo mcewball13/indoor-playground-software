@@ -109,13 +109,20 @@ function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const response = await axios.post('/api/account/login', {
-      email,
-      password,
+    console.log(email, password);
+    // change to axios.post when we have a completed backend
+    const response = await axios({
+      url: '/api/employees/login',
+      method: 'POST',
+      baseURL: '/',
+      data: {
+        email,
+        password,
+      },
     });
     const { accessToken, user } = response.data;
+    window.localStorage.setItem('accessToken', accessToken);
 
-    
     dispatch({
       type: 'LOGIN',
       payload: {

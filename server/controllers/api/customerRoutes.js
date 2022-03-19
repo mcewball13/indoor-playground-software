@@ -4,6 +4,7 @@ const {
     CustomerMinor,
     CustomerGuardianHasCustomerMinor,
 } = require("../../models");
+const { signToken } = require("../../utils/auth");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -28,7 +29,7 @@ router.get("/:id", async (req, res) => {
                 as: "minors",
             },
         ],
-    })
+    });
     res.status(200).json(customerGuardianData);
 });
 // check to see if email exists on blur from email field
@@ -45,7 +46,7 @@ router.get("/email/:email", async (req, res) => {
                 as: "minors",
             },
         ],
-    })
+    });
     res.status(200).json(customerGuardianData);
 });
 
@@ -74,10 +75,11 @@ router.post("/", async (req, res) => {
                 minor_id: minor.id,
             });
         });
+        const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
 
         res.status(200).json({ newCustomerData, newCustomerMinorDataArr });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json(error);
     }
 });
