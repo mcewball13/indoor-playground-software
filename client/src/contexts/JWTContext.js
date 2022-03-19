@@ -48,7 +48,7 @@ const handlers = {
     };
   },
   CUSTOMER_REGISTER: (state, action) => {
-    const { user } = action.payload;
+    const { customer } = action.payload;
 
     return {
       ...state,
@@ -66,6 +66,7 @@ const AuthContext = createContext({
   employeeLogin: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
+  customerRegister: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -169,6 +170,8 @@ function AuthProvider({ children }) {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
   };
+
+  
 
   return (
     <AuthContext.Provider
