@@ -8,6 +8,8 @@ import { isValidToken, setSession } from '../utils/jwt';
 
 const initialState = {
   isAuthenticated: false,
+  isCustomerAuthenticated: false,
+  customer: null,
   isInitialized: false,
   user: null,
 };
@@ -45,6 +47,15 @@ const handlers = {
       user,
     };
   },
+  CUSTOMER_REGISTER: (state, action) => {
+    const { user } = action.payload;
+
+    return {
+      ...state,
+      isCustomerAuthenticated: true,
+      customer,
+    };
+  }
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -111,18 +122,27 @@ function AuthProvider({ children }) {
   const employeeLogin = async (email, password) => {
     console.log(email, password);
     // change to axios.post when we have a completed backend
-    const response = await axios({
-      url: '/api/employees/login',
-      method: 'POST',
-      baseURL: '/',
-      data: {
-        email,
-        password,
-      },
-    });
-    const { accessToken, employeeData: user } = response.data;
-    window.localStorage.setItem('accessToken', accessToken);
+    // // =========================================================================
+    // const response = await axios({
+    //   url: '/api/employees/login',
+    //   method: 'POST',
+    //   baseURL: '/',
+    //   data: {
+    //     email,
+    //     password,
+    //   },
+    // });
+    // const { accessToken, employeeData: user } = response.data;
 
+    // ========================================================================
+    const response = await axios.post('/api/account/login', {
+      email,
+      password,
+    });
+    const { accessToken, user } = response.data;
+    // =========================================================================
+
+    window.localStorage.setItem('accessToken', accessToken);
     dispatch({
       type: 'LOGIN',
       payload: {

@@ -27,7 +27,6 @@ import { PATH_DASHBOARD } from '../routes/paths';
 // avatars
 
 import { waiverText } from './tempWaiverText';
-import RHFSignatureCanvas from '../components/hook-form/RHFSignatureCanvas';
 import { FormProvider } from '../components/hook-form';
 import HTMLBlock from '../components/waiver/HTMLBlock';
 
