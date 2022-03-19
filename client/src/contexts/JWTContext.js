@@ -52,7 +52,7 @@ const reducer = (state, action) => (handlers[action.type] ? handlers[action.type
 const AuthContext = createContext({
   ...initialState,
   method: 'jwt',
-  login: () => Promise.resolve(),
+  employeeLogin: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
 });
@@ -108,7 +108,7 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
-  const login = async (email, password) => {
+  const employeeLogin = async (email, password) => {
     console.log(email, password);
     // change to axios.post when we have a completed backend
     const response = await axios({
@@ -120,7 +120,7 @@ function AuthProvider({ children }) {
         password,
       },
     });
-    const { accessToken, user } = response.data;
+    const { accessToken, employeeData: user } = response.data;
     window.localStorage.setItem('accessToken', accessToken);
 
     dispatch({
@@ -155,7 +155,7 @@ function AuthProvider({ children }) {
       value={{
         ...state,
         method: 'jwt',
-        login,
+        employeeLogin,
         logout,
         register,
       }}

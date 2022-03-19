@@ -24,6 +24,7 @@ import {
 
 export default function GeneralApp() {
   const { user } = useAuth();
+  console.log(user);
   const theme = useTheme();
   const { themeStretch } = useSettings();
 

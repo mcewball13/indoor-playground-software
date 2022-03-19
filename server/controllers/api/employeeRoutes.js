@@ -79,31 +79,38 @@ router.get("/roles", async (req, res) => {
 // });
 
 router.post("/login", async (req, res) => {
-    console.log(req.body);
-    const employeeData = await Employees.findOne({
-        where: {
-            email: req.body.email,
-        },
-    });
-    console.log(employeeData);
-    if (!employeeData) {
-        res.status(404).json({
-            message: "Username or password is incorrect.",
+    try {
+        console.log(req.body);
+        const employeeData = await Employees.findOne({
+            where: {
+                email: req.body.email,
+            },
         });
-        return;
-    }
-    const validPassword = employeeData.checkPassword(req.body.password);
+        console.log(employeeData);
+        if (!employeeData) {
+            res.status(404).json({
+                message: "Username or password is incorrect.",
+            });
+            return;
+        }
+        const validPassword = employeeData.checkPassword(req.body.password);
 
-    if (!validPassword) {
-        res.status(400).json({ message: "Username or password is incorrect" });
-        return;
-    }
-    const token = signToken({
-        id: employeeData.id,
-        email: employeeData.email,
-    });
+        if (!validPassword) {
+            res.status(400).json({
+                message: "Username or password is incorrect",
+            });
+            return;
+        }
+        const accessToken = signToken({
+            id: employeeData.id,
+            email: employeeData.email,
+        });
+        console.log(accessToken)
 
-    res.status(200).json({ token, user: employeeData });
+        res.status(200).json({ accessToken, employeeData });
+    } catch (error) {
+        res.status(500).json(error);
+    }
 });
 // router.post("/logout", (req, res) => {
 //     if (req.session.loggedIn) {
