@@ -13,6 +13,7 @@ import { PATH_AFTER_LOGIN } from '../config';
 // components
 import LoadingScreen from '../components/LoadingScreen';
 import { PATH_DASHBOARD } from './paths';
+import CustomerGuard from '../guards/CustomerGuard';
 
 // ----------------------------------------------------------------------
 
@@ -148,8 +149,14 @@ export default function Router() {
       children: [
         { element: <HomePage />, index: true },
         { path: 'about-us', element: <About /> },
-        { path: 'sign-waiver/', element: <SignWaiver /> },
-        { path: 'sign-waiver/:id', element: <SignWaiver /> },
+        {
+          path: 'sign-waiver/',
+          element: (
+            <CustomerGuard>
+              <SignWaiver />
+            </CustomerGuard>
+          ),
+        },
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <Faqs /> },
       ],

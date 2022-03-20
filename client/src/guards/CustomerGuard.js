@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
 // hooks
 import useAuth from '../hooks/useAuth';
+import UserCreate from '../pages/dashboard/UserCreate';
 // routes
 import { PATH_PAGE } from '../routes/paths';
 
@@ -12,10 +13,25 @@ CustomerGuard.propTypes = {
 };
 
 export default function CustomerGuard({ children }) {
-  const { isCustomerAuthenticated } = useAuth();
+  const { isCustomerAuthenticated, isInitialized  } = useAuth();
+  const { pathname } = useLocation();
+  const [requestedLocation, setRequestedLocation] = useState(null);
 
-  if (isCustomerAuthenticated) {
-    return <Navigate to={PATH_PAGE.signWaiver} />;
+  if (!isInitialized) {
+    return <LoadingScreen />;
+  }
+
+  if (!isCustomerAuthenticated) {
+    if (pathname !== requestedLocation) {
+      setRequestedLocation(pathname);
+    }
+    return <UserCreate />;
+  }
+
+  if (requestedLocation && pathname !== requestedLocation) {
+    setRequestedLocation(null);
+    // is this right navigate to requested location?
+    return <Navigate to={requestedLocation} />;
   }
 
   return <>{children}</>;
