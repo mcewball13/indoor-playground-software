@@ -33,7 +33,8 @@ export default function CustomerGuard({ children }) {
 
   if (requestedLocation && pathname !== requestedLocation) {
     setRequestedLocation(null);
-    // is this right navigate to requested location?
+    // is this right? navigate to requested location?
+    console.log('navigating to requested location');
     return <Navigate to={requestedLocation} />;
   }
 

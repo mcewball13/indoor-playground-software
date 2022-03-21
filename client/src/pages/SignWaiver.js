@@ -30,13 +30,12 @@ import { waiverText } from './tempWaiverText';
 import { FormProvider } from '../components/hook-form';
 import HTMLBlock from '../components/waiver/HTMLBlock';
 
-
 // ----------------------------------------------------------------------
 
 const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
- const theme = useTheme();
+  const theme = useTheme();
 
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
