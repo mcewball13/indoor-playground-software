@@ -36,7 +36,7 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { createNewCustomer, checkEmail } from '../../../redux/slices/waiverFormSlice';
+import { checkEmail } from '../../../redux/slices/waiverFormSlice';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
