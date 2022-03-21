@@ -50,7 +50,7 @@ router.get("/email/:email", async (req, res) => {
     res.status(200).json(customerGuardianData);
 });
 
-router.post("/", async (req, res) => {
+router.post("/new", async (req, res) => {
     try {
         const newCustomerData = await CustomerGuardian.create({
             ...req.body.guardians,
@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
         });
         const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
 
-        res.status(200).json({ newCustomerData, newCustomerMinorDataArr });
+        res.status(200).json({ customer: {newCustomerData, newCustomerMinorDataArr}, token });
     } catch (error) {
         console.log(error);
         res.status(500).json(error);
