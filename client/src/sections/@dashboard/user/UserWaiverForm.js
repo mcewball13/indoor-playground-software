@@ -28,9 +28,9 @@ import {
   TableCell,
 } from '@mui/material';
 // utils
-import { format} from 'date-fns';
+import { format } from 'date-fns';
 // routes
-import {  PATH_PAGE } from '../../../routes/paths';
+import { PATH_PAGE } from '../../../routes/paths';
 // components
 import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
@@ -40,6 +40,7 @@ import { createNewCustomer, checkEmail } from '../../../redux/slices/waiverFormS
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,7 @@ UserWaiverForm.propTypes = {
 };
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
+  const { customerRegister } = useAuth();
 
   const navigate = useNavigate();
 
@@ -63,7 +65,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
-  const {  selectedAvatar, currentCustomer } = useSelector((state) => state.newWaiverForm);
+  const { selectedAvatar, currentCustomer } = useSelector((state) => state.newWaiverForm);
   console.log(currentCustomer);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
@@ -143,18 +145,15 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
   const onSubmit = async () => {
     try {
-      if (!currentCustomer.newCustomerData) await new Promise((resolve) =>
-        resolve(dispatch(createNewCustomer({ guardians: { ...values, avatarUrl: selectedAvatar }, minors })))
-      );
+     await customerRegister({ guardians: { ...values, avatarUrl: selectedAvatar }, minors })
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       console.log(currentCustomer);
-      navigate(`${PATH_PAGE.signWaiver}/${currentCustomer.newCustomerData?.id}`);
- // reset();
+      navigate(PATH_PAGE.signWaiver);
+      // reset();
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
@@ -219,7 +218,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFChooseAvatar
                   name="avatarUrl"
                   accept="image/*"
-                  maxSize={3145728}
+
                   onDrop={handleDrop}
                   helperText={
                     <Typography

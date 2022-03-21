@@ -150,7 +150,7 @@ export default function Router() {
         { element: <HomePage />, index: true },
         { path: 'about-us', element: <About /> },
         {
-          path: 'sign-waiver/',
+          path: 'sign-waiver',
           element: (
             <CustomerGuard>
               <SignWaiver />
