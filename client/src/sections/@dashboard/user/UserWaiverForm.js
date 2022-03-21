@@ -40,6 +40,7 @@ import { createNewCustomer, checkEmail } from '../../../redux/slices/waiverFormS
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,7 @@ UserWaiverForm.propTypes = {
 };
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
+  const {customerRegister} = useAuth();
 
   const navigate = useNavigate();
 
@@ -219,7 +221,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                 <RHFChooseAvatar
                   name="avatarUrl"
                   accept="image/*"
-                  maxSize={3145728}
                   onDrop={handleDrop}
                   helperText={
                     <Typography
