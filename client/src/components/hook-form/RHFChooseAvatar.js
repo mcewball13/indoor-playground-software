@@ -28,7 +28,7 @@ export function RHFChooseAvatar({ name, ...other }) {
 
         return (
           <div>
-            <ChooseAvatar error={checkError} {...other} file={selectedAvatar} />
+            <ChooseAvatar {...other} file={selectedAvatar} />
             {checkError && (
               <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>
                 {error.message}

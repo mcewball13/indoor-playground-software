@@ -75,9 +75,9 @@ router.post("/new", async (req, res) => {
                 minor_id: minor.id,
             });
         });
-        const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
+        const accessToken = signToken({id: newCustomerData.id, email: newCustomerData.email});
 
-        res.status(200).json({ customer: {newCustomerData, newCustomerMinorDataArr}, token });
+        res.status(200).json({ customer: {newCustomerData, newCustomerMinorDataArr}, accessToken });
     } catch (error) {
         console.log(error);
         res.status(500).json(error);

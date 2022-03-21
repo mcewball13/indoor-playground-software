@@ -169,16 +169,13 @@ function AuthProvider({ children }) {
     // change to axios.post when we have a completed backend
     // // =========================================================================
     // const response = await axios({
-    //   url: '/api/employees/login',
+    //   url: '/api/customers/new',
     //   method: 'POST',
     //   baseURL: '/',
-    //   data: {
-    //     email,
-    //     password,
-    //   },
+    //   data: newCustomer,
     // });
     // const { accessToken, employeeData: user } = response.data;
-    const response = await axios.post('/api/account/new', newCustomer);
+    const response = await axios.post('/api/customers/new', newCustomer);
 
     const { accessToken, customer } = response.data;
 
