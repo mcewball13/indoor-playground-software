@@ -165,6 +165,31 @@ function AuthProvider({ children }) {
       },
     });
   };
+  const customerRegister = async (newCustomer) => {
+    // change to axios.post when we have a completed backend
+    // // =========================================================================
+    // const response = await axios({
+    //   url: '/api/employees/login',
+    //   method: 'POST',
+    //   baseURL: '/',
+    //   data: {
+    //     email,
+    //     password,
+    //   },
+    // });
+    // const { accessToken, employeeData: user } = response.data;
+    const response = await axios.post('/api/account/new', newCustomer);
+
+    const { accessToken, customer } = response.data;
+
+    window.localStorage.setItem('accessToken', accessToken);
+    dispatch({
+      type: 'CUSTOMER_REGISTER',
+      payload: {
+        customer,
+      },
+    });
+  };
 
   const logout = async () => {
     setSession(null);
@@ -181,6 +206,7 @@ function AuthProvider({ children }) {
         employeeLogin,
         logout,
         register,
+        customerRegister,
       }}
     >
       {children}
