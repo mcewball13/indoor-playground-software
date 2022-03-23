@@ -36,13 +36,6 @@ const slice = createSlice({
       state.selectedAvatar = action.payload;
       state.isOpenModal = false;
     },
-    createNewCustomerSuccess(state, action) {
-      const newCustomer = action.payload;
-      console.log('newCustomer', newCustomer);
-      state.currentCustomer = newCustomer;
-      state.selectedAvatar = null;
-      state.isLoading = false;
-    },
     checkEmailSuccess(state, action) {
       state.emailExists = true;
       state.currentCustomer = action.payload;
@@ -81,19 +74,6 @@ export function getLocations() {
       const response = await axios.get('/api/locations');
       dispatch(slice.actions.getLocationsSuccess(response.data));
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
-    }
-  };
-}
-export function createNewCustomer(newCustomer) {
-  return async () => {
-    dispatch(slice.actions.startLoading());
-    try {
-      const response = await axios.post('/api/customers', newCustomer);
-      console.log(response.data)
-      dispatch(slice.actions.createNewCustomerSuccess(response.data));
-    } catch (error) {
-      console.log(error);
       dispatch(slice.actions.hasError(error));
     }
   };
