@@ -107,6 +107,7 @@ router.post("/new", async (req, res) => {
 });
 
 router.post("/login", (req, res) => {
+    console.log("login route");
     User.findOne({
         where: {
             email: req.body.email,

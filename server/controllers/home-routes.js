@@ -9,10 +9,6 @@ const sequelize = require("../config/connection");
 const isSignedIn = require("../utils/userAuth");
 const { Op } = require("sequelize");
 
-router.get("/", async (req, res) => {
-    const guardianData = await CustomerGuardian.findAll()
-    res.json(guardianData)
-});
 
 router.get("/login", (req, res) => {
     if (req.session.loggedIn) {
