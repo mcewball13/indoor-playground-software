@@ -145,7 +145,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
   const onSubmit = async () => {
     try {
-     await customerRegister({ guardians: { ...values, avatarUrl: selectedAvatar }, minors })
+      await customerRegister({ guardians: { ...values, avatarUrl: selectedAvatar }, minors });
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       console.log(currentCustomer);
       navigate(PATH_PAGE.signWaiver);

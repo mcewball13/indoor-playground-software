@@ -5,15 +5,14 @@
     "node": true
   },
   "extends": [
-    "airbnb",
+   
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended",
-    "prettier"
+    "plugin:prettier/recommended"
   ],
   "plugins": [
     "react",
     "react-hooks",
-    "prettier"
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {

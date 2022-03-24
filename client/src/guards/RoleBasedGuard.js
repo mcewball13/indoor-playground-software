@@ -5,7 +5,7 @@ import { Container, Alert, AlertTitle } from '@mui/material';
 
 RoleBasedGuard.propTypes = {
   accessibleRoles: PropTypes.array, // Example ['admin', 'leader']
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 const useCurrentRole = () => {

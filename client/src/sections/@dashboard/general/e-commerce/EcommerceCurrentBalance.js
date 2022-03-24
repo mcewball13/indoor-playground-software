@@ -8,7 +8,7 @@ import { fCurrency } from '../../../../utils/formatNumber';
 
 const RowStyle = styled('div')({
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
 });
 
 // ----------------------------------------------------------------------

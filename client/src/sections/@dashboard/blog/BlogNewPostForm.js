@@ -122,7 +122,6 @@ export default function BlogNewPostForm() {
     [setValue]
   );
 
-
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

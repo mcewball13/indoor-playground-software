@@ -40,5 +40,5 @@ export const role = [
   'Project Manager',
   'UI/UX Designer',
   'UI Designer',
-  'Full Stack Designer'
+  'Full Stack Designer',
 ];

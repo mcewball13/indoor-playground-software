@@ -16,12 +16,8 @@ export default function SkeletonKanbanColumn() {
         <Paper variant="outlined" key={index} sx={{ p: 2.5, width: 310 }}>
           <Stack spacing={2}>
             <Skeleton variant="rectangular" sx={{ paddingTop: '75%', borderRadius: 1.5 }} />
-            {index === 0 && (
-              <Skeleton variant="rectangular" sx={{ paddingTop: '25%', borderRadius: 1.5 }} />
-            )}
-            {index !== 2 && (
-              <Skeleton variant="rectangular" sx={{ paddingTop: '25%', borderRadius: 1.5 }} />
-            )}
+            {index === 0 && <Skeleton variant="rectangular" sx={{ paddingTop: '25%', borderRadius: 1.5 }} />}
+            {index !== 2 && <Skeleton variant="rectangular" sx={{ paddingTop: '25%', borderRadius: 1.5 }} />}
           </Stack>
         </Paper>
       ))}

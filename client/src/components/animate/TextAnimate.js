@@ -10,7 +10,7 @@ import { varFade } from './variants';
 TextAnimate.propTypes = {
   text: PropTypes.string.isRequired,
   variants: PropTypes.object,
-  sx: PropTypes.object
+  sx: PropTypes.object,
 };
 
 export default function TextAnimate({ text, variants, sx, ...other }) {
@@ -21,7 +21,7 @@ export default function TextAnimate({ text, variants, sx, ...other }) {
         typography: 'h1',
         overflow: 'hidden',
         display: 'inline-flex',
-        ...sx
+        ...sx,
       }}
       {...other}
     >

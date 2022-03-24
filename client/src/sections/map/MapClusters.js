@@ -10,8 +10,8 @@ const clusterLayer = {
   filter: ['has', 'point_count'],
   paint: {
     'circle-color': ['step', ['get', 'point_count'], '#51bbd6', 100, '#f1f075', 750, '#f28cb1'],
-    'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40]
-  }
+    'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+  },
 };
 
 const clusterCountLayer = {
@@ -22,8 +22,8 @@ const clusterCountLayer = {
   layout: {
     'text-field': '{point_count_abbreviated}',
     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-    'text-size': 12
-  }
+    'text-size': 12,
+  },
 };
 
 const unclusteredPointLayer = {
@@ -35,8 +35,8 @@ const unclusteredPointLayer = {
     'circle-color': '#11b4da',
     'circle-radius': 4,
     'circle-stroke-width': 1,
-    'circle-stroke-color': '#fff'
-  }
+    'circle-stroke-color': '#fff',
+  },
 };
 
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ export default function MapClusters({ ...other }) {
     longitude: -103.59,
     zoom: 3,
     bearing: 0,
-    pitch: 0
+    pitch: 0,
   });
 
   const onClick = (event) => {
@@ -66,7 +66,7 @@ export default function MapClusters({ ...other }) {
         latitude: feature && feature.geometry.coordinates[1],
         // eslint-disable-next-line no-restricted-globals
         zoom: isNaN(zoom) ? 3 : zoom,
-        transitionDuration: 500
+        transitionDuration: 500,
       });
     });
   };

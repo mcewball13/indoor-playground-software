@@ -7,15 +7,13 @@ import { Card } from '@mui/material';
 
 const RootStyle = styled('div')(({ theme }) => ({
   padding: theme.spacing(2),
-  
 }));
 
-const HTMLBlock = ({ waiverText, ...other }) =>  (
-    <Card>
-      <RootStyle dangerouslySetInnerHTML={{ __html: waiverText }} {...other} />
-    </Card>
-  );
-
+const HTMLBlock = ({ waiverText, ...other }) => (
+  <Card>
+    <RootStyle dangerouslySetInnerHTML={{ __html: waiverText }} {...other} />
+  </Card>
+);
 
 HTMLBlock.propTypes = {
   waiverText: PropTypes.string,

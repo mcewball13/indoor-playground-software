@@ -18,9 +18,7 @@ export default function BookingBookedRoom() {
             key={progress.status}
             value={progress.value}
             color={
-              (progress.status === 'Pending' && 'warning') ||
-              (progress.status === 'Cancel' && 'error') ||
-              'success'
+              (progress.status === 'Pending' && 'warning') || (progress.status === 'Cancel' && 'error') || 'success'
             }
             sx={{ height: 8, bgcolor: 'grey.50016' }}
           />

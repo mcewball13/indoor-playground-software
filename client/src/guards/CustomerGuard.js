@@ -12,11 +12,11 @@ import LoadingScreen from '../components/LoadingScreen';
 // ----------------------------------------------------------------------
 
 CustomerGuard.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default function CustomerGuard({ children }) {
-  const { isCustomerAuthenticated, isInitialized  } = useAuth();
+  const { isCustomerAuthenticated, isInitialized } = useAuth();
   const { pathname } = useLocation();
   const [requestedLocation, setRequestedLocation] = useState(null);
 
@@ -40,7 +40,6 @@ export default function CustomerGuard({ children }) {
 
   return <>{children}</>;
 }
-
 
 // once they fill out info and submit they will be sent to the signWaiver page
 // What happens when they go back to the previous page to edit/update?

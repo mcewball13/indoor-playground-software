@@ -15,7 +15,7 @@ i18n
     resources: {
       en: { translations: enLocales },
       de: { translations: deLocales },
-      fr: { translations: frLocales }
+      fr: { translations: frLocales },
     },
     lng: localStorage.getItem('i18nextLng') || 'en',
     fallbackLng: 'en',
@@ -23,8 +23,8 @@ i18n
     ns: ['translations'],
     defaultNS: 'translations',
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   });
 
 export default i18n;

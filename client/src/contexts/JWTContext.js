@@ -55,7 +55,7 @@ const handlers = {
       isCustomerAuthenticated: true,
       customer,
     };
-  }
+  },
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -192,8 +192,6 @@ function AuthProvider({ children }) {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
   };
-
-  
 
   return (
     <AuthContext.Provider

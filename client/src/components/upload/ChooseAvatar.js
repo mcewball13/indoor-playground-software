@@ -67,12 +67,10 @@ ChooseAvatar.propTypes = {
   sx: PropTypes.object,
 };
 
-
-
 export default function ChooseAvatar({ file, helperText, sx, ...other }) {
   const dispatch = useDispatch();
-  
-  const handleOpenModal =() => {
+
+  const handleOpenModal = () => {
     dispatch(openModal(true));
   };
 
@@ -83,7 +81,6 @@ export default function ChooseAvatar({ file, helperText, sx, ...other }) {
           ...sx,
         }}
         {...other}
-        
       >
         <ThumbnailStyle onClick={handleOpenModal}>
           {file && <Image alt="avatar" src={isString(file) ? file : file.preview} sx={{ zIndex: 8 }} />}

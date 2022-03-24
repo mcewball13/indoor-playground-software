@@ -23,11 +23,7 @@ export default function BlockContent() {
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           Drop files here or click&nbsp;
-          <Typography
-            variant="body2"
-            component="span"
-            sx={{ color: 'primary.main', textDecoration: 'underline' }}
-          >
+          <Typography variant="body2" component="span" sx={{ color: 'primary.main', textDecoration: 'underline' }}>
             browse
           </Typography>
           &nbsp;thorough your machine
