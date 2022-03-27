@@ -145,9 +145,8 @@ export default function Router() {
     },
     {
       path: '/',
-      element: <MainLayout />,
       children: [
-        { element: <HomePage />, index: true },
+        {element: <Navigate to={PATH_DASHBOARD.root} replace/>, index: true},
         { path: 'about-us', element: <About /> },
         {
           path: 'sign-waiver',
