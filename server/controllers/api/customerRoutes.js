@@ -50,6 +50,22 @@ router.get("/email/:email", async (req, res) => {
     res.status(200).json(customerGuardianData);
 });
 
+// return true if user exits to trigger modal to show and have user login to call email loging route
+router.get("/email-exists/:email/", async (req, res) => {
+    try {
+        const customerGuardianData = await CustomerGuardian.findOne({
+            attributes: { exclude: ["password"] },
+            where: {
+                email: req.params.email,
+            },
+        });
+        console.log(customerGuardianData);
+        res.status(200).json({userExists: true});
+    } catch (error) {
+        res.status(500).statusMessage(error);
+    }
+});
+
 router.post("/new", async (req, res) => {
     try {
         const newCustomerData = await CustomerGuardian.create({
