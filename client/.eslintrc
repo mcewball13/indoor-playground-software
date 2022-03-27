@@ -5,25 +5,23 @@
     "node": true
   },
   "extends": [
-    "airbnb",
-    "plugin:jsx-a11y/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier"
+   
+    // "plugin:jsx-a11y/recommended",
+    // "plugin:react-hooks/recommended"
   ],
   "plugins": [
     "react",
     "react-hooks",
-    "prettier"
   ],
-  "parser": "@babel/eslint-parser",
   "parserOptions": {
-    "ecmaVersion": 8,
-    "requireConfigFile": false,
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "impliedStrict": true
-    }
+      "jsx": true
+    },
+    "ecmaVersion": 2018,
+    "sourceType": "module"
   },
+
+
   "rules": {
     "import": 0,
     "max-len": 0,
@@ -57,6 +55,7 @@
     "react/jsx-curly-brace-presence": 0,
     "react/destructuring-assignment": 0,
     "import/no-extraneous-dependencies": 0,
+    "import/extensions": 0,
     "no-unused-vars": [
       1,
       {

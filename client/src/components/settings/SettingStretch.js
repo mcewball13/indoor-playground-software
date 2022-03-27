@@ -55,14 +55,8 @@ export default function SettingStretch() {
           }),
         }}
       >
-        <Iconify
-          icon={themeStretch ? 'eva:arrow-ios-back-fill' : 'eva:arrow-ios-forward-fill'}
-          {...ICON_SIZE}
-        />
-        <Iconify
-          icon={themeStretch ? 'eva:arrow-ios-forward-fill' : 'eva:arrow-ios-back-fill'}
-          {...ICON_SIZE}
-        />
+        <Iconify icon={themeStretch ? 'eva:arrow-ios-back-fill' : 'eva:arrow-ios-forward-fill'} {...ICON_SIZE} />
+        <Iconify icon={themeStretch ? 'eva:arrow-ios-forward-fill' : 'eva:arrow-ios-back-fill'} {...ICON_SIZE} />
       </Stack>
     </BoxStyle>
   );

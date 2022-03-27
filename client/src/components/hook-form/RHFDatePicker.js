@@ -1,4 +1,3 @@
-
 import PropTypes from 'prop-types';
 
 // form
@@ -16,7 +15,6 @@ RHFDatePicker.propTypes = {
 
 export default function RHFDatePicker({ label = 'Select your Date', name, ...other }) {
   const { control } = useFormContext();
-
 
   return (
     <Controller

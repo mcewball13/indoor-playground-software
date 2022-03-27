@@ -30,9 +30,9 @@ const FabButtonAnimate = forwardRef(({ color = 'primary', size = 'large', childr
           color: theme.palette[color].contrastText,
           bgcolor: theme.palette[color].main,
           '&:hover': {
-            bgcolor: theme.palette[color].dark
+            bgcolor: theme.palette[color].dark,
           },
-          ...sx
+          ...sx,
         }}
         {...other}
       >
@@ -47,7 +47,7 @@ FabButtonAnimate.propTypes = {
   color: PropTypes.oneOf(['inherit', 'default', 'primary', 'secondary', 'info', 'success', 'warning', 'error']),
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   sx: PropTypes.object,
-  sxWrap: PropTypes.object
+  sxWrap: PropTypes.object,
 };
 
 export default FabButtonAnimate;
@@ -56,23 +56,23 @@ export default FabButtonAnimate;
 
 const varSmall = {
   hover: { scale: 1.07 },
-  tap: { scale: 0.97 }
+  tap: { scale: 0.97 },
 };
 
 const varMedium = {
   hover: { scale: 1.06 },
-  tap: { scale: 0.98 }
+  tap: { scale: 0.98 },
 };
 
 const varLarge = {
   hover: { scale: 1.05 },
-  tap: { scale: 0.99 }
+  tap: { scale: 0.99 },
 };
 
 AnimateWrap.propTypes = {
   children: PropTypes.node.isRequired,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
-  sxWrap: PropTypes.object
+  sxWrap: PropTypes.object,
 };
 
 function AnimateWrap({ size, children, sxWrap }) {
@@ -87,7 +87,7 @@ function AnimateWrap({ size, children, sxWrap }) {
       variants={(isSmall && varSmall) || (isLarge && varLarge) || varMedium}
       sx={{
         display: 'inline-flex',
-        ...sxWrap
+        ...sxWrap,
       }}
     >
       {children}

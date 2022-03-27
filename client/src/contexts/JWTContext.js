@@ -12,6 +12,7 @@ const initialState = {
   customer: null,
   isInitialized: false,
   user: null,
+  existingCustomer: null,
 };
 
 const handlers = {
@@ -39,12 +40,12 @@ const handlers = {
     user: null,
   }),
   REGISTER: (state, action) => {
-    const { user } = action.payload;
+    const { employee } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
-      user,
+      employee,
     };
   },
   CUSTOMER_REGISTER: (state, action) => {
@@ -55,7 +56,14 @@ const handlers = {
       isCustomerAuthenticated: true,
       customer,
     };
-  }
+  },
+  CUSTOMER_EXISTS: (state, action) => {
+    const { existingCustomer,  } = action.payload;
+    return {
+      ...state,
+      existingCustomer,
+    };
+  },
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -67,6 +75,7 @@ const AuthContext = createContext({
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   customerRegister: () => Promise.resolve(),
+  customerExists: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -152,16 +161,16 @@ function AuthProvider({ children }) {
     });
   };
 
-  const register = async (newCustomer) => {
-    const response = await axios.post('/api/account/new', newCustomer);
+  const register = async (newEmployee) => {
+    const response = await axios.post('/api/account/new', newEmployee);
 
-    const { accessToken, user } = response.data;
+    const { accessToken, employee } = response.data;
 
     window.localStorage.setItem('accessToken', accessToken);
     dispatch({
       type: 'REGISTER',
       payload: {
-        user,
+        employee,
       },
     });
   };
@@ -187,13 +196,35 @@ function AuthProvider({ children }) {
       },
     });
   };
+  const customerExists = async (email) => {
+    // change to axios.post when we have a completed backend
+    // // =========================================================================
+    const response = await axios({
+      url: `/api/customers/email-exists/${email}`,
+      method: 'GET',
+      baseURL: '/',
+     
+    });
+    // const { accessToken, employeeData: user } = response.data;
+    // const response = await axios.post('/api/account/new', newCustomer);
+
+    const { exists, customerEmail } = response.data.existingCustomer;
+
+    if (exists) {
+      dispatch({
+        type: 'CUSTOMER_EXISTS',
+        payload: {
+          existingCustomer: {exists, customerEmail},
+        },
+      });
+    }
+    console.log(response.data.existingCustomer);
+  };
 
   const logout = async () => {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
   };
-
-  
 
   return (
     <AuthContext.Provider
@@ -204,6 +235,7 @@ function AuthProvider({ children }) {
         logout,
         register,
         customerRegister,
+        customerExists,
       }}
     >
       {children}

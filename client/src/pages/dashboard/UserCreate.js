@@ -48,9 +48,8 @@ export default function UserCreate() {
   };
 
   useEffect(() => {
-    setMappedAvatars(avatars)
+    setMappedAvatars(avatars);
   }, []);
-  
 
   return (
     <Page title="Create a new account">

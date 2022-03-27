@@ -69,7 +69,7 @@ export default function UploadAvatar({ error, file, helperText, sx, ...other }) 
     multiple: false,
     ...other,
   });
-  console.log(getRootProps())
+  console.log(getRootProps());
 
   return (
     <>

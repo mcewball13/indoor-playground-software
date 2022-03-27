@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef, useContext } from 'react';
 
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
@@ -41,6 +41,7 @@ import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 import useAuth from '../../../hooks/useAuth';
+import { AuthContext } from '../../../contexts/JWTContext';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +54,10 @@ UserWaiverForm.propTypes = {
 };
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
-  const { customerRegister } = useAuth();
+  const { customerRegister, customerExists } = useAuth();
+  const {existingCustomer}  = useContext(AuthContext)
+
+  console.log(existingCustomer)
 
   const navigate = useNavigate();
 
@@ -145,7 +149,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
   const onSubmit = async () => {
     try {
-     await customerRegister({ guardians: { ...values, avatarUrl: selectedAvatar }, minors })
+      await customerRegister({ guardians: { ...values, avatarUrl: selectedAvatar }, minors });
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       console.log(currentCustomer);
       navigate(PATH_PAGE.signWaiver);
@@ -192,7 +196,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleBlur = () => {
-    dispatch(checkEmail(values.email));
+   customerExists(values.email);
   };
 
   // formate date object to string

@@ -8,7 +8,7 @@ import { PATH_DASHBOARD } from '../routes/paths';
 // ----------------------------------------------------------------------
 
 GuestGuard.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default function GuestGuard({ children }) {

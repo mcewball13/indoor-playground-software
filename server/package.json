@@ -1,5 +1,5 @@
 {
-  "name": "Indoor-Playground-Software",
+  "name": "bloksy",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/mcewball13/indoor-playground-software/issues"
   },
-  "homepage": "",
+  "homepage": "/",
   "devDependencies": {
     "jest": "^27.0.6"
   },

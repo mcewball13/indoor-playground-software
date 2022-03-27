@@ -16,7 +16,7 @@ RHFChooseAvatar.propTypes = {
 export function RHFChooseAvatar({ name, ...other }) {
   const { control } = useFormContext();
 
-  const { selectedAvatar } = useSelector(state => state.newWaiverForm);
+  const { selectedAvatar } = useSelector((state) => state.newWaiverForm);
 
   return (
     <Controller
@@ -24,7 +24,6 @@ export function RHFChooseAvatar({ name, ...other }) {
       control={control}
       render={({ field, fieldState: { error } }) => {
         const checkError = !!error && !field.value;
-        
 
         return (
           <div>

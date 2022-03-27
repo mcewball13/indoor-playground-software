@@ -84,7 +84,7 @@ export function checkEmail(email) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.get(`/api/customers/email/${email}`);
-     if (response.data) dispatch(slice.actions.checkEmailSuccess(response.data));
+      if (response.data) dispatch(slice.actions.checkEmailSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
