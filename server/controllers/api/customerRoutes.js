@@ -60,7 +60,18 @@ router.get("/email-exists/:email/", async (req, res) => {
             },
         });
         console.log(customerGuardianData);
-        res.status(200).json({userExists: true});
+        if (!customerGuardianData) {
+            res.status(400).json({
+                existingCustomer: { exists: false },
+            });
+        } else {
+            res.status(200).json({
+                existingCustomer: {
+                    exists: true,
+                    customerEmail: customerGuardianData.email,
+                },
+            });
+        }
     } catch (error) {
         res.status(500).statusMessage(error);
     }
