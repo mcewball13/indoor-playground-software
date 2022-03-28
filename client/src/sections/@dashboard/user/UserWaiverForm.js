@@ -26,8 +26,6 @@ import {
   Table,
   TableRow,
   TableCell,
-  DialogTitle,
-  DialogActions,
 } from '@mui/material';
 // utils
 import { format } from 'date-fns';
@@ -44,7 +42,7 @@ import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 import useAuth from '../../../hooks/useAuth';
 import { AuthContext } from '../../../contexts/JWTContext';
-import { DialogAnimate } from '../../../components/animate';
+import UserCreateModal from './UserCreateModal';
 
 // ----------------------------------------------------------------------
 
@@ -59,8 +57,6 @@ UserWaiverForm.propTypes = {
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
   const { customerRegister, customerExists } = useAuth();
   const { existingCustomer } = useContext(AuthContext);
-
-  console.log('render');
 
   const navigate = useNavigate();
 
@@ -333,9 +329,9 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                   }}
                 />
                 <RHFTextField name="addressPhone" label="Phone Number" />
-                <RHFTextField name="addressState" label="State" />
-                <RHFTextField name="addressCity" label="City" />
                 <RHFTextField name="addressStreet" label="Street Address" />
+                <RHFTextField name="addressCity" label="City" />
+                <RHFTextField name="addressState" label="State" />
                 <RHFTextField name="addressZipCode" label="Zip Code" />
               </Box>
 
@@ -435,47 +431,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
           )}
         </Grid>
       </Grid>
-      <DialogAnimate maxWidthMUI="sm" open={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal}>
-        <DialogActions sx={{ py: 2, px: 3 }}>
-          <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-            Existing Customer Found
-          </Typography>
-        </DialogActions>
-        <Box p={2}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="p">
-                An account with <strong>{values.email || 'this email address'}</strong> already exists. You can load you
-                account now by typing in your password. If you wish to use another email address, you can just close
-                this dialogue.
-              </Typography>
-            </Grid>
-            <Grid justifyContent={'space-between'} container item xs={12} spacing={2}>
-              <Grid item xs={6}>
-                <RHFTextField
-                  name="password"
-                  label="Password"
-                  type={showPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <LoadingButton type="submit" variant="contained">
-                  Load Account
-                </LoadingButton>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-      </DialogAnimate>
+      <UserCreateModal muiWidth='sm' isOpen={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal} email={values.email} />
     </FormProvider>
   );
 }
