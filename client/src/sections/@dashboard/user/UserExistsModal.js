@@ -17,7 +17,7 @@ import Iconify from '../../../components/Iconify';
 
 
 
-const UserCreateModal = ({isOpen, onClose, muiWidth, email}) => {
+const UserExistsModal = ({isOpen, onClose, muiWidth, email}) => {
 // state for show password
 const [showPassword, setShowPassword] = useState(false);
 
@@ -67,11 +67,11 @@ const [showPassword, setShowPassword] = useState(false);
   )
 }
 
-UserCreateModal.propTypes = {
+UserExistsModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     muiWidth: PropTypes.string.isRequired,
     email: PropTypes.string,
 }
 
-export default UserCreateModal
+export default UserExistsModal

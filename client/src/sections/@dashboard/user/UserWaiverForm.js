@@ -42,7 +42,7 @@ import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 import useAuth from '../../../hooks/useAuth';
 import { AuthContext } from '../../../contexts/JWTContext';
-import UserCreateModal from './UserCreateModal';
+import UserExistsModal from './UserExistsModal';
 
 // ----------------------------------------------------------------------
 
@@ -431,7 +431,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
           )}
         </Grid>
       </Grid>
-      <UserCreateModal muiWidth='sm' isOpen={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal} email={values.email} />
+      <UserExistsModal muiWidth='sm' isOpen={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal} email={values.email} />
     </FormProvider>
   );
 }
