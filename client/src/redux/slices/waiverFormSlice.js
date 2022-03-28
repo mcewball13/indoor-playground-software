@@ -10,6 +10,7 @@ const initialState = {
   isLoading: false,
   error: null,
   isOpenModal: false,
+  isOpenModalCustomerExists: false,
   selectedAvatar: null,
   roles: [],
   locations: [],
@@ -44,15 +45,30 @@ const slice = createSlice({
     openModal(state) {
       state.isOpenModal = true;
     },
+    openCustomerExistsModal(state) {
+      state.isOpenModalCustomerExists = true;
+    },
     closeModal(state) {
       state.isOpenModal = false;
+    },
+    closeCustomerExistsModal(state) {
+      state.isOpenModalCustomerExists = false;
     },
   },
 });
 
 export default slice.reducer;
 
-export const { startLoading, hasError, openModal, closeModal, setSelectedAvatar, currentCustomer } = slice.actions;
+export const {
+  startLoading,
+  hasError,
+  openModal,
+  closeModal,
+  setSelectedAvatar,
+  currentCustomer,
+  openCustomerExistsModal,
+  closeCustomerExistsModal,
+} = slice.actions;
 
 // ----------------------------------------------------------------------
 

@@ -26,6 +26,8 @@ import {
   Table,
   TableRow,
   TableCell,
+  DialogTitle,
+  DialogActions,
 } from '@mui/material';
 // utils
 import { format } from 'date-fns';
@@ -36,12 +38,13 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { checkEmail } from '../../../redux/slices/waiverFormSlice';
+import { openCustomerExistsModal, closeCustomerExistsModal } from '../../../redux/slices/waiverFormSlice';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 import useAuth from '../../../hooks/useAuth';
 import { AuthContext } from '../../../contexts/JWTContext';
+import { DialogAnimate } from '../../../components/animate';
 
 // ----------------------------------------------------------------------
 
@@ -55,9 +58,9 @@ UserWaiverForm.propTypes = {
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
   const { customerRegister, customerExists } = useAuth();
-  const {existingCustomer}  = useContext(AuthContext)
+  const { existingCustomer } = useContext(AuthContext);
 
-  console.log(existingCustomer)
+  console.log('render');
 
   const navigate = useNavigate();
 
@@ -69,8 +72,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
-  const { selectedAvatar, currentCustomer } = useSelector((state) => state.newWaiverForm);
-  console.log(currentCustomer);
+  const { selectedAvatar, currentCustomer, isOpenModalCustomerExists } = useSelector((state) => state.newWaiverForm);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
   const addedMinorScrollRef = useRef(null);
@@ -144,6 +146,12 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
+  useEffect(() => {
+    if (existingCustomer) {
+      dispatch(openCustomerExistsModal());
+    }
+  }, [existingCustomer]);
+
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -196,7 +204,11 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleBlur = () => {
-   customerExists(values.email);
+    customerExists(values.email);
+  };
+
+  const handleCustomerExistsCloseModal = () => {
+    dispatch(closeCustomerExistsModal(false));
   };
 
   // formate date object to string
@@ -423,6 +435,47 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
           )}
         </Grid>
       </Grid>
+      <DialogAnimate maxWidthMUI="sm" open={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal}>
+        <DialogActions sx={{ py: 2, px: 3 }}>
+          <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
+            Existing Customer Found
+          </Typography>
+        </DialogActions>
+        <Box p={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="p">
+                An account with <strong>{values.email || 'this email address'}</strong> already exists. You can load you
+                account now by typing in your password. If you wish to use another email address, you can just close
+                this dialogue.
+              </Typography>
+            </Grid>
+            <Grid justifyContent={'space-between'} container item xs={12} spacing={2}>
+              <Grid item xs={6}>
+                <RHFTextField
+                  name="password"
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <LoadingButton type="submit" variant="contained">
+                  Load Account
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+      </DialogAnimate>
     </FormProvider>
   );
 }
