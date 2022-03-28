@@ -26,6 +26,7 @@ import {
   Table,
   TableRow,
   TableCell,
+  DialogTitle
 } from '@mui/material';
 // utils
 import { format } from 'date-fns';
@@ -36,12 +37,13 @@ import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { checkEmail } from '../../../redux/slices/waiverFormSlice';
+import { openCustomerExistsModal, closeCustomerExistsModal } from '../../../redux/slices/waiverFormSlice';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
 import useAuth from '../../../hooks/useAuth';
 import { AuthContext } from '../../../contexts/JWTContext';
+import { DialogAnimate } from '../../../components/animate';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +71,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
-  const { selectedAvatar, currentCustomer } = useSelector((state) => state.newWaiverForm);
+  const { selectedAvatar, currentCustomer, isOpenModalCustomerExists } = useSelector((state) => state.newWaiverForm);
   console.log(currentCustomer);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
@@ -197,6 +199,10 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const handleBlur = () => {
    customerExists(values.email);
+  };
+
+  const handleCustomerExistsCloseModal = () => {
+    dispatch(closeCustomerExistsModal(false));
   };
 
   // formate date object to string
@@ -423,6 +429,16 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
           )}
         </Grid>
       </Grid>
+      <DialogAnimate maxWidthMUI="md" open={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal}>
+        <Box p={2}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} textAlign="center">
+              <DialogTitle>Existing Customer Found</DialogTitle>
+            </Grid>
+            
+          </Grid>
+        </Box>
+      </DialogAnimate>
     </FormProvider>
   );
 }
