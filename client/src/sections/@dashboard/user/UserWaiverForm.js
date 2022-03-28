@@ -26,7 +26,8 @@ import {
   Table,
   TableRow,
   TableCell,
-  DialogTitle
+  DialogTitle,
+  DialogActions,
 } from '@mui/material';
 // utils
 import { format } from 'date-fns';
@@ -57,9 +58,9 @@ UserWaiverForm.propTypes = {
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
   const { customerRegister, customerExists } = useAuth();
-  const {existingCustomer}  = useContext(AuthContext)
+  const { existingCustomer } = useContext(AuthContext);
 
-  console.log(existingCustomer)
+  console.log('render');
 
   const navigate = useNavigate();
 
@@ -72,7 +73,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   const [minors, setMinors] = useState([]);
 
   const { selectedAvatar, currentCustomer, isOpenModalCustomerExists } = useSelector((state) => state.newWaiverForm);
-  console.log(currentCustomer);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
   const addedMinorScrollRef = useRef(null);
@@ -146,6 +146,12 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
+  useEffect(() => {
+    if (existingCustomer) {
+      dispatch(openCustomerExistsModal());
+    }
+  }, [existingCustomer]);
+
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -198,7 +204,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleBlur = () => {
-   customerExists(values.email);
+    customerExists(values.email);
   };
 
   const handleCustomerExistsCloseModal = () => {
@@ -429,13 +435,44 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
           )}
         </Grid>
       </Grid>
-      <DialogAnimate maxWidthMUI="md" open={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal}>
+      <DialogAnimate maxWidthMUI="sm" open={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal}>
+        <DialogActions sx={{ py: 2, px: 3 }}>
+          <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
+            Existing Customer Found
+          </Typography>
+        </DialogActions>
         <Box p={2}>
           <Grid container spacing={2}>
-            <Grid item xs={12} textAlign="center">
-              <DialogTitle>Existing Customer Found</DialogTitle>
+            <Grid item xs={12}>
+              <Typography variant="p">
+                An account with <strong>{values.email || 'this email address'}</strong> already exists. You can load you
+                account now by typing in your password. If you wish to use another email address, you can just close
+                this dialogue.
+              </Typography>
             </Grid>
-            
+            <Grid justifyContent={'space-between'} container item xs={12} spacing={2}>
+              <Grid item xs={6}>
+                <RHFTextField
+                  name="password"
+                  label="Password"
+                  type={showPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <LoadingButton type="submit" variant="contained">
+                  Load Account
+                </LoadingButton>
+              </Grid>
+            </Grid>
           </Grid>
         </Box>
       </DialogAnimate>

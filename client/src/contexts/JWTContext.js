@@ -87,6 +87,7 @@ AuthProvider.propTypes = {
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+
   useEffect(() => {
     const initialize = async () => {
       try {
@@ -218,7 +219,6 @@ function AuthProvider({ children }) {
         },
       });
     }
-    console.log(response.data.existingCustomer);
   };
 
   const logout = async () => {
