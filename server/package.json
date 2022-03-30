@@ -39,6 +39,7 @@
     "mysql2": "^2.2.5",
     "nodemon": "^2.0.12",
     "npm-check-updates": "^11.8.3",
+    "randomstring": "^1.2.2",
     "sequelize": "^6.6.5"
   }
 }

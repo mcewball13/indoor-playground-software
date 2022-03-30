@@ -76,6 +76,11 @@ router.get("/email-exists/:email/", async (req, res) => {
     }
 });
 
+// reset password route
+
+
+
+
 router.post("/new", async (req, res) => {
     try {
         const newCustomerData = await CustomerGuardian.create({
