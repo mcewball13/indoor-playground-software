@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const randomstring = require("randomstring");
+// modules
 const {
     CustomerGuardian,
     CustomerMinor,
@@ -76,10 +78,35 @@ router.get("/email-exists/:email/", async (req, res) => {
     }
 });
 
-// reset password route
-
-
-
+// reset password routed send code to email
+router.put("/reset-password", async (req, res) => {
+    try {
+        const randomNumReset = randomstring.generate({
+            length: 6,
+            charset: 'numeric',
+        });
+        const customerGuardianData = await CustomerGuardian.update({
+            resetPasswordToken: randomNumReset,
+            resetPasswordExpires: Date.now() + 3600000,
+        },
+            {
+                where: {
+                    email: req.body.email,
+                },
+            }
+        );
+        if (!customerGuardianData) {
+            res.status(404).json({
+                message: "Email not found",
+            });
+        }
+        res.status(200).json({
+            message: "Email sent",
+        });
+    } catch (error) {
+        res.status(500).statusMessage(error);
+    }
+});
 
 router.post("/new", async (req, res) => {
     try {
