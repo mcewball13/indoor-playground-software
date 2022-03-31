@@ -10,6 +10,7 @@ const {
 } = require("../../models");
 const { signToken } = require("../../utils/auth");
 const generateHtmlEmail = require("../../utils/emailHtml");
+const generatePlainEmail = require("../../utils/emailPlain");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -109,19 +110,20 @@ router.put("/reset-password", async (req, res) => {
             
         }
         const transporter = nodemailer.createTransport({
-            host: "mail.thewiggleroom.co",
-            port: 465,
-            secure: true,
+            host: process.env.EMAIL_SMTP_HOST,
+            port: process.env.EMAIL_SMTP_SECURE_PORT,
+            secure: process.env.EMAIL_SECURE_BOOLEAN,
             auth: {
-                user: "admin@thewiggleroom.co",
-                pass: "D3adH3ad!1@",
+                user: process.env.EMAIL_USERNAME,
+                pass: process.env.EMAIL_PASSWORD,
             },
+            from: process.env.EMAIL_USERNAME,
         });
         const info = await transporter.sendMail({
             from: '"The Wiggle Room" <admin@thewiggleroom.co>',
             to: req.body.email,
-            subject: "Test Reset Password Email",
-            text: `Your reset code is ${randomNumReset}`,
+            subject: "Reset Password Request from The Wiggle Room",
+            text: generatePlainEmail(randomNumReset),
             html: generateHtmlEmail(randomNumReset),
         });
         console.log("Message sent: %s", info.messageId);
@@ -131,6 +133,7 @@ router.put("/reset-password", async (req, res) => {
             message: "Email sent",
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json(error);
     }
 });
