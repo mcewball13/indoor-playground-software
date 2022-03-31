@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const randomstring = require("randomstring");
+const nodemailer = require("nodemailer");
+
 // modules
 const {
     CustomerGuardian,
@@ -7,6 +9,7 @@ const {
     CustomerGuardianHasCustomerMinor,
 } = require("../../models");
 const { signToken } = require("../../utils/auth");
+const generateHtmlEmail = require("../../utils/emailHtml");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -83,11 +86,14 @@ router.put("/reset-password", async (req, res) => {
     try {
         const randomNumReset = randomstring.generate({
             length: 6,
-            charset: 'numeric',
+            charset: 'alphanumeric',
+            capitalization: "uppercase"
         });
+        console.log(randomNumReset);
         const customerGuardianData = await CustomerGuardian.update({
             resetPasswordToken: randomNumReset,
             resetPasswordExpires: Date.now() + 3600000,
+            resetPasswordUsed: false,
         },
             {
                 where: {
@@ -95,16 +101,37 @@ router.put("/reset-password", async (req, res) => {
                 },
             }
         );
-        if (!customerGuardianData) {
-            res.status(404).json({
+    
+        if (!customerGuardianData[0]) {
+           return res.status(404).json({
                 message: "Email not found",
             });
+            
         }
+        const transporter = nodemailer.createTransport({
+            host: "mail.thewiggleroom.co",
+            port: 465,
+            secure: true,
+            auth: {
+                user: "admin@thewiggleroom.co",
+                pass: "D3adH3ad!1@",
+            },
+        });
+        const info = await transporter.sendMail({
+            from: '"The Wiggle Room" <admin@thewiggleroom.co>',
+            to: req.body.email,
+            subject: "Test Reset Password Email",
+            text: `Your reset code is ${randomNumReset}`,
+            html: generateHtmlEmail(randomNumReset),
+        });
+        console.log("Message sent: %s", info.messageId);
+
+
         res.status(200).json({
             message: "Email sent",
         });
     } catch (error) {
-        res.status(500).statusMessage(error);
+        res.status(500).json(error);
     }
 });
 
