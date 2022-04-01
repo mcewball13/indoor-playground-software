@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const randomstring = require("randomstring");
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
+
 
 // modules
 const {
@@ -11,6 +13,14 @@ const {
 const { signToken } = require("../../utils/auth");
 const generateHtmlEmail = require("../../utils/emailHtml");
 const generatePlainEmail = require("../../utils/emailPlain");
+
+const oAuth2Client = new google.auth.OAuth2(
+    process.env.OAUTH_CLIENT_ID,
+    process.env.OAUTH_CLIENT_SECRET,
+    process.env.OAUTH_REDIRECT_URI
+);
+
+oAuth2Client.setCredentials({refresh_token: process.env.OAUTH_REFRESH_TOKEN});
 
 // get all users
 router.get("/", async (req, res) => {
@@ -85,44 +95,52 @@ router.get("/email-exists/:email/", async (req, res) => {
 // reset password routed send code to email
 router.put("/reset-password", async (req, res) => {
     try {
+
         const randomNumReset = randomstring.generate({
             length: 6,
             charset: 'alphanumeric',
             capitalization: "uppercase"
         });
-        console.log(randomNumReset);
+
+        
+        
         const customerGuardianData = await CustomerGuardian.update({
             resetPasswordToken: randomNumReset,
             resetPasswordExpires: Date.now() + 3600000,
             resetPasswordUsed: false,
         },
-            {
-                where: {
-                    email: req.body.email,
-                },
-            }
+        {
+            where: {
+                email: req.body.email,
+            },
+        }
         );
-    
+        
         if (!customerGuardianData[0]) {
-           return res.status(404).json({
+            return res.status(404).json({
                 message: "Email not found",
             });
             
         }
+
+
+        const accessToken = await oAuth2Client.getAccessToken();
+        
         const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_SMTP_HOST,
-            port: process.env.EMAIL_SMTP_SECURE_PORT,
-            secure: process.env.EMAIL_SECURE_BOOLEAN,
+            service: "gmail",
             auth: {
+                type: "OAuth2",
                 user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD,
+                clientId: process.env.OAUTH_CLIENT_ID,
+                clientSecret: process.env.OAUTH_CLIENT_SECRET,
+                refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+                accessToken: accessToken,
             },
-            from: process.env.EMAIL_USERNAME,
         });
         const info = await transporter.sendMail({
-            from: '"The Wiggle Room" <admin@thewiggleroom.co>',
+            from: '"Mike at Bloksy" <admin@bloksy.co>',
             to: req.body.email,
-            subject: "Reset Password Request from The Wiggle Room",
+            subject: "Reset Password Request from Bloksy",
             text: generatePlainEmail(randomNumReset),
             html: generateHtmlEmail(randomNumReset),
         });
