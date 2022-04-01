@@ -71,6 +71,16 @@ CustomerGuardian.init(
             allowNull: false,
             defaultValue: false,
         },
+        resetPasswordToken: {
+            type: DataTypes.STRING,
+            unique: true,
+        },
+        resetPasswordExpires: {
+            type: DataTypes.BIGINT,
+        },
+        resetPasswordTokenUsed: {
+            type: DataTypes.BOOLEAN,
+        }
     },
     {
         hooks: {
@@ -97,7 +107,7 @@ CustomerGuardian.init(
                 } catch (err) {
                     throw new Error(err);
                 }
-            }
+            },
         },
         sequelize,
         freezeTableName: true,

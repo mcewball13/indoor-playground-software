@@ -1,10 +1,19 @@
 const router = require("express").Router();
+const randomstring = require("randomstring");
+const nodemailer = require("nodemailer");
+
+// modules
+const oAuth2Client = require("../../utils/OAuth2Client");
+
+// modules
 const {
     CustomerGuardian,
     CustomerMinor,
     CustomerGuardianHasCustomerMinor,
 } = require("../../models");
 const { signToken } = require("../../utils/auth");
+const generateHtmlEmail = require("../../utils/emailHtml");
+const generatePlainEmail = require("../../utils/emailPlain");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -73,6 +82,65 @@ router.get("/email-exists/:email/", async (req, res) => {
         }
     } catch (error) {
         res.status(500).statusMessage(error);
+    }
+});
+
+// reset password routed send code to email
+router.put("/reset-password", async (req, res) => {
+    try {
+        const randomNumReset = randomstring.generate({
+            length: 6,
+            charset: "alphanumeric",
+            capitalization: "uppercase",
+        });
+
+        const customerGuardianData = await CustomerGuardian.update(
+            {
+                resetPasswordToken: randomNumReset,
+                resetPasswordExpires: Date.now() + 3600000,
+                resetPasswordUsed: false,
+            },
+            {
+                where: {
+                    email: req.body.email,
+                },
+            }
+        );
+
+        if (!customerGuardianData[0]) {
+            return res.status(404).json({
+                message: "Email not found",
+            });
+        }
+
+        const accessToken = await oAuth2Client.getAccessToken();
+
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                type: "OAuth2",
+                user: process.env.EMAIL_USERNAME,
+                clientId: process.env.OAUTH_CLIENT_ID,
+                clientSecret: process.env.OAUTH_CLIENT_SECRET,
+                refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+                accessToken: accessToken,
+            },
+        });
+        await transporter.sendMail({
+            from: '"Mike at Bloksy" <admin@bloksy.co>',
+            to: req.body.email,
+            subject: "Reset Password Request from Bloksy",
+            text: generatePlainEmail(randomNumReset),
+            html: generateHtmlEmail(randomNumReset),
+        });
+        // console.log("Message sent: %s", info.messageId);
+
+        res.status(200).json({
+            message: "Email sent",
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
     }
 });
 

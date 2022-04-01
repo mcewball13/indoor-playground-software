@@ -67,8 +67,8 @@ export default function ResetPassword() {
                   Please check your email.
                 </Typography>
 
-                <Button size="large" variant="contained" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 5 }}>
-                  Back
+                <Button size="large" variant="contained" component={RouterLink} to={PATH_AUTH.verify} sx={{ mt: 5 }}>
+                  Enter Code
                 </Button>
               </Box>
             )}
