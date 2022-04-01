@@ -1,7 +1,9 @@
 const router = require("express").Router();
 const randomstring = require("randomstring");
 const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
+
+// modules
+const oAuth2Client = require("../../utils/OAuth2Client");
 
 
 // modules
@@ -14,13 +16,7 @@ const { signToken } = require("../../utils/auth");
 const generateHtmlEmail = require("../../utils/emailHtml");
 const generatePlainEmail = require("../../utils/emailPlain");
 
-const oAuth2Client = new google.auth.OAuth2(
-    process.env.OAUTH_CLIENT_ID,
-    process.env.OAUTH_CLIENT_SECRET,
-    process.env.OAUTH_REDIRECT_URI
-);
 
-oAuth2Client.setCredentials({refresh_token: process.env.OAUTH_REFRESH_TOKEN});
 
 // get all users
 router.get("/", async (req, res) => {
@@ -95,6 +91,8 @@ router.get("/email-exists/:email/", async (req, res) => {
 // reset password routed send code to email
 router.put("/reset-password", async (req, res) => {
     try {
+
+        
 
         const randomNumReset = randomstring.generate({
             length: 6,
