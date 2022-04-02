@@ -10,6 +10,8 @@ import { LoadingButton } from '@mui/lab';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
+import { useSelector } from '../../../redux/store';
+import { startOfMinute } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
@@ -21,13 +23,15 @@ ResetPasswordForm.propTypes = {
 export default function ResetPasswordForm({ onSent, onGetEmail }) {
   const isMountedRef = useIsMountedRef();
 
+  const {resetEmail} = useSelector((state) => state.newWaiverForm);
+
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
   });
 
   const methods = useForm({
     resolver: yupResolver(ResetPasswordSchema),
-    defaultValues: { email: 'demo@minimals.cc' },
+    defaultValues: { email: resetEmail || 'demo@minimals.cc' },
   });
 
   const {

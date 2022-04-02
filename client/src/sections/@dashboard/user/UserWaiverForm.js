@@ -207,7 +207,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleCustomerExistsCloseModal = () => {
-    dispatch(closeCustomerExistsModal(false));
+    dispatch(closeCustomerExistsModal());
   };
 
   // formate date object to string

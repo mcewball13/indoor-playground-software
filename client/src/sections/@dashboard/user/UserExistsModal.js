@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
+import { Link as RouterLink } from 'react-router-dom';
 
 // mui
 import {
@@ -13,6 +14,7 @@ import {
   TextField,
   Stack,
   Button,
+  Link,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
@@ -21,6 +23,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 
 // componenets
+import { PATH_AUTH } from '../../../routes/paths';
 import { DialogAnimate } from '../../../components/animate';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import Iconify from '../../../components/Iconify';
@@ -85,17 +88,23 @@ const UserExistsModal = ({ isOpen, onClose, muiWidth, email }) => {
             ),
           }}
         />
-
-        <Grid container gap={3}>
-          <Grid item>
-            <LoadingButton type="submit" variant="contained">
-              Load Account
-            </LoadingButton>
+        <Grid container gap={3} >
+          <Grid item container gap={2} flex={1} >
+            <Grid item>
+              <LoadingButton type="submit" variant="contained">
+                Load Account
+              </LoadingButton>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" color="inherit" onClick={onClose}>
+                Cancel
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Button variant="outlined" color="inherit" onClick={onClose}>
-              Cancel
-            </Button>
+          <Grid item alignSelf={'center'}>
+            <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.resetPassword}>
+              Forgot password?
+            </Link>
           </Grid>
         </Grid>
       </Stack>
