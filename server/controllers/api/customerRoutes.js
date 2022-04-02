@@ -2,8 +2,9 @@ const router = require("express").Router();
 const randomstring = require("randomstring");
 const nodemailer = require("nodemailer");
 
-// modules
-const oAuth2Client = require("../../utils/OAuth2Client");
+// email client instance
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 // modules
 const {
@@ -113,21 +114,8 @@ router.put("/reset-password", async (req, res) => {
             });
         }
 
-        const accessToken = await oAuth2Client.getAccessToken();
-
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                type: "OAuth2",
-                user: process.env.EMAIL_USERNAME,
-                clientId: process.env.OAUTH_CLIENT_ID,
-                clientSecret: process.env.OAUTH_CLIENT_SECRET,
-                refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-                accessToken: accessToken,
-            },
-        });
-        await transporter.sendMail({
-            from: '"Mike at Bloksy" <admin@bloksy.co>',
+        await sgMail.send({
+            from: 'admin@bloksy.com',
             to: req.body.email,
             subject: "Reset Password Request from Bloksy",
             text: generatePlainEmail(randomNumReset),
