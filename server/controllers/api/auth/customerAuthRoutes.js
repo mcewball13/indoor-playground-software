@@ -34,16 +34,16 @@ router.post("/login", async (req, res) => {
         const validPassword = await existingCustomerData.checkPassword(
             req.body.password
         );
-console.log("validPassword", validPassword);
+
         if (!validPassword) {
             res.status(400).json({ message: "Invalid User name or password" });
             return;
         }
         const { id, email } = existingCustomerData.dataValues;
-        const accessToken = await signToken({id, email});
+        const accessToken = signToken({id, email});
 
         res.json({
-            customer: { existingCustomerData },
+            existingCustomerData,
             accessToken,
         });
     } catch (error) {

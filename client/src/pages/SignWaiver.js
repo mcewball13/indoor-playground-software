@@ -29,6 +29,7 @@ import { PATH_DASHBOARD } from '../routes/paths';
 import { waiverText } from './tempWaiverText';
 import { FormProvider } from '../components/hook-form';
 import HTMLBlock from '../components/waiver/HTMLBlock';
+import useAuth from '../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -36,14 +37,14 @@ const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
   const theme = useTheme();
-
+const { customer} = useAuth()
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
   const signatureRef = useRef({});
   const signatureBlockCardRef = useRef(null);
-  console.log(theme);
+  console.log(customer);
 
   // only update signature width when the signature block is visible
   useEffect(() => {
@@ -136,7 +137,7 @@ export default function SignWaiver() {
                   marginLeft: '1rem',
                 }}
               >
-                {currentCustomer.newCustomerData?.guardianFirstName} {currentCustomer.newCustomerData?.guardianLastName}
+                {customer.newCustomerData?.guardianFirstName} {customer.newCustomerData?.guardianLastName}
               </Typography>
             </Grid>
           </Grid>
@@ -145,11 +146,11 @@ export default function SignWaiver() {
               Minors:
             </Typography>
 
-            {currentCustomer.newCustomerMinorDataArr &&
-              currentCustomer.newCustomerMinorDataArr.map((minor, i) => (
+            {customer.newCustomerMinorDataArr &&
+              customer.newCustomerMinorDataArr.map((minor, i) => (
                 <Grid item key={minor + i}>
                   <Typography variant="p" component="p" sx={{ marginLeft: '1rem' }}>
-                    {currentCustomer.newCustomerMinorDataArr.length - 1 !== i
+                    {customer.newCustomerMinorDataArr.length - 1 !== i
                       ? `${minor.minorFirstName}
                       ${minor.minorLastName},`
                       : `${minor.minorFirstName} ${minor.minorLastName}`}

@@ -223,7 +223,7 @@ function AuthProvider({ children }) {
         password,
       },
     });
-    const { accessToken, customer } = response.data;
+    const { accessToken, existingCustomer } = response.data;
 
     // ========================================================================
 
@@ -231,7 +231,7 @@ function AuthProvider({ children }) {
     dispatch({
       type: 'CUSTOMER_LOGIN',
       payload: {
-        customer,
+        existingCustomer,
       },
     });
   };

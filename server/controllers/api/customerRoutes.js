@@ -137,6 +137,7 @@ router.post("/new", async (req, res) => {
         const newCustomerData = await CustomerGuardian.create({
             ...req.body.guardians,
             isAccountOwner: true,
+            displayName: `${req.body.guardians.guardianFirstName} ${req.body.guardians.guardianLastName}`,
         });
         console.log(req.body);
         // map through minor array and add customeguardian id to each minor

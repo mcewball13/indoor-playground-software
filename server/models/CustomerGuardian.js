@@ -23,7 +23,11 @@ CustomerGuardian.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        guardianBirthday: {
+        displayName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        birthday: {
             type: DataTypes.DATEONLY,
             allowNull: false,
         },
@@ -54,10 +58,10 @@ CustomerGuardian.init(
         addressZipCode: {
             type: DataTypes.STRING,
         },
-        addressPhone: {
+        phoneNumber: {
             type: DataTypes.STRING,
         },
-        avatarUrl: {
+        photoURL: {
             type: DataTypes.STRING,
         },
         storedValue: {
