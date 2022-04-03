@@ -160,7 +160,7 @@ router.post("/new", async (req, res) => {
         // const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
 
         // test user created by mui assets api
-        const token = signToken({
+        const accessToken = signToken({
             id: "8864c717-587d-472a-929a-8e5f298024da-0",
             displayName: "Jaydon Frankie",
             email: "demo@minimals.cc",
@@ -180,7 +180,7 @@ router.post("/new", async (req, res) => {
 
         res.status(200).json({
             customer: { newCustomerData, newCustomerMinorDataArr },
-            token,
+            accessToken,
         });
     } catch (error) {
         console.log(error);
@@ -188,83 +188,6 @@ router.post("/new", async (req, res) => {
     }
 });
 
-router.post("/login", (req, res) => {
-    console.log("login route");
-    User.findOne({
-        where: {
-            email: req.body.email,
-        },
-    }).then((dbUserData) => {
-        if (!dbUserData) {
-            res.status(400).json({
-                message: "No user with that email address!",
-            });
-            return;
-        }
 
-        const validPassword = dbUserData.checkPassword(req.body.password);
-
-        if (!validPassword) {
-            res.status(400).json({ message: "Incorrect password!" });
-            return;
-        }
-
-        req.session.save(() => {
-            req.session.user_id = dbUserData.id;
-            req.session.username = dbUserData.username;
-            req.session.loggedIn = true;
-
-            res.json({ user: dbUserData, message: "You are now logged in!" });
-        });
-    });
-});
-router.post("/logout", (req, res) => {
-    if (req.session.loggedIn) {
-        req.session.destroy(() => {
-            res.status(204).end();
-        });
-    } else {
-        res.status(404).end();
-    }
-});
-
-router.put("/:id", (req, res) => {
-    User.update(req.body, {
-        individualHooks: true,
-        where: {
-            id: req.params.id,
-        },
-    })
-        .then((dbUserData) => {
-            if (!dbUserData[0]) {
-                res.status(404).json({ message: "No user found with this id" });
-                return;
-            }
-            res.json(dbUserData);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
-});
-
-router.delete("/:id", (req, res) => {
-    User.destroy({
-        where: {
-            id: req.params.id,
-        },
-    })
-        .then((dbUserData) => {
-            if (!dbUserData) {
-                res.status(404).json({ message: "No user found with this id" });
-                return;
-            }
-            res.json(dbUserData);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
-});
 
 module.exports = router;
