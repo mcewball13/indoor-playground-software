@@ -201,7 +201,8 @@ function AuthProvider({ children }) {
 
     const { accessToken, customer } = response.data;
 
-    window.localStorage.setItem('accessToken', accessToken);
+    // uncomment when we have a completed backend
+    // window.localStorage.setItem('accessToken', accessToken);
     dispatch({
       type: 'CUSTOMER_REGISTER',
       payload: {
