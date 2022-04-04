@@ -2,8 +2,9 @@ const router = require("express").Router();
 const randomstring = require("randomstring");
 const nodemailer = require("nodemailer");
 
-// modules
-const oAuth2Client = require("../../utils/OAuth2Client");
+// email client instance
+const sgMail = require('@sendgrid/mail')
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 // modules
 const {
@@ -113,21 +114,8 @@ router.put("/reset-password", async (req, res) => {
             });
         }
 
-        const accessToken = await oAuth2Client.getAccessToken();
-
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                type: "OAuth2",
-                user: process.env.EMAIL_USERNAME,
-                clientId: process.env.OAUTH_CLIENT_ID,
-                clientSecret: process.env.OAUTH_CLIENT_SECRET,
-                refreshToken: process.env.OAUTH_REFRESH_TOKEN,
-                accessToken: accessToken,
-            },
-        });
-        await transporter.sendMail({
-            from: '"Mike at Bloksy" <admin@bloksy.co>',
+        await sgMail.send({
+            from: 'admin@bloksy.com',
             to: req.body.email,
             subject: "Reset Password Request from Bloksy",
             text: generatePlainEmail(randomNumReset),
@@ -149,6 +137,7 @@ router.post("/new", async (req, res) => {
         const newCustomerData = await CustomerGuardian.create({
             ...req.body.guardians,
             isAccountOwner: true,
+            displayName: `${req.body.guardians.guardianFirstName} ${req.body.guardians.guardianLastName}`,
         });
         console.log(req.body);
         // map through minor array and add customeguardian id to each minor
@@ -172,7 +161,7 @@ router.post("/new", async (req, res) => {
         // const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
 
         // test user created by mui assets api
-        const token = signToken({
+        const accessToken = signToken({
             id: "8864c717-587d-472a-929a-8e5f298024da-0",
             displayName: "Jaydon Frankie",
             email: "demo@minimals.cc",
@@ -192,7 +181,7 @@ router.post("/new", async (req, res) => {
 
         res.status(200).json({
             customer: { newCustomerData, newCustomerMinorDataArr },
-            token,
+            accessToken,
         });
     } catch (error) {
         console.log(error);
@@ -200,83 +189,6 @@ router.post("/new", async (req, res) => {
     }
 });
 
-router.post("/login", (req, res) => {
-    console.log("login route");
-    User.findOne({
-        where: {
-            email: req.body.email,
-        },
-    }).then((dbUserData) => {
-        if (!dbUserData) {
-            res.status(400).json({
-                message: "No user with that email address!",
-            });
-            return;
-        }
 
-        const validPassword = dbUserData.checkPassword(req.body.password);
-
-        if (!validPassword) {
-            res.status(400).json({ message: "Incorrect password!" });
-            return;
-        }
-
-        req.session.save(() => {
-            req.session.user_id = dbUserData.id;
-            req.session.username = dbUserData.username;
-            req.session.loggedIn = true;
-
-            res.json({ user: dbUserData, message: "You are now logged in!" });
-        });
-    });
-});
-router.post("/logout", (req, res) => {
-    if (req.session.loggedIn) {
-        req.session.destroy(() => {
-            res.status(204).end();
-        });
-    } else {
-        res.status(404).end();
-    }
-});
-
-router.put("/:id", (req, res) => {
-    User.update(req.body, {
-        individualHooks: true,
-        where: {
-            id: req.params.id,
-        },
-    })
-        .then((dbUserData) => {
-            if (!dbUserData[0]) {
-                res.status(404).json({ message: "No user found with this id" });
-                return;
-            }
-            res.json(dbUserData);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
-});
-
-router.delete("/:id", (req, res) => {
-    User.destroy({
-        where: {
-            id: req.params.id,
-        },
-    })
-        .then((dbUserData) => {
-            if (!dbUserData) {
-                res.status(404).json({ message: "No user found with this id" });
-                return;
-            }
-            res.json(dbUserData);
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json(err);
-        });
-});
 
 module.exports = router;

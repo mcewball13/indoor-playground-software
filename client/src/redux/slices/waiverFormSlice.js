@@ -17,6 +17,7 @@ const initialState = {
   customers: [],
   currentCustomer: {},
   emailExists: false,
+  resetEmail: '',
 };
 
 // ----------------------------------------------------------------------
@@ -37,9 +38,8 @@ const slice = createSlice({
       state.selectedAvatar = action.payload;
       state.isOpenModal = false;
     },
-    checkEmailSuccess(state, action) {
-      state.emailExists = true;
-      state.currentCustomer = action.payload;
+    setResetEmailSuccess(state, action) {
+      state.resetEmail = action.payload;
       state.isLoading = false;
     },
     openModal(state) {
@@ -94,13 +94,11 @@ export function getLocations() {
     }
   };
 }
-// check to see if email is in the database
-export function checkEmail(email) {
+export function setResetEmail(email) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/customers/email/${email}`);
-      if (response.data) dispatch(slice.actions.checkEmailSuccess(response.data));
+      dispatch(slice.actions.setResetEmailSuccess(email));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -8,7 +8,8 @@ for (let i = 0; i < 50; i++) {
         {
             guardianFirstName: faker.name.firstName(),
             guardianLastName: faker.name.lastName(),
-            guardianBirthday: faker.date.past(50, new Date("04/04/2000")),
+            displayName: faker.name.findName(),
+            birthday: faker.date.past(50, new Date("04/04/2000")),
             password: faker.internet.password(),
             email: faker.internet.email(),
             addressStreet: faker.address.streetAddress(),

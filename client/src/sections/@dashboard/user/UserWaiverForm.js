@@ -80,17 +80,17 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     guardianFirstName: Yup.string().required('First name is required'),
     guardianLastName: Yup.string().required('Last name is required'),
     email: Yup.string().required('Email is required').email(),
-    guardianBirthday: Yup.string().required('Birth date is required'),
+    birthday: Yup.string().required('Birth date is required'),
     password: Yup.string()
       .required('Password is required')
       .min(8, 'Password is too short - 8 characters minimum')
       .matches(/[0-9a-zA-Z*.!@$%^&(){}[\]:;<>,.?~_+-=|\]]/),
-    addressPhone: Yup.string().required('Phone number is required'),
+    phoneNumber: Yup.string().required('Phone number is required'),
     addressStreet: Yup.string(),
     addressState: Yup.string(),
     addressCity: Yup.string(),
     addressZipCode: Yup.string().required('Zip code is required'),
-    avatarUrl: Yup.mixed(),
+    photoURL: Yup.mixed(),
   });
 
   // .test('required', 'Avatar is required', (value) => value !== ''),
@@ -100,14 +100,14 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
       guardianFirstName: currentCustomer.newCustomerData?.guardianFirstName || '',
       guardianLastName: currentCustomer.newCustomerData?.guardianLastName || '',
       email: currentCustomer.newCustomerData?.email || '',
-      guardianBirthday: currentCustomer.newCustomerData?.guardianBirthday || null,
+      birthday: currentCustomer.newCustomerData?.birthday || null,
       password: '',
-      addressPhone: currentCustomer.newCustomerData?.addressPhone || '',
+      phoneNumber: currentCustomer.newCustomerData?.phoneNumber || '',
       addressStreet: currentCustomer.newCustomerData?.addressStreet || '',
       addressState: currentCustomer.newCustomerData?.addressState || '',
       addressCity: currentCustomer.newCustomerData?.addressCity || '',
       addressZipCode: currentCustomer.newCustomerData?.addressZipCode || '',
-      avatarUrl: currentCustomer?.avatarUrl || null,
+      photoURL: currentCustomer?.photoURL || null,
       isBanned: currentCustomer?.isBanned || false,
       status: currentCustomer?.status,
       minorFirstName: '',
@@ -156,7 +156,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
   const onSubmit = async () => {
     try {
-      await customerRegister({ guardians: { ...values, avatarUrl: selectedAvatar }, minors });
+      await customerRegister({ guardians: { ...values, photoURL: selectedAvatar }, minors });
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       console.log(currentCustomer);
       navigate(PATH_PAGE.signWaiver);
@@ -172,7 +172,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
       if (file) {
         setValue(
-          'avatarUrl',
+          'photoURL',
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
@@ -207,7 +207,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleCustomerExistsCloseModal = () => {
-    dispatch(closeCustomerExistsModal(false));
+    dispatch(closeCustomerExistsModal());
   };
 
   // formate date object to string
@@ -232,7 +232,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
                 <Box sx={{ mb: 5 }}>
                   <RHFChooseAvatar
-                    name="avatarUrl"
+                    name="photoURL"
                     accept="image/*"
                     onDrop={handleDrop}
                     helperText={
@@ -317,7 +317,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                   <RHFTextField onBlur={handleBlur} name="email" label="Email Address" />
                   <RHFTextField name="guardianFirstName" label="First Name" />
                   <RHFTextField name="guardianLastName" label="Last Name" />
-                  <RHFDatePicker name="guardianBirthday" label="Guardian Birth Date" openTo="year" />
+                  <RHFDatePicker name="birthday" label="Guardian Birth Date" openTo="year" />
                   <RHFTextField
                     name="password"
                     label="Password"
@@ -332,7 +332,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                       ),
                     }}
                   />
-                  <RHFTextField name="addressPhone" label="Phone Number" />
+                  <RHFTextField name="phoneNumber" label="Phone Number" />
                   <RHFTextField name="addressStreet" label="Street Address" />
                   <RHFTextField name="addressCity" label="City" />
                   <RHFTextField name="addressState" label="State" />

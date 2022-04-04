@@ -13,6 +13,7 @@ const initialState = {
   isInitialized: false,
   user: null,
   existingCustomer: null,
+  currentCustomer: {},
 };
 
 const handlers = {
@@ -34,6 +35,7 @@ const handlers = {
       user,
     };
   },
+  
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
@@ -57,6 +59,15 @@ const handlers = {
       customer,
     };
   },
+  CUSTOMER_LOGIN: (state, action) => {
+    const { customer } = action.payload;
+
+    return {
+      ...state,
+      isCustomerAuthenticated: true,
+      customer,
+    };
+  },
   CUSTOMER_EXISTS: (state, action) => {
     const { existingCustomer,  } = action.payload;
     return {
@@ -72,6 +83,7 @@ const AuthContext = createContext({
   ...initialState,
   method: 'jwt',
   employeeLogin: () => Promise.resolve(),
+  customerLogin: () => Promise.resolve(),
   logout: () => Promise.resolve(),
   register: () => Promise.resolve(),
   customerRegister: () => Promise.resolve(),
@@ -189,7 +201,8 @@ function AuthProvider({ children }) {
 
     const { accessToken, customer } = response.data;
 
-    window.localStorage.setItem('accessToken', accessToken);
+    // uncomment when we have a completed backend
+    // window.localStorage.setItem('accessToken', accessToken);
     dispatch({
       type: 'CUSTOMER_REGISTER',
       payload: {
@@ -197,6 +210,33 @@ function AuthProvider({ children }) {
       },
     });
   };
+  const customerLogin = async (email, password) => {
+
+    // change to axios.post when we have a completed backend
+    // =========================================================================
+
+    const response = await axios({
+      url: '/api/auth/customers/login',
+      method: 'POST',
+      baseURL: '/',
+      data: {
+        email,
+        password,
+      },
+    });
+    const { accessToken, existingCustomer } = response.data;
+
+    // ========================================================================
+
+    window.localStorage.setItem('accessToken', accessToken);
+    dispatch({
+      type: 'CUSTOMER_LOGIN',
+      payload: {
+        existingCustomer,
+      },
+    });
+  };
+
   const customerExists = async (email) => {
     // change to axios.post when we have a completed backend
     // // =========================================================================
@@ -206,9 +246,7 @@ function AuthProvider({ children }) {
       baseURL: '/',
      
     });
-    // const { accessToken, employeeData: user } = response.data;
-    // const response = await axios.post('/api/account/new', newCustomer);
-
+   
     const { exists, customerEmail } = response.data.existingCustomer;
 
     if (exists) {
@@ -232,6 +270,7 @@ function AuthProvider({ children }) {
         ...state,
         method: 'jwt',
         employeeLogin,
+        customerLogin,
         logout,
         register,
         customerRegister,
