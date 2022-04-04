@@ -151,9 +151,9 @@ export default function Router() {
         {
           path: 'sign-waiver',
           element: (
-            <CustomerGuard>
+            // <CustomerGuard>
               <SignWaiver />
-            </CustomerGuard>
+            // </CustomerGuard>
           ),
         },
         { path: 'contact-us', element: <Contact /> },

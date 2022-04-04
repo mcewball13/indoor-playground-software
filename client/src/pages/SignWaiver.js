@@ -6,6 +6,7 @@ import { capitalCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import SignatureCanvas from 'react-signature-canvas';
+import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
 // modules
 import DOMPurify from 'dompurify';
 
@@ -37,13 +38,14 @@ const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
   const theme = useTheme();
-const { customer} = useAuth()
+  const { customer } = useAuth();
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
   const signatureRef = useRef({});
   const signatureBlockCardRef = useRef(null);
+  const pdfWaiverElement = useRef(null);
   console.log(customer);
 
   // only update signature width when the signature block is visible
@@ -75,7 +77,7 @@ const { customer} = useAuth()
 
   // Form defaults and Method initialization
   const signatureSchema = Yup.object().shape({
-    signature: Yup.string().required('Please sign the waiver'),
+    signature: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -102,7 +104,7 @@ const { customer} = useAuth()
     setSignature(signatureImg);
   };
   const onSubmit = async () => {
-    console.log('data');
+    pdfWaiverElement.current.save();
   };
   const handleClearSignature = () => signatureRef.current.clear();
 
@@ -117,71 +119,77 @@ const { customer} = useAuth()
             { name: !isEdit ? 'New user' : capitalCase('name') },
           ]}
         />
-
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <HTMLBlock waiverText={safeHTML} />
-          </Grid>
-          <Grid alignItems="center" container spacing={2} item xs={6}>
-            <Grid item>
-              <Typography variant="h4" component="h4">
-                Signing for:
-              </Typography>
+        <PDFExport paperSize="Letter" ref={pdfWaiverElement} imageResolution={300} scale={0.55} margin={10}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <HTMLBlock waiverText={safeHTML} />
             </Grid>
-            <Grid item xs={6}>
-              <Typography
-                textAlign="left"
-                variant="p"
-                component="p"
-                sx={{
-                  marginLeft: '1rem',
-                }}
-              >
-                {customer.newCustomerData?.guardianFirstName} {customer.newCustomerData?.guardianLastName}
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid alignItems="center" container item xs={6}>
-            <Typography variant="h4" component="h4">
-              Minors:
-            </Typography>
-
-            {customer.newCustomerMinorDataArr &&
-              customer.newCustomerMinorDataArr.map((minor, i) => (
-                <Grid item key={minor + i}>
-                  <Typography variant="p" component="p" sx={{ marginLeft: '1rem' }}>
-                    {customer.newCustomerMinorDataArr.length - 1 !== i
-                      ? `${minor.minorFirstName}
-                      ${minor.minorLastName},`
-                      : `${minor.minorFirstName} ${minor.minorLastName}`}
-                  </Typography>
-                </Grid>
-              ))}
-          </Grid>
-          <Grid item xs={12}>
-            <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-              <Card sx={{ border: 1, marginBottom: 3 }} ref={signatureBlockCardRef}>
-                <SignatureCanvas
-                  id={`signature`}
-                  onEnd={handleUpdateSignature}
-                  ref={signatureRef}
-                  canvasProps={{
-                    width: canvasWidth,
-                    height: 200,
+            <Grid alignItems="center" container spacing={2} item xs={6}>
+              <Grid item>
+                <Typography variant="h4" component="h4">
+                  Signing for:
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography
+                  alignSelf={'center'}
+                  textAlign="left"
+                  variant="p"
+                  component="p"
+                  sx={{
+                    marginLeft: '1rem',
                   }}
-                />
-              </Card>
-              <Stack gap={3} justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ my: 3 }}>
-                <Button color="inherit" variant="outlined" onClick={() => handleClearSignature()}>
-                  Clear Signature
-                </Button>
-                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  Submit Waiver
-                </LoadingButton>
-              </Stack>
-            </FormProvider>
+                >
+                  {customer?.newCustomerData?.guardianFirstName} {customer?.newCustomerData?.guardianLastName}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid alignItems="center" container item xs={6}>
+              <Typography variant="h4" component="h4">
+                Minors:
+              </Typography>
+
+              {customer?.newCustomerMinorDataArr &&
+                customer?.newCustomerMinorDataArr.map((minor, i) => (
+                  <Grid item key={minor + i}>
+                    <Typography variant="p" component="p" sx={{ marginLeft: '1rem' }}>
+                      {customer?.newCustomerMinorDataArr.length - 1 !== i
+                        ? `${minor.minorFirstName}
+                      ${minor.minorLastName},`
+                        : `${minor.minorFirstName} ${minor.minorLastName}`}
+                    </Typography>
+                  </Grid>
+                ))}
+            </Grid>
+            <Grid item xs={12}>
+              <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+                <Card sx={{ border: 1, marginBottom: 3 }} ref={signatureBlockCardRef}>
+                  <SignatureCanvas
+                    id={`signature`}
+                    onEnd={handleUpdateSignature}
+                    ref={signatureRef}
+                    canvasProps={{
+                      width: canvasWidth,
+                      height: 200,
+                    }}
+                  />
+                </Card>
+                <Stack gap={3} justifyContent="space-between" direction={{ xs: 'column', sm: 'row' }} sx={{ my: 3 }}>
+                  <Button color="inherit" variant="outlined" onClick={() => handleClearSignature()}>
+                    Clear Signature
+                  </Button>
+                  <LoadingButton
+                    type="submit"
+                    variant="contained"
+                    loading={isSubmitting}
+                  >
+                    Submit Waiver
+                  </LoadingButton>
+                </Stack>
+              </FormProvider>
+            </Grid>
           </Grid>
-        </Grid>
+        </PDFExport>
       </Container>
     </Page>
   );
