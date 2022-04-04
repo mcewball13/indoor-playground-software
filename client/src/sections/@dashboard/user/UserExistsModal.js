@@ -35,6 +35,7 @@ const UserExistsModal = ({ isOpen, onClose, muiWidth, email }) => {
   const UserExistsModal = Yup.object().shape({
     modalPassword: Yup.string().required('Password is required'),
   });
+  
 
   // .test('required', 'Avatar is required', (value) => value !== ''),
 
