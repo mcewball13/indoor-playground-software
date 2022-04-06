@@ -31,16 +31,6 @@ Memberships.init(
             type: DataTypes.STRING(1000),
             allowNull: true,
         },
-        startDate: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: Date.now(),
-        },
-        endDate: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: momentDate.add(1, 'M'),
-        },
         price: {
             type: DataTypes.FLOAT,
             allowNull: true,

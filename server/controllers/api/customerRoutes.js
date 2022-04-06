@@ -15,6 +15,7 @@ const {
 const { signToken } = require("../../utils/auth");
 const generateHtmlEmail = require("../../utils/emailHtml");
 const generatePlainEmail = require("../../utils/emailPlain");
+const Memberships = require("../../models/Memberships");
 
 // get all users
 router.get("/", async (req, res) => {
@@ -48,13 +49,12 @@ router.get("/auto-complete", async (req, res) => {
                     },
                     as: "minors",
                 },
+                {
+                    model: Memberships,
+                    attributes: ["title"],
+                }
             ],
-            attributes: [
-                "id",
-                "guardianFirstName",
-                "guardianLastName",
-                "email",
-            ],
+            attributes: ["id", "displayName", "email","photoURL"],
         });
         res.json(guardianData);
     } catch (error) {

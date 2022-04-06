@@ -20,6 +20,7 @@ for (let i = 0; i < 6000; i++) {
             storedValue: faker.finance.amount(1,200,2),
             notes: faker.lorem.paragraph(3),
             isAccountOwner: true,
+            membership_id: Math.floor((Math.random() * 4)+1),
             company_id: Math.floor((Math.random() * 7)+1),
             locations_id: Math.floor((Math.random() * 4)+1),
         }

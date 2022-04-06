@@ -1,5 +1,5 @@
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -22,7 +22,7 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // _mock_
-import { _userList } from '../../_mock';
+// import { _userList } from '../../_mock';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
@@ -30,16 +30,18 @@ import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import axios from '../../utils/axios';
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user/list';
+import avatars from '../../assets/avatars';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'minors', label: 'Minors', alignRight: false },
+  { id: 'membership', label: 'Membership/Passes', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
@@ -50,7 +52,7 @@ export default function UserList() {
   const theme = useTheme();
   const { themeStretch } = useSettings();
 
-  const [userList, setUserList] = useState(_userList);
+  const [userList, setUserList] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -58,6 +60,19 @@ export default function UserList() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  useEffect(() => {
+    const updateUserList = async () => {
+      const { data } = await axios({
+        url: `/api/customers/auto-complete`,
+        method: 'GET',
+        baseURL: '/',
+      });
+      setUserList(data);
+    };
+    updateUserList();
+  }, []);
+
+  console.log(userList);
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -110,6 +125,12 @@ export default function UserList() {
     setUserList(deleteUsers);
   };
 
+  const renderAvatar = () => {
+    const randomNum = Math.floor(Math.random() * avatars.length);
+    return avatars[randomNum];
+  };
+
+
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
   const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
@@ -160,7 +181,14 @@ export default function UserList() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const {
+                      id,
+                      displayName,
+                      email,
+                      minors,
+                      membership: { title },
+                      photoURL,
+                    } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -173,28 +201,28 @@ export default function UserList() {
                         aria-checked={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onClick={() => handleClick(name)} />
+                          <Checkbox checked={isItemSelected} onClick={() => handleClick(displayName)} />
                         </TableCell>
                         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+                          <Avatar alt={displayName} src={renderAvatar()} sx={{ mr: 2 }} />
                           <Typography variant="subtitle2" noWrap>
-                            {name}
+                            {displayName}
                           </Typography>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                        <TableCell align="left">
+                        <TableCell align="left">{email}</TableCell>
+                        <TableCell align="left">{'minors'}</TableCell>
+                        <TableCell align="left">{title}</TableCell>
+                        {/* <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                             color={(status === 'banned' && 'error') || 'success'}
                           >
                             {sentenceCase(status)}
                           </Label>
-                        </TableCell>
+                        </TableCell> */}
 
                         <TableCell align="right">
-                          <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
+                          <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={displayName} />
                         </TableCell>
                       </TableRow>
                     );
