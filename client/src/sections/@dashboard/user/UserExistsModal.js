@@ -28,7 +28,7 @@ import { DialogAnimate } from '../../../components/animate';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import Iconify from '../../../components/Iconify';
 
-const UserExistsModal = ({ isOpen, onClose, muiWidth, email }) => {
+const UserExistsModal = ({ onClose, email }) => {
   // state for show password
   const [showPassword, setShowPassword] = useState(false);
 
@@ -53,10 +53,7 @@ const UserExistsModal = ({ isOpen, onClose, muiWidth, email }) => {
   });
 
   const {
-    reset,
     watch,
-    control,
-    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;

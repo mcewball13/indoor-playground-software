@@ -3,8 +3,8 @@ const randomstring = require("randomstring");
 const nodemailer = require("nodemailer");
 
 // email client instance
-const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // modules
 const {
@@ -15,14 +15,50 @@ const {
 const { signToken } = require("../../utils/auth");
 const generateHtmlEmail = require("../../utils/emailHtml");
 const generatePlainEmail = require("../../utils/emailPlain");
+const Memberships = require("../../models/Memberships");
 
 // get all users
 router.get("/", async (req, res) => {
     try {
-        const guardianData = await CustomerGuardian.findAll({});
+        const guardianData = await CustomerGuardian.findAll({
+            include: [
+                {
+                    model: CustomerMinor,
+                    through: {
+                        model: CustomerGuardianHasCustomerMinor,
+                        attributes: [],
+                    },
+                    as: "minors",
+                },
+            ],
+        });
         res.json(guardianData);
     } catch (error) {
-        res.status(500).statusMessage(error);
+        res.status(500).json(error);
+    }
+});
+router.get("/auto-complete", async (req, res) => {
+    try {
+        const guardianData = await CustomerGuardian.findAll({
+            include: [
+                {
+                    model: CustomerMinor,
+                    attributes: ["id", "minorFirstName", "minorLastName"],
+                    through: {
+                        attributes: [],
+                    },
+                    as: "minors",
+                },
+                {
+                    model: Memberships,
+                    attributes: ["title"],
+                }
+            ],
+            attributes: ["id", "displayName", "email","photoURL"],
+        });
+        res.json(guardianData);
+    } catch (error) {
+        res.status(500).json(error);
     }
 });
 
@@ -115,7 +151,7 @@ router.put("/reset-password", async (req, res) => {
         }
 
         await sgMail.send({
-            from: 'admin@bloksy.com',
+            from: "admin@bloksy.com",
             to: req.body.email,
             subject: "Reset Password Request from Bloksy",
             text: generatePlainEmail(randomNumReset),
@@ -188,7 +224,5 @@ router.post("/new", async (req, res) => {
         res.status(500).json(error);
     }
 });
-
-
 
 module.exports = router;
