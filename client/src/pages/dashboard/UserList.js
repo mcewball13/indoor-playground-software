@@ -186,8 +186,9 @@ export default function UserList() {
                       displayName,
                       email,
                       minors,
-                      membership: { title },
+                      membership = "You should buy one",
                       photoURL,
+                      status = "Active",
                     } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -204,22 +205,22 @@ export default function UserList() {
                           <Checkbox checked={isItemSelected} onClick={() => handleClick(displayName)} />
                         </TableCell>
                         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={displayName} src={renderAvatar()} sx={{ mr: 2 }} />
+                          <Avatar alt={displayName} src={photoURL || renderAvatar()} sx={{ mr: 2 }} />
                           <Typography variant="subtitle2" noWrap>
                             {displayName}
                           </Typography>
                         </TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{'minors'}</TableCell>
-                        <TableCell align="left">{title}</TableCell>
-                        {/* <TableCell align="left">
+                        <TableCell align="left">{membership?.title ? membership?.title : membership}</TableCell>
+                        <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                             color={(status === 'banned' && 'error') || 'success'}
                           >
                             {sentenceCase(status)}
                           </Label>
-                        </TableCell> */}
+                        </TableCell>
 
                         <TableCell align="right">
                           <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={displayName} />
@@ -287,7 +288,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return array.filter((_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return array.filter((user) => user.displayName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
