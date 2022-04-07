@@ -212,7 +212,7 @@ export default function UserList() {
                         </TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{'minors'}</TableCell>
-                        <TableCell align="left">{membership?.title ? membership?.title : membership}</TableCell>
+                        <TableCell align="left">{membership?.title ? membership?.title : <Button>Add</Button>}</TableCell>
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
