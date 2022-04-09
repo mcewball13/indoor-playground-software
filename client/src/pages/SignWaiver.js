@@ -7,6 +7,7 @@ import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import SignatureCanvas from 'react-signature-canvas';
 import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import { drawDOM, exportPDF } from '@progress/kendo-drawing';
 // modules
 import DOMPurify from 'dompurify';
 
@@ -46,7 +47,8 @@ export default function SignWaiver() {
   const signatureRef = useRef({});
   const signatureBlockCardRef = useRef(null);
   const pdfWaiverElement = useRef(null);
-  console.log(customer);
+  const pdfWaiverElementDownload = useRef(null);
+  console.log(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
   // only update signature width when the signature block is visible
   useEffect(() => {
@@ -104,7 +106,18 @@ export default function SignWaiver() {
     setSignature(signatureImg);
   };
   const onSubmit = async () => {
-    pdfWaiverElement.current.save();
+    console.log(pdfWaiverElement.current);
+    const drawnDOM = await drawDOM(pdfWaiverElement.current, {
+      paperSize: 'A4',
+      margin: '1cm',
+      scale: .55,
+    });
+    const base64PDF = await exportPDF(drawnDOM);
+    console.log(base64PDF);
+    const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isDesktop) {
+      await pdfWaiverElementDownload.current.save();
+    }
   };
   const handleClearSignature = () => signatureRef.current.clear();
 
@@ -119,8 +132,8 @@ export default function SignWaiver() {
             { name: !isEdit ? 'New user' : capitalCase('name') },
           ]}
         />
-        <PDFExport paperSize="Letter" ref={pdfWaiverElement} imageResolution={300} scale={0.55} margin={10}>
-          <Grid container spacing={2}>
+        <PDFExport ref={pdfWaiverElementDownload} paperSize="Letter" imageResolution={300} scale={0.55} margin={10}>
+          <Grid ref={pdfWaiverElement} container spacing={2}>
             <Grid item xs={12}>
               <HTMLBlock waiverText={safeHTML} />
             </Grid>
@@ -178,11 +191,7 @@ export default function SignWaiver() {
                   <Button color="inherit" variant="outlined" onClick={() => handleClearSignature()}>
                     Clear Signature
                   </Button>
-                  <LoadingButton
-                    type="submit"
-                    variant="contained"
-                    loading={isSubmitting}
-                  >
+                  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                     Submit Waiver
                   </LoadingButton>
                 </Stack>
