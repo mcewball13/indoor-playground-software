@@ -8,7 +8,7 @@ const membershipName = ["Summer Pass", "Family", "Single", false]
 for (let i = 0; i < 4; i++) {
     memberships.push(
         {
-            title: membershipName[Math.floor((Math.random() * 4))],
+            title: faker.random.arrayElement(membershipName),
             description: faker.lorem.lines(1),
             isActive: true,
             

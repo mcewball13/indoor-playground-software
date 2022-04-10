@@ -12,9 +12,9 @@ const sequelize = require("../config/connection");
 const seedAll = async () => {
     await sequelize.sync({ force: true });
     console.log("=============");
-    await seedCompanies();
-    console.log("=============");
     await seedMemberships();
+    console.log("=============");
+    await seedCompanies();
     console.log("=============");
     await seedLocations();
     console.log("=============");

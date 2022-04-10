@@ -190,7 +190,7 @@ export default function UserList() {
                       photoURL,
                       status = "Active",
                     } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                    const isItemSelected = selected.indexOf(displayName) !== -1;
 
                     return (
                       <TableRow
@@ -212,7 +212,7 @@ export default function UserList() {
                         </TableCell>
                         <TableCell align="left">{email}</TableCell>
                         <TableCell align="left">{'minors'}</TableCell>
-                        <TableCell align="left">{membership?.title ? membership?.title : <Button>Add</Button>}</TableCell>
+                        <TableCell align="left">{membership?.title === '0' ? <Button>Add</Button>: membership?.title }</TableCell>
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
