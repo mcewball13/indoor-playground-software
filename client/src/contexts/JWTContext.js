@@ -88,6 +88,7 @@ const AuthContext = createContext({
   register: () => Promise.resolve(),
   customerRegister: () => Promise.resolve(),
   customerExists: () => Promise.resolve(),
+  submitSignedWaiver: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -191,7 +192,7 @@ function AuthProvider({ children }) {
     // change to axios.post when we have a completed backend
     // // =========================================================================
     const response = await axios({
-      url: '/api/customers/new',
+      url: '/api/auth/customers/new',
       method: 'POST',
       baseURL: '/',
       data: newCustomer,
@@ -259,6 +260,19 @@ function AuthProvider({ children }) {
     }
   };
 
+  const submitSignedWaiver = async ({signedWaiver, customerId}) => {
+    // change to axios.post when we have a completed backend
+    // // =========================================================================
+    const response = await axios({
+      url: `/api/auth/customers/save-signed-waiver/cloudinary/${customerId}`,
+      method: 'POST',
+      baseURL: '/',
+      data: signedWaiver,
+    });
+    // const { accessToken, employeeData: user } = response.data;
+    // const response = await axios.post('/api/account/new', newCustomer);
+  };
+
   const logout = async () => {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
@@ -275,6 +289,7 @@ function AuthProvider({ children }) {
         register,
         customerRegister,
         customerExists,
+        submitSignedWaiver
       }}
     >
       {children}

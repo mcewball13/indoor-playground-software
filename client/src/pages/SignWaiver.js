@@ -39,7 +39,7 @@ const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
   const theme = useTheme();
-  const { customer } = useAuth();
+  const { customer, submitSignedWaiver } = useAuth();
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
   const { id = '' } = useParams();
@@ -48,7 +48,6 @@ export default function SignWaiver() {
   const signatureBlockCardRef = useRef(null);
   const pdfWaiverElement = useRef(null);
   const pdfWaiverElementDownload = useRef(null);
-  console.log(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
   // only update signature width when the signature block is visible
   useEffect(() => {
@@ -73,9 +72,6 @@ export default function SignWaiver() {
   // state to hold signature
   const [signature, setSignature] = useState('');
   console.log(signature);
-
-  const { currentCustomer } = useSelector((state) => state.newWaiverForm);
-  console.log('currentCustomer', currentCustomer);
 
   // Form defaults and Method initialization
   const signatureSchema = Yup.object().shape({
@@ -106,14 +102,18 @@ export default function SignWaiver() {
     setSignature(signatureImg);
   };
   const onSubmit = async () => {
-    console.log(pdfWaiverElement.current);
     const drawnDOM = await drawDOM(pdfWaiverElement.current, {
       paperSize: 'A4',
       margin: '1cm',
       scale: .55,
     });
-    const base64PDF = await exportPDF(drawnDOM);
-    console.log(base64PDF);
+    const signedWaiver = await exportPDF(drawnDOM);
+    // post cloudinary url to server
+    await submitSignedWaiver({
+      signedWaiver,
+      customerId: customer.newCustomerData.id,
+    }); 
+    console.log(signedWaiver);
     const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isDesktop) {
       await pdfWaiverElementDownload.current.save();
