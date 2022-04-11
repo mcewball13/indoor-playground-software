@@ -59,7 +59,7 @@ export default function UserMoreMenu({ onDelete, userName, isMinor }) {
           Delete
         </MenuItem>
 
-        {!isMinor && (
+        {!isMinor && !! userName && (
           <MenuItem component={RouterLink} to={`${PATH_DASHBOARD.user.root}/${paramCase(userName)}/edit`}>
             <Iconify icon={'eva:edit-fill'} sx={{ ...ICON }} />
             Edit

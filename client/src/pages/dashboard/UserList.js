@@ -1,6 +1,7 @@
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import axios from 'axios';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -38,8 +39,8 @@ import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@das
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  // { id: 'role', label: 'Role', alignRight: false },
+  { id: 'isAccountOwner', label: 'is Account Owner', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
@@ -58,6 +59,55 @@ export default function UserList() {
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  useEffect(async () => {
+    const { data } = await axios({
+      method: 'get',
+      url: '/customers',
+      baseURL: 'http://localhost:3031/api',
+    })
+      .then((response) => response);
+      setUserList(data);
+    // console.log('data', data)
+  }, [])
+
+  // NOTE schema from mock data
+  // id: _mock.id(index),
+  // avatarUrl: _mock.image.avatar(index),
+  // name: _mock.name.fullName(index),
+  // email: _mock.email(index),
+  // phoneNumber: _mock.phoneNumber(index),
+  // address: '908 Jack Locks',
+  // country: _mock.address.country(index),
+  // state: 'Virginia',
+  // city: 'Rancho Cordova',
+  // zipCode: '85807',
+  // company: _mock.company(index),
+  // isVerified: _mock.boolean(index),
+  // status: randomInArray(['active', 'banned']),
+  // role: _mock.role(index),
+
+  // NOTE schema from db response
+  // addressCity: "Lakewood"
+  // addressPhone: "220-429-4192 x596"
+  // addressState: "WY"
+  // addressStreet: "774 Stokes Greens"
+  // addressZipCode: null
+  // avatarUrl: null
+  // company_id: 5
+  // createdAt: "2022-04-09T18:08:12.000Z"
+  // email: "Imelda47@hotmail.com"
+  // guardianBirthday: "1962-02-25"
+  // guardianFirstName: "Chyna"
+  // guardianLastName: "Schmitt"
+  // id: 1
+  // isAccountOwner: true
+  // isBanned: false
+  // locations_id: 4
+  // notes: "Nihil necessitatibus consequuntur eos sit magni delectus. Nesciunt qui incidunt qui sed vitae et officia ratione non. Et provident velit quia omnis. Sit consequatur velit vel dolorem asperiores."
+  // password: "xQPtBcR8HcD5jJK"
+  // storedValue: 136.8
+  // updatedAt: "2022-04-09T18:08:12.000Z"
+
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -73,11 +123,12 @@ export default function UserList() {
     setSelected([]);
   };
 
-  const handleClick = (name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (id) => {
+    debugger;
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -99,15 +150,16 @@ export default function UserList() {
   };
 
   const handleDeleteUser = (userId) => {
+    debugger;
     const deleteUser = userList.filter((user) => user.id !== userId);
     setSelected([]);
     setUserList(deleteUser);
   };
 
   const handleDeleteMultiUser = (selected) => {
-    const deleteUsers = userList.filter((user) => !selected.includes(user.name));
-    setSelected([]);
-    setUserList(deleteUsers);
+    // const deleteUsers = userList.filter((user) => !selected.includes(user.name));
+    // setSelected([]);
+    // setUserList(deleteUsers);
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
@@ -115,6 +167,11 @@ export default function UserList() {
   const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && Boolean(filterName);
+
+  const handleChange = (event) => {
+    console.log('handler')
+    setChecked(event.target.checked);
+  };
 
   return (
     <Page title="User: List">
@@ -159,45 +216,49 @@ export default function UserList() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                  {/* {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => { */}
+                    {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
 
+                      const isItemSelected = selected.indexOf(row.id) !== -1;
+                      console.log(row.guardianFirstName)
                     return (
                       <TableRow
                         hover
-                        key={id}
+                        key={row.id}
                         tabIndex={-1}
                         role="checkbox"
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onClick={() => handleClick(name)} />
+                          <Checkbox
+                            checked={isItemSelected}
+                            onChange={handleChange} 
+                          />
                         </TableCell>
                         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
+                          {/* <Avatar alt={row.guardianFirstName} src={avatarUrl} sx={{ mr: 2 }} /> */}
                           <Typography variant="subtitle2" noWrap>
-                            {name}
+                            {row.guardianFirstName}{" "}{row.guardianLastName}
                           </Typography>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="left">company ID: {row.company_id}</TableCell>
+                        {/* <TableCell align="left">{role}</TableCell> */}
+                        <TableCell align="left">{row.isAccountOwner ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(status === 'banned' && 'error') || 'success'}
+                            color={(row.isBanned && 'error') || 'success'}
                           >
-                            {sentenceCase(status)}
+                            {row.isBanned ? 'Banned' : 'Active'}
                           </Label>
                         </TableCell>
 
-                        <TableCell align="right">
-                          <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
+                        <TableCell align="right"> 
+                          <UserMoreMenu onDelete={() => handleDeleteUser(row.id)} userName={row.guardianFirstName} />
                         </TableCell>
                       </TableRow>
-                    );
+                      )
                   })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
@@ -252,6 +313,7 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
+  console.log('applySortFilter', array, comparator, query)
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
