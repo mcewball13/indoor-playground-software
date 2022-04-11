@@ -36,6 +36,8 @@ if (process.env.NODE_ENV === "production") {
    res.sendFile(path.join(__dirname, '../client/build/index.html'));
  });
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: false })
+  .then(() => {
     app.listen(PORT, () => console.log(`Now listening on port ${PORT}`));
-});
+  })
+  .catch((e) => console.log('seqelize startup error on port', PORT, e));

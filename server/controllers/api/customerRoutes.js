@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const cors = require("cors");
 const {
     CustomerGuardian,
     CustomerMinor,
@@ -6,8 +7,12 @@ const {
 } = require("../../models");
 const { signToken } = require("../../utils/auth");
 
+var corsOptions = {
+  origin: 'http://localhost:3030',
+}
+
 // get all users
-router.get("/", async (req, res) => {
+router.get("/", cors(corsOptions), async (req, res) => {
     try {
         const guardianData = await CustomerGuardian.findAll({});
         res.json(guardianData);
