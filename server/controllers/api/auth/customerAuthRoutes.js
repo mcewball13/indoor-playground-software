@@ -6,10 +6,20 @@ const {
 } = require("../../../models");
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
+const { randomUUID } = require('crypto')
+const cloudinary = require("cloudinary").v2;
 
 const generateHtmlEmail = require("../../../utils/emailHtml");
 const generatePlainEmail = require("../../../utils/emailPlain");
 const { signToken } = require("../../../utils/auth");
+
+
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_SECRET,
+    secure: true
+  });
 
 // email client instance
 const sgMail = require("@sendgrid/mail");
@@ -172,7 +182,18 @@ router.post("/new", async (req, res) => {
 });
 
 router.put("/save-signed-waiver/cloudinary/:id", (req, res) => {
-    console.log(req.body);
+    const UUID = randomUUID()
+    cloudinary.uploader.upload(
+        req.body.signedWaiver,
+        {
+            public_id: `pdfs/customer-pdfs/${UUID}`,
+            overwrite: true,
+        },
+        function (error, result) {
+            console.log(result, error);
+        }
+    );
+    console.log(req.body.signedWaiver);
     console.log("param id", req.params.id);
     res.status(200).json({
         message: "Signed Waiver Saved",

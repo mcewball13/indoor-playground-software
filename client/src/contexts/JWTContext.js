@@ -265,9 +265,9 @@ function AuthProvider({ children }) {
     // // =========================================================================
     const response = await axios({
       url: `/api/auth/customers/save-signed-waiver/cloudinary/${customerId}`,
-      method: 'POST',
+      method: 'PUT',
       baseURL: '/',
-      data: signedWaiver,
+      data: {signedWaiver},
     });
     // const { accessToken, employeeData: user } = response.data;
     // const response = await axios.post('/api/account/new', newCustomer);
