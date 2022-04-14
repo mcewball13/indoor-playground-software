@@ -6,6 +6,7 @@ const CustomerGuardianHasCustomerMinor = require("./CustomerGuardianHasCustomerM
 const Employees = require("./Employees");
 const EmployeeRoles = require("./EmployeeRoles");
 const Memberships = require("./Memberships");
+const SignedWaivers = require("./SignedWaivers");
 
 // Create associations with the main company
 Company.hasMany(Locations, {
@@ -48,7 +49,23 @@ CustomerGuardian.belongsTo(Memberships, {
     unique: false,
 })
 
-// Company informational relationships
+// Waiver relationships
+SignedWaivers.belongsTo(CustomerGuardian, {
+    foreignKey: "guardian_id",
+    unique: false,
+})
+CustomerGuardian.hasMany(SignedWaivers, {
+    foreignKey: "guardian_id",
+    unique: false,
+})
+CustomerMinor.hasMany(SignedWaivers, {
+    foreignKey: "minor_id",
+    unique: false,
+})
+SignedWaivers.belongsTo(CustomerMinor, {
+    foreignKey: "minor_id",
+    unique: false,
+})
 
 // Create the many to many association with itself for account owners and other adults on the same account.
 

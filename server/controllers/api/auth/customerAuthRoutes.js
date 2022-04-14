@@ -6,23 +6,23 @@ const {
 } = require("../../../models");
 const nodemailer = require("nodemailer");
 const randomstring = require("randomstring");
-const { randomUUID } = require('crypto')
+const { randomUUID } = require("crypto");
 const cloudinary = require("cloudinary").v2;
 
 const generateHtmlEmail = require("../../../utils/emailHtml");
 const generatePlainEmail = require("../../../utils/emailPlain");
 const { signToken } = require("../../../utils/auth");
 
-
-cloudinary.config({ 
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
-    api_key: process.env.CLOUDINARY_API_KEY, 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_SECRET,
-    secure: true
-  });
+    secure: true,
+});
 
 // email client instance
 const sgMail = require("@sendgrid/mail");
+const SignedWaivers = require("../../../models/SignedWaivers");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // api/auth/customers
@@ -181,19 +181,48 @@ router.post("/new", async (req, res) => {
     }
 });
 
-router.put("/save-signed-waiver/cloudinary/:id", (req, res) => {
-    const UUID = randomUUID()
-    cloudinary.uploader.upload(
+router.put("/save-signed-waiver/cloudinary/:id", async (req, res) => {
+    const UUID = randomUUID();
+    let signedWaiverURL;
+    await cloudinary.uploader.upload(
         req.body.signedWaiver,
         {
             public_id: `pdfs/customer-pdfs/${UUID}`,
             overwrite: true,
         },
         function (error, result) {
+            signedWaiverURL = result.url;
             console.log(result, error);
         }
     );
-    console.log(req.body.signedWaiver);
+    const customerResponse = await CustomerGuardian.findOne({
+        where: {
+            id: req.params.id,
+        },
+        include: [
+            {
+                model: CustomerMinor,
+                through: CustomerGuardianHasCustomerMinor,
+                as: "minors",
+            },
+        ],
+    });
+    const minorIds = customerResponse.minors.map((minor) => minor.id);
+    if (minorIds.length > 0) {
+        await minorIds.map((minorId) =>
+            SignedWaivers.create({
+                waiverURL: signedWaiverURL,
+                guardian_id: req.params.id,
+                minor_id: minorId,
+            })
+        );
+    } else {
+        await SignedWaivers.create({
+            waiverURL: signedWaiverURL,
+            guardian_id: req.params.id,
+        });
+    }
+    console.log(signedWaiverURL);
     console.log("param id", req.params.id);
     res.status(200).json({
         message: "Signed Waiver Saved",
