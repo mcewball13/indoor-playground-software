@@ -114,12 +114,13 @@ export default function SignWaiver() {
       signedWaiver,
       customerId: customer.newCustomerData.id,
     }); 
-    console.log(signedWaiver);
     const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isDesktop) {
       await pdfWaiverElementDownload.current.save();
     }
   };
+
+  // clear signature on click
   const handleClearSignature = () => signatureRef.current.clear();
 
   return (

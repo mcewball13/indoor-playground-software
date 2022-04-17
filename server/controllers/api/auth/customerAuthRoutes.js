@@ -57,11 +57,11 @@ router.post("/login", async (req, res) => {
             return;
         }
         const { id, email } = existingCustomerData.dataValues;
-        const accessToken = signToken({ id, email });
+        const customerAccessToken = signToken({ id, email });
 
         res.json({
             existingCustomerData,
-            accessToken,
+            customerAccessToken,
         });
     } catch (error) {
         console.log(error);
@@ -153,7 +153,7 @@ router.post("/new", async (req, res) => {
         // const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
 
         // test user created by mui assets api
-        const accessToken = signToken({
+        const customerAccessToken = signToken({
             id: "8864c717-587d-472a-929a-8e5f298024da-0",
             displayName: "Jaydon Frankie",
             email: "demo@minimals.cc",
@@ -173,7 +173,7 @@ router.post("/new", async (req, res) => {
 
         res.status(200).json({
             customer: { newCustomerData, newCustomerMinorDataArr },
-            accessToken,
+            customerAccessToken,
         });
     } catch (error) {
         console.log(error);
@@ -181,9 +181,11 @@ router.post("/new", async (req, res) => {
     }
 });
 
-router.put("/save-signed-waiver/cloudinary/:id", async (req, res) => {
+router.post("/save-signed-waiver/cloudinary/:id", async (req, res) => {
+    // generate randome UUID for signed waiver
     const UUID = randomUUID();
     let signedWaiverURL;
+    // upload signed waiver to cloudinary
     await cloudinary.uploader.upload(
         req.body.signedWaiver,
         {
@@ -191,10 +193,12 @@ router.put("/save-signed-waiver/cloudinary/:id", async (req, res) => {
             overwrite: true,
         },
         function (error, result) {
+            // set the signed waiver url
             signedWaiverURL = result.url;
             console.log(result, error);
         }
     );
+    // find the customer by id and include the minors
     const customerResponse = await CustomerGuardian.findOne({
         where: {
             id: req.params.id,
@@ -207,7 +211,9 @@ router.put("/save-signed-waiver/cloudinary/:id", async (req, res) => {
             },
         ],
     });
+    // create a minor list to update
     const minorIds = customerResponse.minors.map((minor) => minor.id);
+    // if the customer has minors create the links in the signedWaiver table
     if (minorIds.length > 0) {
         await minorIds.map((minorId) =>
             SignedWaivers.create({
@@ -217,14 +223,14 @@ router.put("/save-signed-waiver/cloudinary/:id", async (req, res) => {
             })
         );
     } else {
+        // if the customer does not have minors create the links in the signedWaiver table
         await SignedWaivers.create({
             waiverURL: signedWaiverURL,
             guardian_id: req.params.id,
         });
     }
-    console.log(signedWaiverURL);
-    console.log("param id", req.params.id);
     res.status(200).json({
+        signedWaiverURL,
         message: "Signed Waiver Saved",
     });
 });

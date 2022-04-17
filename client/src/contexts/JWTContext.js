@@ -35,7 +35,7 @@ const handlers = {
       user,
     };
   },
-  
+
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
@@ -69,12 +69,19 @@ const handlers = {
     };
   },
   CUSTOMER_EXISTS: (state, action) => {
-    const { existingCustomer,  } = action.payload;
+    const { existingCustomer } = action.payload;
     return {
       ...state,
       existingCustomer,
     };
   },
+  SUBMIT_SIGNED_WAIVER: (state, action) => {
+    const { customer } = action.payload;
+    return {
+      ...state,
+      customer,
+    };
+  }
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -100,11 +107,11 @@ AuthProvider.propTypes = {
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-
   useEffect(() => {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem('accessToken');
+        const customerAccessToken = window.localStorage.getItem('customerAccessToken');
 
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
@@ -200,10 +207,10 @@ function AuthProvider({ children }) {
     // const { accessToken, employeeData: user } = response.data;
     // const response = await axios.post('/api/account/new', newCustomer);
 
-    const { accessToken, customer } = response.data;
+    const { customerAccessToken, customer } = response.data;
 
     // uncomment when we have a completed backend
-    // window.localStorage.setItem('accessToken', accessToken);
+    window.localStorage.setItem('customerAccessToken', customerAccessToken);
     dispatch({
       type: 'CUSTOMER_REGISTER',
       payload: {
@@ -212,7 +219,6 @@ function AuthProvider({ children }) {
     });
   };
   const customerLogin = async (email, password) => {
-
     // change to axios.post when we have a completed backend
     // =========================================================================
 
@@ -225,11 +231,11 @@ function AuthProvider({ children }) {
         password,
       },
     });
-    const { accessToken, existingCustomer } = response.data;
+    const { customerAccessToken, existingCustomer } = response.data;
 
     // ========================================================================
 
-    window.localStorage.setItem('accessToken', accessToken);
+    window.localStorage.setItem('customerAccessToken', customerAccessToken);
     dispatch({
       type: 'CUSTOMER_LOGIN',
       payload: {
@@ -245,32 +251,39 @@ function AuthProvider({ children }) {
       url: `/api/customers/email-exists/${email}`,
       method: 'GET',
       baseURL: '/',
-     
     });
-   
+
     const { exists, customerEmail } = response.data.existingCustomer;
 
     if (exists) {
       dispatch({
         type: 'CUSTOMER_EXISTS',
         payload: {
-          existingCustomer: {exists, customerEmail},
+          existingCustomer: { exists, customerEmail },
         },
       });
     }
   };
 
-  const submitSignedWaiver = async ({signedWaiver, customerId}) => {
+  const submitSignedWaiver = async ({ signedWaiver, customerId }) => {
     // change to axios.post when we have a completed backend
     // // =========================================================================
     const response = await axios({
       url: `/api/auth/customers/save-signed-waiver/cloudinary/${customerId}`,
-      method: 'PUT',
+      method: 'POST',
       baseURL: '/',
-      data: {signedWaiver},
+      data: { signedWaiver },
     });
-    // const { accessToken, employeeData: user } = response.data;
-    // const response = await axios.post('/api/account/new', newCustomer);
+
+    dispatch({
+      type: 'SUBMIT_SIGNED_WAIVER',
+      payload: {
+        customer: {
+          ...state.customer,
+          signedWaiverURL: response.data.signedWaiver,
+        },
+      },
+    });
   };
 
   const logout = async () => {
@@ -289,7 +302,7 @@ function AuthProvider({ children }) {
         register,
         customerRegister,
         customerExists,
-        submitSignedWaiver
+        submitSignedWaiver,
       }}
     >
       {children}
