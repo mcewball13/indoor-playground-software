@@ -2,6 +2,7 @@
 import { useTheme } from '@mui/system';
 import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { useSnackbar } from 'notistack';
 import { capitalCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
@@ -43,6 +44,7 @@ export default function SignWaiver() {
   const { customer, submitSignedWaiver } = useAuth();
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
+  const { enqueueSnackbar} = useSnackbar();
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
   const signatureRef = useRef({});
@@ -114,10 +116,12 @@ export default function SignWaiver() {
       signedWaiver,
       customerId: customer.newCustomerData.id,
     }); 
+    enqueueSnackbar('Waiver Signed');
     const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isDesktop) {
       await pdfWaiverElementDownload.current.save();
     }
+    
   };
 
   // clear signature on click
