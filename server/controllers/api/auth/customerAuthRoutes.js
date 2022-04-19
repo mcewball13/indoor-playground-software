@@ -182,6 +182,7 @@ router.post("/new", async (req, res) => {
 });
 
 router.post("/save-signed-waiver/cloudinary/:id", async (req, res) => {
+    try {
     // generate randome UUID for signed waiver
     const UUID = randomUUID();
     let signedWaiverURL;
@@ -233,6 +234,10 @@ router.post("/save-signed-waiver/cloudinary/:id", async (req, res) => {
         signedWaiverURL,
         message: "Signed Waiver Saved",
     });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
 });
 
 router.delete("/:id", (req, res) => {
