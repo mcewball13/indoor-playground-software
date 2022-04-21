@@ -23,7 +23,7 @@ export const PATH_PAGE = {
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   signWaiver: '/sign-waiver',
-  signWaiver: '/sign-waiver-success',
+  signWaiverSuccess: '/sign-waiver-success',
   pricing: '/pricing',
   payment: '/payment',
   about: '/about-us',

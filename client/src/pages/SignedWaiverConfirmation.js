@@ -1,6 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 import { m } from 'framer-motion';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
 
 
 // @mui
@@ -9,6 +10,7 @@ import { Box, Button, Typography, Container } from '@mui/material';
 
 import Page from '../components/Page';
 import { MotionContainer, varBounce } from '../components/animate';
+import { PATH_AUTH, PATH_PAGE } from '../routes/paths';
 
 const RootStyle = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -18,7 +20,16 @@ const RootStyle = styled('div')(({ theme }) => ({
   paddingBottom: theme.spacing(10),
 }));
 
-export default function SignedWaiverConfirmation({firstName = "Wiggler"}){
+export default function SignedWaiverConfirmation(){
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigate(PATH_PAGE.signWaiver);
+    }, 5000);
+  }, []);
+
+
   return (
     <Page title="Successfully Signed Waiver" sx={{height: 1}}>
       <RootStyle>
@@ -26,7 +37,7 @@ export default function SignedWaiverConfirmation({firstName = "Wiggler"}){
           <Box sx={{maxWidth: 480, margin: 'auto', textAlign: 'center'}}>
             <m.div variants={varBounce().in}>
               <Typography variant="h3" paragraph>
-                Thank you {firstName}, you've successfully signed your waiver!
+                Success!
               </Typography>
             </m.div>
             <Typography sx={{color: 'text.secondary'}}>
@@ -35,7 +46,7 @@ export default function SignedWaiverConfirmation({firstName = "Wiggler"}){
             <m.div variants={varBounce().in}>
               image
             </m.div>
-            <Button to="/sign-waiver" size="large" variant="contained" component="a">
+            <Button to="/sign-waiver" size="large" variant="contained" component={RouterLink}>
               New waiver
             </Button>
           </Box>
@@ -45,5 +56,3 @@ export default function SignedWaiverConfirmation({firstName = "Wiggler"}){
 
   )
 }
-
-SignedWaiverConfirmation.propTypes = {}

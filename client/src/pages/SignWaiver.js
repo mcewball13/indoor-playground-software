@@ -5,7 +5,7 @@ import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { capitalCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import SignatureCanvas from 'react-signature-canvas';
 import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
 import { drawDOM, exportPDF } from '@progress/kendo-drawing';
@@ -24,7 +24,7 @@ import useSettings from '../hooks/useSettings';
 // utils
 import { useSelector } from '../redux/store';
 // routes
-import { PATH_DASHBOARD } from '../routes/paths';
+import { PATH_DASHBOARD, PATH_PAGE } from '../routes/paths';
 // sections
 // slices
 // _mock_
@@ -44,6 +44,7 @@ export default function SignWaiver() {
   const { customer, submitSignedWaiver } = useAuth();
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { enqueueSnackbar} = useSnackbar();
   const { id = '' } = useParams();
   const isEdit = pathname.includes('edit');
@@ -121,7 +122,7 @@ export default function SignWaiver() {
     if (isDesktop) {
       await pdfWaiverElementDownload.current.save();
     }
-    
+    navigate(PATH_PAGE.signWaiverSuccess);
   };
 
   // clear signature on click

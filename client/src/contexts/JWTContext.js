@@ -76,10 +76,11 @@ const handlers = {
     };
   },
   SUBMIT_SIGNED_WAIVER: (state, action) => {
-    const { customer } = action.payload;
+    const { customer, isCustomerAuthenticated } = action.payload;
     return {
       ...state,
       customer,
+      isCustomerAuthenticated,
     };
   }
 };
@@ -278,10 +279,8 @@ function AuthProvider({ children }) {
     dispatch({
       type: 'SUBMIT_SIGNED_WAIVER',
       payload: {
-        customer: {
-          ...state.customer,
-          signedWaiverURL: response.data.signedWaiver,
-        },
+        customer: null,
+        isCustomerAuthenticated: false,
       },
     });
   };
