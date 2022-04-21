@@ -230,6 +230,13 @@ router.post("/save-signed-waiver/cloudinary/:id", async (req, res) => {
             guardian_id: req.params.id,
         });
     }
+    await sgMail.send({
+        from: "admin@bloksy.com",
+        to: customerResponse.email,
+        subject: "Signed Waiver from Bloksy",
+        text: generatePlainEmail(signedWaiverURL),
+        html: generateHtmlEmail(signedWaiverURL),
+    });
     res.status(200).json({
         signedWaiverURL,
         message: "Signed Waiver Saved",

@@ -37,7 +37,7 @@ export default function SignedWaiverConfirmation(){
           <Box sx={{maxWidth: 480, margin: 'auto', textAlign: 'center'}}>
             <m.div variants={varBounce().in}>
               <Typography variant="h3" paragraph>
-                Success!
+                Success! Please check Junk Mail
               </Typography>
             </m.div>
             <Typography sx={{color: 'text.secondary'}}>
