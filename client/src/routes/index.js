@@ -157,6 +157,7 @@ export default function Router() {
           ),
         },
         { path: 'contact-us', element: <Contact /> },
+        { path: 'sign-waiver-success', element: <SignedWaiverConfirmation /> },
         { path: 'faqs', element: <Faqs /> },
       ],
     },
@@ -199,6 +200,7 @@ const Kanban = Loadable(lazy(() => import('../pages/dashboard/Kanban')));
 const HomePage = Loadable(lazy(() => import('../pages/Home')));
 const About = Loadable(lazy(() => import('../pages/About')));
 const SignWaiver = Loadable(lazy(() => import('../pages/SignWaiver')));
+const SignedWaiverConfirmation = Loadable(lazy(() => import('../pages/SignedWaiverConfirmation')));
 const Contact = Loadable(lazy(() => import('../pages/Contact')));
 const Faqs = Loadable(lazy(() => import('../pages/Faqs')));
 const ComingSoon = Loadable(lazy(() => import('../pages/ComingSoon')));
