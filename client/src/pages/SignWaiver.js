@@ -113,17 +113,19 @@ export default function SignWaiver() {
     });
     const signedWaiver = await exportPDF(drawnDOM);
     // post cloudinary url to server
+    const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isDesktop) {
+      console.log(pdfWaiverElementDownload.current);
+      await pdfWaiverElementDownload.current.save();
+    }
     await submitSignedWaiver({
       signedWaiver,
       customerId: customer.newCustomerData.id,
     }); 
     enqueueSnackbar('Waiver Signed');
-    const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (isDesktop) {
-      await pdfWaiverElementDownload.current.save();
-    }
     navigate(PATH_PAGE.signWaiverSuccess);
   };
+  console.log(pdfWaiverElementDownload.current);
 
   // clear signature on click
   const handleClearSignature = () => signatureRef.current.clear();
