@@ -58,7 +58,7 @@ UserWaiverForm.propTypes = {
 };
 
 export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, onCancel }) {
-  const { customerRegister, customerExists } = useAuth();
+  const { customerRegister, customerExists, setCustomerExistsNull } = useAuth();
   const { existingCustomer } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   // State to hold array of minors in objects
   const [minors, setMinors] = useState([]);
 
-  const { selectedAvatar, currentCustomer, isOpenModalCustomerExists } = useSelector((state) => state.newWaiverForm);
+  const { selectedAvatar, currentCustomer } = useSelector((state) => state.newWaiverForm);
   // capture the element to scroll to
   const addMinorFormScrollRef = useRef(null);
   const addedMinorScrollRef = useRef(null);
@@ -145,12 +145,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit, currentUser]);
 
-  useEffect(() => {
-    if (existingCustomer) {
-      dispatch(openCustomerExistsModal());
-    }
-  }, [existingCustomer]);
-
   const handleOnEntered = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
@@ -207,7 +201,8 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   };
 
   const handleCustomerExistsCloseModal = () => {
-    dispatch(closeCustomerExistsModal());
+    setCustomerExistsNull();
+    reset();
   };
 
   // formate date object to string
@@ -441,7 +436,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
           </Grid>
         </Grid>
       </FormProvider>
-      <DialogAnimate maxWidthMUI="sm" open={isOpenModalCustomerExists} onClose={handleCustomerExistsCloseModal}>
+      <DialogAnimate maxWidthMUI="sm" open={!!existingCustomer} onClose={handleCustomerExistsCloseModal}>
         <DialogActions sx={{ py: 2, px: 3 }}>
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
             Existing Customer Found

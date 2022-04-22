@@ -20,15 +20,16 @@ export default function NavbarDocs() {
         <Typography gutterBottom variant="subtitle1">
           Hi, {user?.displayName}
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+        {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           Need help?
           <br /> Please check our docs
         </Typography>
-      </div>
+     
 
       <Button href={PATH_DOCS} target="_blank" rel="noopener" variant="contained">
         Documentation
-      </Button>
+      </Button> */}
+       </div>
     </Stack>
   );
 }

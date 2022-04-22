@@ -82,7 +82,14 @@ const handlers = {
       customer,
       isCustomerAuthenticated,
     };
-  }
+  },
+  SET_EXISTS_NULL: (state, action) => {
+    const { existingCustomer } = action.payload;
+    return {
+      ...state,
+      existingCustomer,
+    };
+  },
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -97,6 +104,7 @@ const AuthContext = createContext({
   customerRegister: () => Promise.resolve(),
   customerExists: () => Promise.resolve(),
   submitSignedWaiver: () => Promise.resolve(),
+  setCustomerExistsNull: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -254,15 +262,17 @@ function AuthProvider({ children }) {
       baseURL: '/',
     });
 
-    const { exists, customerEmail } = response.data.existingCustomer;
+    if (response.data) {
+      const { existingCustomer } = response.data;
 
-    if (exists) {
-      dispatch({
-        type: 'CUSTOMER_EXISTS',
-        payload: {
-          existingCustomer: { exists, customerEmail },
-        },
-      });
+      if (existingCustomer.exists) {
+        dispatch({
+          type: 'CUSTOMER_EXISTS',
+          payload: {
+            existingCustomer,
+          },
+        });
+      }
     }
   };
 
@@ -284,6 +294,14 @@ function AuthProvider({ children }) {
       },
     });
   };
+  const setCustomerExistsNull = async () => {
+    dispatch({
+      type: 'SET_EXISTS_NULL',
+      payload: {
+        existingCustomer: null,
+      },
+    });
+  };
 
   const logout = async () => {
     setSession(null);
@@ -302,6 +320,7 @@ function AuthProvider({ children }) {
         customerRegister,
         customerExists,
         submitSignedWaiver,
+        setCustomerExistsNull,
       }}
     >
       {children}
