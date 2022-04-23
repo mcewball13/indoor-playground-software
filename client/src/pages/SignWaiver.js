@@ -125,7 +125,6 @@ export default function SignWaiver() {
     enqueueSnackbar('Waiver Signed');
     navigate(PATH_PAGE.signWaiverSuccess);
   };
-  console.log(pdfWaiverElementDownload.current);
 
   // clear signature on click
   const handleClearSignature = () => signatureRef.current.clear();

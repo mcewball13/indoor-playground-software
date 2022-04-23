@@ -1,5 +1,5 @@
 import { sentenceCase } from 'change-case';
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -34,6 +34,7 @@ import axios from '../../utils/axios';
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user/list';
 import avatars from '../../assets/avatars';
+import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +73,6 @@ export default function UserList() {
     updateUserList();
   }, []);
 
-  console.log(userList);
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -130,7 +130,6 @@ export default function UserList() {
     return avatars[randomNum];
   };
 
-
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
   const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
@@ -179,61 +178,64 @@ export default function UserList() {
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
-                <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const {
-                      id,
-                      displayName,
-                      email,
-                      minors,
-                      membership = "You should buy one",
-                      photoURL,
-                      status = "Active",
-                    } = row;
-                    const isItemSelected = selected.indexOf(displayName) !== -1;
+               
+                  <TableBody>
+                    {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                      const {
+                        id,
+                        displayName,
+                        email,
+                        minors,
+                        membership = 'You should buy one',
+                        photoURL,
+                        status = 'Active',
+                      } = row;
+                      const isItemSelected = selected.indexOf(displayName) !== -1;
 
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onClick={() => handleClick(displayName)} />
-                        </TableCell>
-                        <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={displayName} src={photoURL || renderAvatar()} sx={{ mr: 2 }} />
-                          <Typography variant="subtitle2" noWrap>
-                            {displayName}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">{email}</TableCell>
-                        <TableCell align="left">{'minors'}</TableCell>
-                        <TableCell align="left">{membership?.title === '0' ? <Button>Add</Button>: membership?.title }</TableCell>
-                        <TableCell align="left">
-                          <Label
-                            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(status === 'banned' && 'error') || 'success'}
-                          >
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell>
+                      return (
+                        <TableRow
+                          hover
+                          key={id}
+                          tabIndex={-1}
+                          role="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox checked={isItemSelected} onClick={() => handleClick(displayName)} />
+                          </TableCell>
+                          <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Avatar alt={displayName} src={photoURL || renderAvatar()} sx={{ mr: 2 }} />
+                            <Typography variant="subtitle2" noWrap>
+                              {displayName}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{'minors'}</TableCell>
+                          <TableCell align="left">
+                            {membership?.title === '0' ? <Button>Add</Button> : membership?.title}
+                          </TableCell>
+                          <TableCell align="left">
+                            <Label
+                              variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                              color={(status === 'banned' && 'error') || 'success'}
+                            >
+                              {sentenceCase(status)}
+                            </Label>
+                          </TableCell>
 
-                        <TableCell align="right">
-                          <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={displayName} />
-                        </TableCell>
+                          <TableCell align="right">
+                            <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={displayName} />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 53 * emptyRows }}>
+                        <TableCell colSpan={6} />
                       </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
+                    )}
+                  </TableBody>
                 {isNotFound && (
                   <TableBody>
                     <TableRow>
