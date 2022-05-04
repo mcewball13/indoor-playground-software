@@ -87,7 +87,6 @@ export default function UserList() {
           `
         }
       });
-      console.log(data.data);
       setUserList(data.data.allCustomers);
     };
     updateUserList();
@@ -303,7 +302,6 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
-  console.log('arrary', array)
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
