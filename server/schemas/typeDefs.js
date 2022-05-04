@@ -5,10 +5,22 @@ const typeDefs = gql`
     token: ID!
     employee: Employee
   }
+  type CustomerMinor{
+    id: ID!
+    minorFirstName: String!
+    minorLastName: String!
+    minorBirthday: String!
+    email: String
+    notes: String
+    createdAt: String
+    updatedAt: String
+  }
   type CustomerGuardian {
     id: ID!
-    firstName: String!
-    lastName: String!
+    guardianFirstName: String!
+    guardianLastName: String!
+    displayName: String!
+    minors: [CustomerMinor]
   }
   type Employee {
     id: ID!

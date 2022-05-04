@@ -1,7 +1,7 @@
 const { AuthenticationError } = require("apollo-server-express");
 
 const employeeQueries = require('./employeeResolvers/employeeResolverQueries')
-const { CustomerGuardian, Employee } = require("../models");
+const { CustomerGuardian, CustomerMinor, CustomerGuardianHasCustomerMinor, Employee } = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
@@ -10,11 +10,21 @@ const resolvers = {
 
         allCustomers: async (parent, args, context) => {
             try {
-                const guardianData = await CustomerGuardian.findAll({});
-                console.log(guardianData);
+                const guardianData = await CustomerGuardian.findAll({
+                    include: [
+                        {
+                            model: CustomerMinor,
+                            through: {
+                                model: CustomerGuardianHasCustomerMinor,
+                                attributes: [],
+                            },
+                            as: "minors",
+                        },
+                    ],
+                });
                 return guardianData;
             } catch (error) {
-                console.log(error);
+                console.log(`error`);
             }
         },
 

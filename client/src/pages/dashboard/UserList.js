@@ -64,11 +64,31 @@ export default function UserList() {
   useEffect(() => {
     const updateUserList = async () => {
       const { data } = await axios({
-        url: `/api/customers/auto-complete`,
-        method: 'GET',
-        baseURL: '/',
+        url: `/graphql`,
+        method: 'POST',
+        baseURL: 'http://localhost:3031/',
+        data: {
+          query: `
+            query Query {
+              allCustomers {
+              id
+              guardianFirstName
+              guardianLastName
+              displayName
+              minors {
+                id
+                minorFirstName
+                minorLastName
+                minorBirthday
+                email
+              }
+            }
+          }
+          `
+        }
       });
-      setUserList(data);
+      console.log(data.data);
+      setUserList(data.data.allCustomers);
     };
     updateUserList();
   }, []);
@@ -283,6 +303,7 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
+  console.log('arrary', array)
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
