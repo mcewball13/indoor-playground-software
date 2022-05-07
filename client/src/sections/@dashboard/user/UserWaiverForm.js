@@ -133,6 +133,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   } = methods;
 
   const values = watch();
+  console.log('values', values);
 
   useEffect(() => {
     if (isEdit && currentUser) {

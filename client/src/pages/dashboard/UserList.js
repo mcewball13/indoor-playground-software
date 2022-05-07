@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
+import {GET_ALL_CUSTOMERS} from '../../utils/gql/queries/customerQueries';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // _mock_
@@ -68,23 +69,7 @@ export default function UserList() {
         method: 'POST',
         baseURL: 'http://localhost:3031/',
         data: {
-          query: `
-            query Query {
-              allCustomers {
-              id
-              guardianFirstName
-              guardianLastName
-              displayName
-              minors {
-                id
-                minorFirstName
-                minorLastName
-                minorBirthday
-                email
-              }
-            }
-          }
-          `
+          query: GET_ALL_CUSTOMERS
         }
       });
       setUserList(data.data.allCustomers);

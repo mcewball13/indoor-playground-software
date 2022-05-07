@@ -1,9 +1,13 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
-  type Auth{
+  type EmployeeAuth{
     token: ID!
     employee: Employee
+  }
+  type CustomerAuth{
+    customerAccessToken: ID!
+    customer: CustomerGuardian
   }
   type CustomerMinor{
     id: ID!
@@ -69,6 +73,29 @@ const typeDefs = gql`
     addressZip: String
     addressPhone: String
   }
+  input RegisterNewMinorsInput {
+    minorFirstName: String
+    minorLastName: String
+    minorBirthday: String
+    email: String
+  }
+  input RegisterNewCustomerInput {
+    guardianFirstName: String
+    guardianLastName: String
+    email: String
+    password: String
+    birthday: String
+    isBanned: Boolean
+    # isAccountOwner: Boolean
+    addressCity: String
+    addressState: String
+    addressZipCode: String
+    addressStreet: String
+    phoneNumber: String
+    photoURL: String
+    status: String
+  }
+
   type Query{
     allCustomers: [CustomerGuardian]
     singleCustomer(id: ID!): CustomerGuardian 
@@ -77,9 +104,11 @@ const typeDefs = gql`
     addEmployeeFormFill: EmployeeForm
   }
   type Mutation{
-    addUser(input: AddEmployeeFieldsInput): Auth
-    loginUser(email: String, password: String): Auth
-    
+    customerLogin(email: String!, password: String!): CustomerAuth
+    addUser(input: AddEmployeeFieldsInput): EmployeeAuth
+    loginUser(email: String, password: String): EmployeeAuth
+    customerSignup(guardians: RegisterNewCustomerInput, minors: [RegisterNewMinorsInput]): CustomerAuth
+    emailExists(email: String!): Boolean
   }
 `;
 
