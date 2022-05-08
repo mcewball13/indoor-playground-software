@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
+import { ADD_NEW_CUSTOMER } from '../utils/gql/queries/auth/customerMutations';
 
 // ----------------------------------------------------------------------
 
@@ -204,14 +205,22 @@ function AuthProvider({ children }) {
       },
     });
   };
-  const customerRegister = async (newCustomer) => {
+  const customerRegister = async ({ guardians, minors }) => {
+    console.log(guardians, minors);
     // change to axios.post when we have a completed backend
     // // =========================================================================
     const response = await axios({
-      url: '/api/auth/customers/new',
+      url: '/graphql',
       method: 'POST',
-      baseURL: '/',
-      data: newCustomer,
+      baseURL: 'http://localhost:3031',
+      data: {
+        query: ADD_NEW_CUSTOMER,
+
+        variables: {
+          guardians,
+          minors,
+        },
+      },
     });
     // const { accessToken, employeeData: user } = response.data;
     // const response = await axios.post('/api/account/new', newCustomer);

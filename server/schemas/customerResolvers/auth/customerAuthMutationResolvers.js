@@ -69,7 +69,7 @@ module.exports = {
             );
         }
     },
-    customerSignup: async (parent, { guardians, minors = []}, context) => {
+    customerRegister: async (parent, { guardians, minors = []}, context) => {
         console.log(guardians)
         try {
             const newCustomerData = await CustomerGuardian.create({

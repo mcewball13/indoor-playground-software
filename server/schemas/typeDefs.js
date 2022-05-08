@@ -94,6 +94,9 @@ const typeDefs = gql`
     phoneNumber: String
     photoURL: String
     status: String
+    minorFirstName: String
+    minorLastName: String
+    minorBirthday: String
   }
 
   type Query{
@@ -107,7 +110,7 @@ const typeDefs = gql`
     customerLogin(email: String!, password: String!): CustomerAuth
     addUser(input: AddEmployeeFieldsInput): EmployeeAuth
     loginUser(email: String, password: String): EmployeeAuth
-    customerSignup(guardians: RegisterNewCustomerInput, minors: [RegisterNewMinorsInput]): CustomerAuth
+    customerRegister(guardians: RegisterNewCustomerInput, minors: [RegisterNewMinorsInput]): CustomerAuth
     emailExists(email: String!): Boolean
   }
 `;
