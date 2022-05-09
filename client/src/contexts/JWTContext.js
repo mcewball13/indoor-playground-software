@@ -14,7 +14,7 @@ const initialState = {
   isInitialized: false,
   user: null,
   existingCustomer: null,
-  currentCustomer: {},
+  emailExists: {},
 };
 
 const handlers = {
@@ -70,10 +70,10 @@ const handlers = {
     };
   },
   CUSTOMER_EXISTS: (state, action) => {
-    const { existingCustomer } = action.payload;
+    const { emailExists } = action.payload;
     return {
       ...state,
-      existingCustomer,
+      emailExists,
     };
   },
   SUBMIT_SIGNED_WAIVER: (state, action) => {
@@ -85,10 +85,10 @@ const handlers = {
     };
   },
   SET_EXISTS_NULL: (state, action) => {
-    const { existingCustomer } = action.payload;
+    const { emailExists } = action.payload;
     return {
       ...state,
-      existingCustomer,
+      emailExists,
     };
   },
 };
@@ -268,9 +268,11 @@ console.log("response.data", response.data.data.customerRegister);
     // change to axios.post when we have a completed backend
     // // =========================================================================
     const response = await axios({
-      url: `/api/customers/email-exists/${email}`,
-      method: 'GET',
-      baseURL: '/',
+      url: `/graphql`,
+      method: 'POST',
+      baseURL: 'http://localhost:3031',
+      data: {
+        query: 
     });
 
     if (response.data) {

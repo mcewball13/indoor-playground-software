@@ -105,13 +105,13 @@ const typeDefs = gql`
     allEmployees: [Employee]
     getRoles: [Role]
     addEmployeeFormFill: EmployeeForm
+    emailExists(email: String!): Boolean
   }
   type Mutation{
     customerLogin(email: String!, password: String!): CustomerAuth
     addUser(input: AddEmployeeFieldsInput): EmployeeAuth
     loginUser(email: String, password: String): EmployeeAuth
     customerRegister(guardians: RegisterNewCustomerInput, minors: [RegisterNewMinorsInput]): CustomerAuth
-    emailExists(email: String!): Boolean
   }
 `;
 

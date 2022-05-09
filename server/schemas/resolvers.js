@@ -2,13 +2,14 @@ const { AuthenticationError } = require("apollo-server-express");
 
 const employeeQueries = require('./employeeResolvers/employeeResolverQueries')
 const customerAuthMutations = require('./customerResolvers/auth/customerAuthMutationResolvers')
+const customerQueryResolvers = require('./customerResolvers/customerQueryResolvers')
 const { CustomerGuardian, CustomerMinor, CustomerGuardianHasCustomerMinor, Employee } = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
     Query: {
         ...employeeQueries,
-        
+        ...customerQueryResolvers,
 
         allCustomers: async (parent, args, context) => {
             try {

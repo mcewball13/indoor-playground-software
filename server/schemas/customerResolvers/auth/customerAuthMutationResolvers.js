@@ -127,24 +127,5 @@ module.exports = {
                 "Internal Server Error, Please try again"
             );
         }
-    },
-    emailExists: async (parent, { email }, context) => {
-        try {
-            const customerGuardianData = await CustomerGuardian.findOne({
-                attributes: { exclude: ["password"] },
-                where: {
-                    email: email,
-                },
-            });
-            if (!customerGuardianData) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (error) {
-            throw new AuthenticationError(
-                "Internal Server Error, Please try again"
-            );
-        }
     }
 };
