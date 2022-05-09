@@ -224,8 +224,10 @@ function AuthProvider({ children }) {
     });
     // const { accessToken, employeeData: user } = response.data;
     // const response = await axios.post('/api/account/new', newCustomer);
-
-    const { customerAccessToken, customer } = response.data;
+console.log("response.data", response.data.data.customerRegister);
+    const { customerAccessToken, customer } = response.data.data.customerRegister;
+    console.log("customer", customer);
+    console.log("customerAccessToken", customerAccessToken);
 
     // uncomment when we have a completed backend
     window.localStorage.setItem('customerAccessToken', customerAccessToken);

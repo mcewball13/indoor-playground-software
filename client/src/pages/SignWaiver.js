@@ -120,7 +120,7 @@ export default function SignWaiver() {
     }
     await submitSignedWaiver({
       signedWaiver,
-      customerId: customer.newCustomerData.id,
+      customerId: customer.id,
     }); 
     enqueueSnackbar('Waiver Signed');
     navigate(PATH_PAGE.signWaiverSuccess);
@@ -161,7 +161,7 @@ export default function SignWaiver() {
                     marginLeft: '1rem',
                   }}
                 >
-                  {customer?.newCustomerData?.guardianFirstName} {customer?.newCustomerData?.guardianLastName}
+                  {customer?.guardianFirstName} {customer?.guardianLastName}
                 </Typography>
               </Grid>
             </Grid>
@@ -170,11 +170,11 @@ export default function SignWaiver() {
                 Minors:
               </Typography>
 
-              {customer?.newCustomerMinorDataArr &&
-                customer?.newCustomerMinorDataArr.map((minor, i) => (
+              {customer?.minors &&
+                customer?.minors.map((minor, i) => (
                   <Grid item key={minor + i}>
                     <Typography variant="p" component="p" sx={{ marginLeft: '1rem' }}>
-                      {customer?.newCustomerMinorDataArr.length - 1 !== i
+                      {customer?.minors.length - 1 !== i
                         ? `${minor.minorFirstName}
                       ${minor.minorLastName},`
                         : `${minor.minorFirstName} ${minor.minorLastName}`}
