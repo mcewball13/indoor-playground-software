@@ -60,6 +60,10 @@ const typeDefs = gql`
     roles: [Role]
     locations: [Locations]
   }
+  type SignedWaiver {
+    signedWaiverURL: String
+    message: String
+  }
   input AddEmployeeFieldsInput {
     username: String!
     lastName: String!
@@ -112,6 +116,7 @@ const typeDefs = gql`
     addUser(input: AddEmployeeFieldsInput): EmployeeAuth
     loginUser(email: String, password: String): EmployeeAuth
     customerRegister(guardians: RegisterNewCustomerInput, minors: [RegisterNewMinorsInput]): CustomerAuth
+    submitSignedWaiver(signedWaiver: String, customerId: ID): SignedWaiver
   }
 `;
 

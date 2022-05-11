@@ -127,5 +127,70 @@ module.exports = {
                 "Internal Server Error, Please try again"
             );
         }
-    }
+    },
+    submitSignedWaiver: async (parent, { signedWaiver, customerId }, context) => {
+        try {
+            // generate randome UUID for signed waiver
+            const UUID = randomUUID();
+            let signedWaiverURL;
+            // upload signed waiver to cloudinary
+            await cloudinary.uploader.upload(
+                signedWaiver,
+                {
+                    public_id: `pdfs/customer-pdfs/${UUID}`,
+                    overwrite: true,
+                },
+                function (error, result) {
+                    // set the signed waiver url
+                    signedWaiverURL = result.url;
+                    console.log(result, error);
+                }
+            );
+            // find the customer by id and include the minors
+            const customerResponse = await CustomerGuardian.findOne({
+                where: {
+                    id: customerId,
+                },
+                include: [
+                    {
+                        model: CustomerMinor,
+                        through: CustomerGuardianHasCustomerMinor,
+                        as: "minors",
+                    },
+                ],
+            });
+            // create a minor list to update
+            const minorIds = customerResponse.minors.map((minor) => minor.id);
+            // if the customer has minors create the links in the signedWaiver table
+            if (minorIds.length > 0) {
+                await minorIds.map((minorId) =>
+                    SignedWaivers.create({
+                        waiverURL: signedWaiverURL,
+                        guardian_id: customerId,
+                        minor_id: minorId,
+                    })
+                );
+            } else {
+                // if the customer does not have minors create the links in the signedWaiver table
+                await SignedWaivers.create({
+                    waiverURL: signedWaiverURL,
+                    guardian_id: customerId,
+                });
+            }
+            await sgMail.send({
+                from: "admin@bloksy.com",
+                to: customerResponse.email,
+                subject: "Signed Waiver from Bloksy",
+                text: generatePlainEmail(signedWaiverURL),
+                html: generateHtmlEmail(signedWaiverURL),
+            });
+            return {
+                signedWaiverURL,
+                message: "Signed Waiver Saved",
+            };
+            } catch (error) {
+                console.log(error);
+                throw new AuthenticationError(error);
+            }
+        }
 };

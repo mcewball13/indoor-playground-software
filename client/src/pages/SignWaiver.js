@@ -112,6 +112,7 @@ export default function SignWaiver() {
       scale: .55,
     });
     const signedWaiver = await exportPDF(drawnDOM);
+    console.log(signedWaiver);
     // post cloudinary url to server
     const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isDesktop) {

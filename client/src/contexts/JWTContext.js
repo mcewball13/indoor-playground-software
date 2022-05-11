@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 // utils
 import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
-import { ADD_NEW_CUSTOMER } from '../utils/gql/queries/auth/customerMutations';
+import { ADD_NEW_CUSTOMER, SUBMIT_SIGNED_WAIVER } from '../utils/gql/queries/auth/customerMutations';
+import { EMAIL_EXISTS } from '../utils/gql/queries/customerQueries';
 
 // ----------------------------------------------------------------------
 
@@ -14,7 +15,6 @@ const initialState = {
   isInitialized: false,
   user: null,
   existingCustomer: null,
-  emailExists: {},
 };
 
 const handlers = {
@@ -73,7 +73,7 @@ const handlers = {
     const { emailExists } = action.payload;
     return {
       ...state,
-      emailExists,
+      existingCustomer: emailExists,
     };
   },
   SUBMIT_SIGNED_WAIVER: (state, action) => {
@@ -85,10 +85,9 @@ const handlers = {
     };
   },
   SET_EXISTS_NULL: (state, action) => {
-    const { emailExists } = action.payload;
     return {
       ...state,
-      emailExists,
+      existingCustomer: null,
     };
   },
 };
@@ -224,10 +223,10 @@ function AuthProvider({ children }) {
     });
     // const { accessToken, employeeData: user } = response.data;
     // const response = await axios.post('/api/account/new', newCustomer);
-console.log("response.data", response.data.data.customerRegister);
+    console.log('response.data', response.data.data.customerRegister);
     const { customerAccessToken, customer } = response.data.data.customerRegister;
-    console.log("customer", customer);
-    console.log("customerAccessToken", customerAccessToken);
+    console.log('customer', customer);
+    console.log('customerAccessToken', customerAccessToken);
 
     // uncomment when we have a completed backend
     window.localStorage.setItem('customerAccessToken', customerAccessToken);
@@ -272,17 +271,21 @@ console.log("response.data", response.data.data.customerRegister);
       method: 'POST',
       baseURL: 'http://localhost:3031',
       data: {
-        query: 
+        query: EMAIL_EXISTS,
+        variables: {
+          email,
+        },
+      },
     });
 
-    if (response.data) {
-      const { existingCustomer } = response.data;
-
-      if (existingCustomer.exists) {
+    if (response.data.data.emailExists) {
+      const { emailExists } = response.data.data;
+      console.log('emailExists', emailExists);
+      if (emailExists) {
         dispatch({
           type: 'CUSTOMER_EXISTS',
           payload: {
-            existingCustomer,
+            emailExists,
           },
         });
       }
@@ -293,10 +296,10 @@ console.log("response.data", response.data.data.customerRegister);
     // change to axios.post when we have a completed backend
     // // =========================================================================
     const response = await axios({
-      url: `/api/auth/customers/save-signed-waiver/cloudinary/${customerId}`,
+      url: `/graphql`,
       method: 'POST',
       baseURL: '/',
-      data: { signedWaiver },
+      data: { query: SUBMIT_SIGNED_WAIVER, variables: { signedWaiver, customerId } },
     });
 
     dispatch({
@@ -310,9 +313,6 @@ console.log("response.data", response.data.data.customerRegister);
   const setCustomerExistsNull = async () => {
     dispatch({
       type: 'SET_EXISTS_NULL',
-      payload: {
-        existingCustomer: null,
-      },
     });
   };
 

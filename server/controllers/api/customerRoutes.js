@@ -77,48 +77,5 @@ router.get("/:id", async (req, res) => {
     });
     res.status(200).json(customerGuardianData);
 });
-// check to see if email exists on blur from email field
-router.get("/email/:email", async (req, res) => {
-    const customerGuardianData = await CustomerGuardian.findOne({
-        attributes: { exclude: ["password"] },
-        where: {
-            email: req.params.email,
-        },
-        include: [
-            {
-                model: CustomerMinor,
-                through: CustomerGuardianHasCustomerMinor,
-                as: "minors",
-            },
-        ],
-    });
-    res.status(200).json(customerGuardianData);
-});
-
-// return true if user exits to trigger modal to show and have user login to call email loging route
-router.get("/email-exists/:email/", async (req, res) => {
-    try {
-        const customerGuardianData = await CustomerGuardian.findOne({
-            attributes: { exclude: ["password"] },
-            where: {
-                email: req.params.email,
-            },
-        });
-        if (!customerGuardianData) {
-            res.status(200).json({
-                existingCustomer: { exists: false },
-            });
-        } else {
-            res.status(200).json({
-                existingCustomer: {
-                    exists: true,
-                    customerEmail: customerGuardianData.email,
-                },
-            });
-        }
-    } catch (error) {
-        res.status(500).statusMessage(error);
-    }
-});
 
 module.exports = router;

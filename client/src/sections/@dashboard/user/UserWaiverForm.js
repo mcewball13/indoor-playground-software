@@ -26,7 +26,6 @@ import {
   Table,
   TableRow,
   TableCell,
-  DialogTitle,
   DialogActions,
 } from '@mui/material';
 // utils
@@ -37,8 +36,7 @@ import { PATH_PAGE } from '../../../routes/paths';
 import Label from '../../../components/Label';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
-import { useDispatch, useSelector } from '../../../redux/store';
-import { openCustomerExistsModal, closeCustomerExistsModal } from '../../../redux/slices/waiverFormSlice';
+import { useSelector } from '../../../redux/store';
 import { UserMoreMenu } from './list';
 import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
 import { RHFChooseAvatar } from '../../../components/hook-form/RHFChooseAvatar';
@@ -63,7 +61,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
 
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
   //  show password local state
@@ -133,7 +130,6 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
   } = methods;
 
   const values = watch();
-  console.log('values', values);
 
   useEffect(() => {
     if (isEdit && currentUser) {

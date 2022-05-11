@@ -16,3 +16,11 @@ mutation addNewCustomer($guardians: RegisterNewCustomerInput, $minors: [Register
     }
   }
 `
+
+export const SUBMIT_SIGNED_WAIVER = `
+mutation addWiaverCloudinary($signedWaiver: String, $customerId: ID) {
+  submitSignedWaiver(signedWaiver: $signedWaiver, customerId: $customerId) {
+    signedWaiverURL
+  }
+}
+`

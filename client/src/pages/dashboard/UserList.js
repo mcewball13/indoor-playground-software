@@ -35,7 +35,6 @@ import axios from '../../utils/axios';
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user/list';
 import avatars from '../../assets/avatars';
-import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 

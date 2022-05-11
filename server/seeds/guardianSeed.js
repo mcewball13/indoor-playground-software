@@ -3,7 +3,7 @@ const faker = require("faker")
 
 const guardians = []
 
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 8; i++) {
     guardians.push(
         {
             guardianFirstName: faker.name.firstName(),

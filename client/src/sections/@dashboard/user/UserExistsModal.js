@@ -5,13 +5,10 @@ import { Link as RouterLink } from 'react-router-dom';
 
 // mui
 import {
-  Box,
   Grid,
   Typography,
   InputAdornment,
   IconButton,
-  DialogActions,
-  TextField,
   Stack,
   Button,
   Link,
@@ -20,11 +17,10 @@ import { LoadingButton } from '@mui/lab';
 
 // form
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm} from 'react-hook-form';
 
 // componenets
 import { PATH_AUTH } from '../../../routes/paths';
-import { DialogAnimate } from '../../../components/animate';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import Iconify from '../../../components/Iconify';
 
@@ -112,6 +108,7 @@ const UserExistsModal = ({ onClose, email }) => {
 
 UserExistsModal.propTypes = {
   email: PropTypes.string,
+  onClose: PropTypes.func,
 };
 
 export default UserExistsModal;

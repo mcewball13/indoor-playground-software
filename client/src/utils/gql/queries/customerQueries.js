@@ -15,3 +15,9 @@ query GetAllCustomers {
 }
 }
 `;
+
+export const EMAIL_EXISTS = `
+query emailExistsBoolean($email: String!) {
+  emailExists(email: $email)
+}
+`

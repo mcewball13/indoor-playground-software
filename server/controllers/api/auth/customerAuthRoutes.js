@@ -124,62 +124,7 @@ router.put("/reset-password", async (req, res) => {
     }
 });
 
-router.post("/new", async (req, res) => {
-    try {
-        const newCustomerData = await CustomerGuardian.create({
-            ...req.body.guardians,
-            isAccountOwner: true,
-            displayName: `${req.body.guardians.guardianFirstName} ${req.body.guardians.guardianLastName}`,
-        });
-        console.log(req.body);
-        // map through minor array and add customeguardian id to each minor
-        const minorsWithIdArr = req.body.minors.map((minor) => {
-            return {
-                ...minor,
-                guardian_id: newCustomerData.id,
-            };
-        });
-        console.log(minorsWithIdArr);
-        const newCustomerMinorDataArr = await CustomerMinor.bulkCreate(
-            minorsWithIdArr
-        );
-        // map through newCusomerMinoeDataArr and add customeguardian id to each minor create cusomterguardianhascustomerminor
-        newCustomerMinorDataArr.map(async (minor) => {
-            await CustomerGuardianHasCustomerMinor.create({
-                guardian_id: newCustomerData.id,
-                minor_id: minor.id,
-            });
-        });
-        // const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
 
-        // test user created by mui assets api
-        const customerAccessToken = signToken({
-            id: "8864c717-587d-472a-929a-8e5f298024da-0",
-            displayName: "Jaydon Frankie",
-            email: "demo@minimals.cc",
-            password: "demo1234",
-            photoURL:
-                "https://minimal-assets-api.vercel.app/assets/images/avatars/avatar_default.jpg",
-            phoneNumber: "+40 777666555",
-            country: "United States",
-            address: "90210 Broadway Blvd",
-            state: "California",
-            city: "San Francisco",
-            zipCode: "94116",
-            about: "Praesent turpis. Phasellus viverra nulla ut metus varius laoreet. Phasellus tempus.",
-            role: "admin",
-            isPublic: true,
-        });
-
-        res.status(200).json({
-            customer: { newCustomerData, newCustomerMinorDataArr },
-            customerAccessToken,
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).json(error);
-    }
-});
 
 router.post("/save-signed-waiver/cloudinary/:id", async (req, res) => {
     try {
