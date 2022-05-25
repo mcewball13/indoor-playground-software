@@ -32,14 +32,14 @@ SessionTypes.init(
             allowNull: true,
         },
         expireType: {
-            type: DataTypes.FLOAT,
-            allowNull: true,
+            type: DataTypes.STRING,
+            allowNull: false,
         },
-        isRenewable: {
-            type: DataTypes.BOOLEAN,
-            allowNull: true,
+        daysToExpire: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
-        renewalPrice: {
+        startDate: {
             type: DataTypes.FLOAT,
             allowNull: true,
         },
