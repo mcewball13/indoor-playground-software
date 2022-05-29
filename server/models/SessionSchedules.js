@@ -2,7 +2,7 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 const moment = require("moment");
 
-const date = new Date()
+const momentDate = moment().format("MMM Do YYYY")
 
 class SessionTypes extends Model {}
 
@@ -27,17 +27,16 @@ SessionTypes.init(
                 len: [1],
             },
         },
-        daysOfWeek: {
-            type: DataTypes.STRING(100),
+        notes: {
+            type: DataTypes.STRING(1000),
             allowNull: true,
         },
-        startDateTime: {
-            type: DataTypes.DATE(),
+        expireType: {
+            type: DataTypes.STRING,
             allowNull: false,
-            defaultValue: date.toISOString()
         },
-        endDateTime: {
-            type: DataTypes.DATE(),
+        daysToExpire: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         startDate: {
