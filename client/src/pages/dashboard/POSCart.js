@@ -3,7 +3,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack } from '@mui/material';
+import { Container, Typography, Stack, Grid } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProducts, filterProducts } from '../../redux/slices/product';
@@ -24,10 +24,12 @@ import {
   ShopProductSearch,
 } from '../../sections/@dashboard/e-commerce/e-commerce-shop';
 import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
+import { CartSidebar } from '../../sections/@dashboard/e-commerce/pos-shop';
+import Scrollbar from '../../components/Scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceShop() {
+export default function POSCart() {
   const { themeStretch } = useSettings();
 
   const dispatch = useDispatch();
@@ -106,7 +108,7 @@ export default function EcommerceShop() {
 
   return (
     <Page title="Ecommerce: Shop">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
           heading="Shop"
           links={[
@@ -163,8 +165,16 @@ export default function EcommerceShop() {
             </>
           )}
         </Stack>
-
-        <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
+        <Grid container spacing={2}>
+          <Stack direction="row" spacing={2}>
+            <Grid item xs={12} sm={9}>
+                <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <CartSidebar />
+            </Grid>
+          </Stack>
+        </Grid>
         <CartWidget />
       </Container>
     </Page>
