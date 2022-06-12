@@ -5,6 +5,7 @@ import { Box } from '@mui/material';
 import { SkeletonProductItem } from '../../../../components/skeleton';
 //
 import ShopProductCard from './ShopProductCard';
+import Scrollbar from '../../../../components/Scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -15,21 +16,24 @@ ShopProductList.propTypes = {
 
 export default function ShopProductList({ products, loading }) {
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gap: 3,
-        gridTemplateColumns: {
-          xs: 'repeat(1, 1fr)',
-          sm: 'repeat(2, 1fr)',
-          md: 'repeat(3, 1fr)',
-          lg: 'repeat(4, 1fr)',
-        },
-      }}
-    >
+    <Scrollbar>
+      <Box
+        sx={{
+          display: 'grid',
+          gap: 3,
+          gridTemplateColumns: {
+            xs: 'repeat(1, 1fr)',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)',
+            lg: 'repeat(3, 1fr)',
+            xl: 'repeat(4, 1fr)',
+          },
+        }}
+      >
         {(loading ? [...Array(12)] : products).map((product, index) =>
           product ? <ShopProductCard key={product.id} product={product} /> : <SkeletonProductItem key={index} />
         )}
-    </Box>
+      </Box>
+    </Scrollbar>
   );
 }

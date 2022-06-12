@@ -107,10 +107,10 @@ export default function POSCart() {
   };
 
   return (
-    <Page title="Ecommerce: Shop">
+    <Page title="POS: Cart">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
-          heading="Shop"
+          heading="Register"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
@@ -129,19 +129,7 @@ export default function POSCart() {
           sx={{ mb: 2 }}
         >
           <ShopProductSearch />
-
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <FormProvider methods={methods}>
-              <ShopFilterSidebar
-                onResetAll={handleResetFilter}
-                isOpen={openFilter}
-                onOpen={handleOpenFilter}
-                onClose={handleCloseFilter}
-              />
-            </FormProvider>
-
-            <ShopProductSort />
-          </Stack>
+          
         </Stack>
 
         <Stack sx={{ mb: 3 }}>
@@ -166,11 +154,11 @@ export default function POSCart() {
           )}
         </Stack>
         <Grid container spacing={2}>
-          <Stack direction="row" spacing={2}>
-            <Grid item xs={12} sm={9}>
+          <Stack direction="row" spacing={2}sx={{flex:1}}>
+            <Grid item xs={12} sm={8}sx={{height: "60vh"}} >
                 <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
             </Grid>
-            <Grid item xs={12} sm={3}>
+            <Grid item xs={12} sm={4}>
               <CartSidebar />
             </Grid>
           </Stack>
