@@ -129,7 +129,7 @@ export default function POSCart() {
           sx={{ mb: 2 }}
         >
           <ShopProductSearch />
-          
+
         </Stack>
 
         <Stack sx={{ mb: 3 }}>
@@ -163,7 +163,6 @@ export default function POSCart() {
             </Grid>
           </Stack>
         </Grid>
-        <CartWidget />
       </Container>
     </Page>
   );
