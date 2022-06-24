@@ -115,7 +115,7 @@ export default function POSCart() {
   };
 
   return (
-    <Page title="POS: Cart">
+    <Page title="POS: Cart" >
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
           heading="Register"
@@ -161,7 +161,7 @@ export default function POSCart() {
           )}
         </Stack>
         <Grid container spacing={2} direction="column">
-          <Stack direction="row" spacing={2} sx={{ flex: 1 }}>
+          <Stack direction="row" spacing={2}>
             <Grid item xs={12} sm={8} sx={{ height: '60vh' }}>
               <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
             </Grid>
@@ -169,7 +169,7 @@ export default function POSCart() {
               <CartSidebar />
             </Grid>
           </Stack>
-          <Stack direction="row" spacing={2} justifyContent="center">
+          <Stack direction="row" spacing={2} justifyContent="center" sx={{position: "absolute", bottom: 0, width: "100%"}}>
             {iconArr.map((item, index) => (
               <IconButton>
                 <Iconify color="default" icon={item} width={60} height={60} />
