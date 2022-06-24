@@ -3,7 +3,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack, Grid } from '@mui/material';
+import { Container, Typography, Stack, Grid, IconButton } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProducts, filterProducts } from '../../redux/slices/product';
@@ -26,8 +26,16 @@ import {
 import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
 import { CartSidebar } from '../../sections/@dashboard/e-commerce/pos-shop';
 import Scrollbar from '../../components/Scrollbar';
+import Iconify from '../../components/Iconify';
 
 // ----------------------------------------------------------------------
+const iconArr = [
+  'ic:outline-account-circle',
+  'ic:baseline-repeat',
+  'ic:outline-outbox',
+  'ic:baseline-barcode',
+  'ic:baseline-card-giftcard',
+];
 
 export default function POSCart() {
   const { themeStretch } = useSettings();
@@ -129,7 +137,6 @@ export default function POSCart() {
           sx={{ mb: 2 }}
         >
           <ShopProductSearch />
-
         </Stack>
 
         <Stack sx={{ mb: 3 }}>
@@ -153,14 +160,21 @@ export default function POSCart() {
             </>
           )}
         </Stack>
-        <Grid container spacing={2}>
-          <Stack direction="row" spacing={2}sx={{flex:1}}>
-            <Grid item xs={12} sm={8}sx={{height: "60vh"}} >
-                <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
+        <Grid container spacing={2} direction="column">
+          <Stack direction="row" spacing={2} sx={{ flex: 1 }}>
+            <Grid item xs={12} sm={8} sx={{ height: '60vh' }}>
+              <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
             </Grid>
             <Grid item xs={12} sm={4}>
               <CartSidebar />
             </Grid>
+          </Stack>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            {iconArr.map((item, index) => (
+              <IconButton>
+                <Iconify color="default" icon={item} width={60} height={60} />
+              </IconButton>
+            ))}
           </Stack>
         </Grid>
       </Container>
