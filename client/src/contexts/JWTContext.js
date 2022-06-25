@@ -84,12 +84,10 @@ const handlers = {
       isCustomerAuthenticated,
     };
   },
-  SET_EXISTS_NULL: (state, action) => {
-    return {
-      ...state,
-      existingCustomer: null,
-    };
-  },
+  SET_EXISTS_NULL: (state) => ({
+    ...state,
+    existingCustomer: null,
+  }),
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -120,6 +118,7 @@ function AuthProvider({ children }) {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem('accessToken');
+        // eslint-disable-next-line
         const customerAccessToken = window.localStorage.getItem('customerAccessToken');
 
         if (accessToken && isValidToken(accessToken)) {
@@ -295,7 +294,7 @@ function AuthProvider({ children }) {
   const submitSignedWaiver = async ({ signedWaiver, customerId }) => {
     // change to axios.post when we have a completed backend
     // // =========================================================================
-    const response = await axios({
+    await axios({
       url: `/graphql`,
       method: 'POST',
       baseURL: '/',

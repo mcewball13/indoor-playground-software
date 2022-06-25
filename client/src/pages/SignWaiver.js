@@ -1,5 +1,4 @@
 // @mui
-import { useTheme } from '@mui/system';
 import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
@@ -7,7 +6,7 @@ import { capitalCase } from 'change-case';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import SignatureCanvas from 'react-signature-canvas';
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import { PDFExport} from '@progress/kendo-react-pdf';
 import { drawDOM, exportPDF } from '@progress/kendo-drawing';
 // modules
 import DOMPurify from 'dompurify';
@@ -22,7 +21,7 @@ import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 // hooks
 import useSettings from '../hooks/useSettings';
 // utils
-import { useSelector } from '../redux/store';
+
 // routes
 import { PATH_DASHBOARD, PATH_PAGE } from '../routes/paths';
 // sections
@@ -40,7 +39,6 @@ import useAuth from '../hooks/useAuth';
 const safeHTML = DOMPurify.sanitize(waiverText.content);
 
 export default function SignWaiver() {
-  const theme = useTheme();
   const { customer, submitSignedWaiver } = useAuth();
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();

@@ -3,7 +3,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack, Grid, IconButton } from '@mui/material';
+import { Container, Typography, Stack, Grid } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProducts, filterProducts } from '../../redux/slices/product';
@@ -14,18 +14,13 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { FormProvider } from '../../components/hook-form';
 // sections
 import {
   ShopTagFiltered,
-  ShopProductSort,
   ShopProductList,
-  ShopFilterSidebar,
   ShopProductSearch,
 } from '../../sections/@dashboard/e-commerce/e-commerce-shop';
-import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
 import { CartSidebar } from '../../sections/@dashboard/e-commerce/pos-shop';
-import Scrollbar from '../../components/Scrollbar';
 import ToolkitBar from '../../sections/@dashboard/e-commerce/pos-shop/ToolkitBar';
 
 // ----------------------------------------------------------------------
