@@ -169,7 +169,7 @@ export default function POSCart() {
               <CartSidebar />
             </Grid>
           </Grid>
-          <Grid direction="row" spacing={2}>
+          <Grid item container spacing={2} justifyContent="center">
             {iconArr.map((item, index) => (
               <IconButton>
                 <Iconify color="default" icon={item} width={60} height={60} />
