@@ -161,21 +161,21 @@ export default function POSCart() {
           )}
         </Stack>
         <Grid container spacing={2} direction="column">
-          <Stack direction="row" spacing={2}>
+          <Grid container item direction="row" spacing={2}>
             <Grid item xs={12} sm={8} sx={{ height: '60vh' }}>
               <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={4} sx={{ height: '60vh' }}>
               <CartSidebar />
             </Grid>
-          </Stack>
-          <Stack direction="row" spacing={2} justifyContent="center" sx={{position: "absolute", bottom: 0, width: "100%"}}>
+          </Grid>
+          <Grid direction="row" spacing={2}>
             {iconArr.map((item, index) => (
               <IconButton>
                 <Iconify color="default" icon={item} width={60} height={60} />
               </IconButton>
             ))}
-          </Stack>
+          </Grid>
         </Grid>
       </Container>
     </Page>
