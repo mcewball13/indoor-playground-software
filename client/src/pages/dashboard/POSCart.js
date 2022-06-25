@@ -26,7 +26,7 @@ import {
 import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
 import { CartSidebar } from '../../sections/@dashboard/e-commerce/pos-shop';
 import Scrollbar from '../../components/Scrollbar';
-import Iconify from '../../components/Iconify';
+import ToolkitBar from '../../sections/@dashboard/e-commerce/pos-shop/ToolkitBar';
 
 // ----------------------------------------------------------------------
 const iconArr = [
@@ -169,13 +169,7 @@ export default function POSCart() {
               <CartSidebar />
             </Grid>
           </Grid>
-          <Grid item container spacing={2} justifyContent="center">
-            {iconArr.map((item, index) => (
-              <IconButton>
-                <Iconify color="default" icon={item} width={60} height={60} />
-              </IconButton>
-            ))}
-          </Grid>
+          <ToolkitBar iconArr={iconArr} />
         </Grid>
       </Container>
     </Page>
