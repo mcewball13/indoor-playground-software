@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes, useLocation } from 'react-router-dom';
 // layouts
-import MainLayout from '../layouts/main';
+// import MainLayout from '../layouts/main';
 import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // guards
@@ -197,7 +197,7 @@ const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));
 const Kanban = Loadable(lazy(() => import('../pages/dashboard/Kanban')));
 // Main
-const HomePage = Loadable(lazy(() => import('../pages/Home')));
+// const HomePage = Loadable(lazy(() => import('../pages/Home')));
 const About = Loadable(lazy(() => import('../pages/About')));
 const SignWaiver = Loadable(lazy(() => import('../pages/SignWaiver')));
 const SignedWaiverConfirmation = Loadable(lazy(() => import('../pages/SignedWaiverConfirmation')));

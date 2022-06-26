@@ -74,10 +74,6 @@ export default function POSCart() {
     dispatch(filterProducts(values));
   }, [dispatch, values]);
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };

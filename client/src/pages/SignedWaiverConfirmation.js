@@ -10,7 +10,7 @@ import { Box, Button, Typography, Container } from '@mui/material';
 
 import Page from '../components/Page';
 import { MotionContainer, varBounce } from '../components/animate';
-import { PATH_AUTH, PATH_PAGE } from '../routes/paths';
+import { PATH_PAGE } from '../routes/paths';
 
 const RootStyle = styled('div')(({ theme }) => ({
   display: 'flex',

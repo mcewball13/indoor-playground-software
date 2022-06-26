@@ -1,7 +1,6 @@
-import { Grid, Card, Typography, Stack, Button, IconButton } from '@mui/material';
-import { alpha, styled } from '@mui/material/styles';
+import { Typography, Stack, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React from 'react';
-import Iconify from '../../../../components/Iconify';
 import CartItem from './CartItem';
 
 const cartItems = [

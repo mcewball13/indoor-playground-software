@@ -23,6 +23,6 @@ export default function CartItem({ title, isAdmission = 'false', bgColor, onDele
 CartItem.propTypes = {
   title: PropTypes.string.isRequired,
   isAdmission: PropTypes.bool,
-  isWaiverSigned: PropTypes.bool,
   onDelete: PropTypes.func,
+  bgColor: PropTypes.string,
 };

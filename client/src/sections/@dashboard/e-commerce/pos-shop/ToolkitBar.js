@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, IconButton } from '@mui/material';
 import Iconify from '../../../../components/Iconify';
 
@@ -13,3 +14,6 @@ export default function ToolkitBar({ iconArr }) {
     </Grid>
   );
 }
+ToolkitBar.propTypes = {
+  iconArr: PropTypes.arrayOf(PropTypes.string).isRequired,
+};

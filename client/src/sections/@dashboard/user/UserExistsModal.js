@@ -49,12 +49,9 @@ const UserExistsModal = ({ onClose, email }) => {
   });
 
   const {
-    watch,
     handleSubmit,
-    formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
 
   const onSubmit = (data) => {
     console.log(data);
