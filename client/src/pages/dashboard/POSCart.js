@@ -3,7 +3,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack, Grid } from '@mui/material';
+import { Container, Typography, Stack, Grid, Tab, Tabs } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProducts, filterProducts } from '../../redux/slices/product';
@@ -22,14 +22,39 @@ import {
 } from '../../sections/@dashboard/e-commerce/e-commerce-shop';
 import { CartSidebar } from '../../sections/@dashboard/e-commerce/pos-shop';
 import ToolkitBar from '../../sections/@dashboard/e-commerce/pos-shop/ToolkitBar';
+import Iconify from '../../components/Iconify';
 
 // ----------------------------------------------------------------------
-const iconArr = [
+const ICON_ARR = [
   'ic:outline-account-circle',
   'ic:baseline-repeat',
   'ic:outline-outbox',
   'ic:baseline-barcode',
   'ic:baseline-card-giftcard',
+];
+
+// Set values from categories in database
+const FILTER_TABS = [
+  {
+    value: 'Admission',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Classes',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Clothing',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Events',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Snacks',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
 ];
 
 export default function POSCart() {
@@ -39,7 +64,10 @@ export default function POSCart() {
 
   const [openFilter, setOpenFilter] = useState(false);
 
+  const [currentTab, setCurrentTab] = useState('Admission');
+
   const { products, sortBy, filters } = useSelector((state) => state.product);
+  console.log('products', products);
 
   const filteredProducts = applyFilter(products, sortBy, filters);
 
@@ -106,7 +134,7 @@ export default function POSCart() {
   };
 
   return (
-    <Page title="POS: Cart" >
+    <Page title="POS: Cart">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
           heading="Register"
@@ -127,6 +155,12 @@ export default function POSCart() {
           justifyContent="space-between"
           sx={{ mb: 2 }}
         >
+          <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
+            {FILTER_TABS.map((item) => (
+              <Tab disableRipple key={item.value} label={item.value} value={item.value} />
+            ))}
+          </Tabs>
+
           <ShopProductSearch />
         </Stack>
 
@@ -160,7 +194,7 @@ export default function POSCart() {
               <CartSidebar />
             </Grid>
           </Grid>
-          <ToolkitBar iconArr={iconArr} />
+          <ToolkitBar iconArr={ICON_ARR} />
         </Grid>
       </Container>
     </Page>
