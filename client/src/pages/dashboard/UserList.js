@@ -188,7 +188,6 @@ export default function UserList() {
                         id,
                         displayName,
                         email,
-                        minors,
                         membership = 'You should buy one',
                         photoURL,
                         status = 'Active',

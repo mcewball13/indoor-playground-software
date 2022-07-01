@@ -3,7 +3,7 @@ import orderBy from 'lodash/orderBy';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Container, Typography, Stack } from '@mui/material';
+import { Container, Typography, Stack, Grid, Tab, Tabs } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProducts, filterProducts } from '../../redux/slices/product';
@@ -14,27 +14,60 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { FormProvider } from '../../components/hook-form';
 // sections
 import {
   ShopTagFiltered,
-  ShopProductSort,
   ShopProductList,
-  ShopFilterSidebar,
   ShopProductSearch,
 } from '../../sections/@dashboard/e-commerce/e-commerce-shop';
-import CartWidget from '../../sections/@dashboard/e-commerce/CartWidget';
+import { CartSidebar } from '../../sections/@dashboard/e-commerce/pos-shop';
+import ToolkitBar from '../../sections/@dashboard/e-commerce/pos-shop/ToolkitBar';
+import Iconify from '../../components/Iconify';
 
 // ----------------------------------------------------------------------
+const ICON_ARR = [
+  'ic:outline-account-circle',
+  'ic:baseline-repeat',
+  'ic:outline-outbox',
+  'ic:baseline-barcode',
+  'ic:baseline-card-giftcard',
+];
 
-export default function EcommerceShop() {
+// Set values from categories in database
+const FILTER_TABS = [
+  {
+    value: 'Admission',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Classes',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Clothing',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Events',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+  {
+    value: 'Snacks',
+    icon: <Iconify icon={ICON_ARR[0]} width={20} height={20} />,
+  },
+];
+
+export default function POSCart() {
   const { themeStretch } = useSettings();
 
   const dispatch = useDispatch();
 
   const [openFilter, setOpenFilter] = useState(false);
 
+  const [currentTab, setCurrentTab] = useState('Admission');
+
   const { products, sortBy, filters } = useSelector((state) => state.product);
+  console.log('products', products);
 
   const filteredProducts = applyFilter(products, sortBy, filters);
 
@@ -69,10 +102,6 @@ export default function EcommerceShop() {
     dispatch(filterProducts(values));
   }, [dispatch, values]);
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
-
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
@@ -105,10 +134,10 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Ecommerce: Shop">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
+    <Page title="POS: Cart">
+      <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
-          heading="Shop"
+          heading="Register"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
@@ -126,20 +155,13 @@ export default function EcommerceShop() {
           justifyContent="space-between"
           sx={{ mb: 2 }}
         >
+          <Tabs value={currentTab} onChange={(event, newValue) => setCurrentTab(newValue)}>
+            {FILTER_TABS.map((item) => (
+              <Tab disableRipple key={item.value} label={item.value} value={item.value} />
+            ))}
+          </Tabs>
+
           <ShopProductSearch />
-
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <FormProvider methods={methods}>
-              <ShopFilterSidebar
-                onResetAll={handleResetFilter}
-                isOpen={openFilter}
-                onOpen={handleOpenFilter}
-                onClose={handleCloseFilter}
-              />
-            </FormProvider>
-
-            <ShopProductSort />
-          </Stack>
         </Stack>
 
         <Stack sx={{ mb: 3 }}>
@@ -163,9 +185,17 @@ export default function EcommerceShop() {
             </>
           )}
         </Stack>
-
-        <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
-        <CartWidget />
+        <Grid container spacing={2} direction="column">
+          <Grid container item direction="row" spacing={2}>
+            <Grid item xs={12} sm={8} sx={{ height: '60vh' }}>
+              <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
+            </Grid>
+            <Grid item xs={12} sm={4} sx={{ height: '60vh' }}>
+              <CartSidebar />
+            </Grid>
+          </Grid>
+          <ToolkitBar iconArr={ICON_ARR} />
+        </Grid>
       </Container>
     </Page>
   );

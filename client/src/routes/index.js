@@ -1,7 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes, useLocation } from 'react-router-dom';
 // layouts
-import MainLayout from '../layouts/main';
+// import MainLayout from '../layouts/main';
 import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // guards
@@ -76,7 +76,7 @@ export default function Router() {
           path: 'e-commerce',
           children: [
             { element: <Navigate to={PATH_DASHBOARD.eCommerce.shop} replace />, index: true },
-            { path: 'shop', element: <EcommerceShop /> },
+            { path: 'shop', element: <POSCart /> },
             { path: 'product/:name', element: <EcommerceProductDetails /> },
             { path: 'list', element: <EcommerceProductList /> },
             { path: 'product/new', element: <EcommerceProductCreate /> },
@@ -178,7 +178,7 @@ const GeneralEcommerce = Loadable(lazy(() => import('../pages/dashboard/GeneralE
 const GeneralAnalytics = Loadable(lazy(() => import('../pages/dashboard/GeneralAnalytics')));
 const GeneralBanking = Loadable(lazy(() => import('../pages/dashboard/GeneralBanking')));
 const GeneralBooking = Loadable(lazy(() => import('../pages/dashboard/GeneralBooking')));
-const EcommerceShop = Loadable(lazy(() => import('../pages/dashboard/EcommerceShop')));
+const POSCart = Loadable(lazy(() => import('../pages/dashboard/POSCart')));
 const EcommerceProductDetails = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductDetails')));
 const EcommerceProductList = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductList')));
 const EcommerceProductCreate = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductCreate')));
@@ -197,7 +197,7 @@ const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));
 const Kanban = Loadable(lazy(() => import('../pages/dashboard/Kanban')));
 // Main
-const HomePage = Loadable(lazy(() => import('../pages/Home')));
+// const HomePage = Loadable(lazy(() => import('../pages/Home')));
 const About = Loadable(lazy(() => import('../pages/About')));
 const SignWaiver = Loadable(lazy(() => import('../pages/SignWaiver')));
 const SignedWaiverConfirmation = Loadable(lazy(() => import('../pages/SignedWaiverConfirmation')));

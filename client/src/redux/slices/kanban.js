@@ -6,7 +6,6 @@ import axios from '../../utils/axios';
 import { dispatch } from '../store';
 
 // ----------------------------------------------------------------------
-
 function objFromArray(array, key = 'id') {
   return array.reduce((accumulator, current) => {
     accumulator[current[key]] = current;

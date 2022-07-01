@@ -4,8 +4,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 // hooks
 import useAuth from '../hooks/useAuth';
 import UserCreate from '../pages/dashboard/UserCreate';
-// routes
-import { PATH_PAGE } from '../routes/paths';
 // components
 import LoadingScreen from '../components/LoadingScreen';
 
