@@ -14,7 +14,7 @@ ShopProductList.propTypes = {
   loading: PropTypes.bool,
 };
 
-export default function ShopProductList({ products, loading }) {
+export default function ShopProductList({ products, loading, handleAddToCart }) {
   return (
     <Scrollbar>
       <Box
@@ -31,7 +31,7 @@ export default function ShopProductList({ products, loading }) {
         }}
       >
         {(loading ? [...Array(12)] : products).map((product, index) =>
-          product ? <ShopProductCard key={product.id} product={product} /> : <SkeletonProductItem key={index} />
+          product ? <ShopProductCard onClick={handleAddToCart} key={product.id} product={product} /> : <SkeletonProductItem key={index} />
         )}
       </Box>
     </Scrollbar>

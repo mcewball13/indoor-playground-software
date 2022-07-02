@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Container, Typography, Stack, Grid, Tab, Tabs } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getProducts, filterProducts } from '../../redux/slices/product';
+import { getProducts, filterProducts, addCart } from '../../redux/slices/product';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -133,6 +133,11 @@ export default function POSCart() {
     setValue('rating', '');
   };
 
+  const handleAddToCart = (product) => () => {
+    console.log('product', product);
+    dispatch(addCart(product));
+  }
+
   return (
     <Page title="POS: Cart">
       <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -188,7 +193,7 @@ export default function POSCart() {
         <Grid container spacing={2} direction="column">
           <Grid container item direction="row" spacing={2}>
             <Grid item xs={12} sm={8} sx={{ height: '60vh' }}>
-              <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
+              <ShopProductList handleAddToCart={handleAddToCart} products={filteredProducts} loading={!products.length && isDefault} />
             </Grid>
             <Grid item xs={12} sm={4} sx={{ height: '60vh' }}>
               <CartSidebar />

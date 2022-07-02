@@ -7,6 +7,9 @@ const Employees = require("./Employees");
 const EmployeeRoles = require("./EmployeeRoles");
 const Memberships = require("./Memberships");
 const SignedWaivers = require("./SignedWaivers");
+const SessionProducts = require("./SessionProducts");
+const SessionTypes = require("./SessionTypes");
+const SessionSchedules = require("./SessionSchedules");
 
 // Create associations with the main company
 Company.hasMany(Locations, {
@@ -30,6 +33,11 @@ Locations.hasMany(EmployeeRoles, {
     foreignKey: "location_id",
     unique: false,
 });
+Locations.hasMany(SessionProducts, {
+    foreignKey: "locations_id",
+    unique: false, // This is to allow multiple products to be assigned to a location
+    onDelete: "set null",
+});
 
 // create employee relationships
 
@@ -43,29 +51,29 @@ Employees.belongsTo(EmployeeRoles, {
 Memberships.hasMany(CustomerGuardian, {
     foreignKey: "membership_id",
     unique: false,
-})
+});
 CustomerGuardian.belongsTo(Memberships, {
     foreignKey: "membership_id",
     unique: false,
-})
+});
 
 // Waiver relationships
 SignedWaivers.belongsTo(CustomerGuardian, {
     foreignKey: "guardian_id",
     unique: false,
-})
+});
 CustomerGuardian.hasMany(SignedWaivers, {
     foreignKey: "guardian_id",
     unique: false,
-})
+});
 CustomerMinor.hasMany(SignedWaivers, {
     foreignKey: "minor_id",
     unique: false,
-})
+});
 SignedWaivers.belongsTo(CustomerMinor, {
     foreignKey: "minor_id",
     unique: false,
-})
+});
 
 // Create the many to many association with itself for account owners and other adults on the same account.
 
@@ -96,6 +104,13 @@ CustomerMinor.belongsToMany(CustomerGuardian, {
     foreignKey: "minor_id",
 });
 
+//  Create the relationship with the session products
+
+SessionSchedules.hasMany(SessionProducts, {
+    foreignKey: "session_schedule_id",
+    unique: false,
+    onDelete: "set null",
+});
 module.exports = {
     CustomerGuardian,
     CustomerMinor,
