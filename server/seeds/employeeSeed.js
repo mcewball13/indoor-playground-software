@@ -1,6 +1,6 @@
 const { Employees } = require("../models");
 
-const defaultEmployee = {
+const _DEFAULT_EMPLOYEE = {
     username: "demoAdmin",
     email: "demo@minimals.cc",
     password: "demo1234",
@@ -10,7 +10,7 @@ const defaultEmployee = {
 
 const seedEmployees = () => {
     try {
-        return Employees.create(defaultEmployee);
+        return Employees.create(_DEFAULT_EMPLOYEE);
     } catch (error) {
         console.log(error);
     }

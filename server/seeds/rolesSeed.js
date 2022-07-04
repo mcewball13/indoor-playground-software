@@ -1,28 +1,22 @@
 const { EmployeeRoles } = require("../models");
-const {faker} = require("@faker-js/faker");
+const { faker } = require("@faker-js/faker");
 
-
-const roles = []
+const _ROLES = [];
 
 for (let i = 0; i < 4; i++) {
-    roles.push(
-        {
-            roleTitle: faker.commerce.department(),
-            description: faker.lorem.lines(1),
-            thumbnail: faker.image.image(),
-            isActive: faker.helpers.arrayElement([true, false]),
-            
-        }
-    )
-    
+    _ROLES.push({
+        roleTitle: faker.commerce.department(),
+        description: faker.lorem.lines(1),
+        thumbnail: faker.image.image(),
+        isActive: faker.helpers.arrayElement([true, false]),
+    });
 }
 
-const seedRoles =()=> {
+const seedRoles = () => {
     try {
-       return EmployeeRoles.bulkCreate(roles)
-        
+        return EmployeeRoles.bulkCreate(_ROLES);
     } catch (error) {
-        console.log(error)        
+        console.log(error);
     }
 };
 

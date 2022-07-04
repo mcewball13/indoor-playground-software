@@ -1,10 +1,10 @@
 const { Company } = require("../models");
-const {faker} = require("@faker-js/faker");
+const { faker } = require("@faker-js/faker");
 
-const companies = [];
+const _COMPANIES = [];
 
 for (let i = 0; i < 7; i++) {
-    companies.push({
+    _COMPANIES.push({
         companyName: faker.company.companyName(),
         dateInBusiness: faker.date.past(50),
         addressStreet: faker.address.streetAddress(),
@@ -15,6 +15,6 @@ for (let i = 0; i < 7; i++) {
     });
 }
 
-const seedCompanies = () => Company.bulkCreate(companies);
+const seedCompanies = () => Company.bulkCreate(_COMPANIES);
 
 module.exports = seedCompanies;

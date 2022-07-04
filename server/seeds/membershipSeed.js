@@ -1,29 +1,22 @@
-const Memberships = require("../models/Memberships");
-const {faker} = require("@faker-js/faker");
+const { Memberships } = require("../models");
+const { faker } = require("@faker-js/faker");
 
-
-
-const memberships = []
-const membershipName = ["Summer Pass", "Family", "Single", false]
+const _MEMBERSHIPS = [];
+const _MEMBERSHIP_NAMES = ["Summer Pass", "Family", "Single", false];
 
 for (let i = 0; i < 4; i++) {
-    memberships.push(
-        {
-            title: faker.helpers.arrayElement(membershipName),
-            description: faker.lorem.lines(1),
-            isActive: true,
-            
-        }
-    )
-    
+    _MEMBERSHIPS.push({
+        title: faker.helpers.arrayElement(_MEMBERSHIP_NAMES),
+        description: faker.lorem.lines(1),
+        isActive: true,
+    });
 }
 
-const seedMemberships =()=> {
+const seedMemberships = () => {
     try {
-       return Memberships.bulkCreate(memberships)
-        
+        return Memberships.bulkCreate(_MEMBERSHIPS);
     } catch (error) {
-        console.log(error)        
+        console.log(error);
     }
 };
 

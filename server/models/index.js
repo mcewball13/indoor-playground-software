@@ -10,6 +10,7 @@ const SignedWaivers = require("./SignedWaivers");
 const SessionProducts = require("./SessionProducts");
 const SessionTypes = require("./SessionTypes");
 const SessionSchedules = require("./SessionSchedules");
+const ProductCategories = require("./ProductCategories");
 
 // Create associations with the main company
 Company.hasMany(Locations, {
@@ -119,4 +120,9 @@ module.exports = {
     CustomerGuardianHasCustomerMinor,
     Employees,
     EmployeeRoles,
+    ProductCategories,
+    SessionTypes,
+    SessionSchedules,
+    SessionProducts,
+    Memberships,
 };
