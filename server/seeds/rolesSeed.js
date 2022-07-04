@@ -1,5 +1,6 @@
 const { EmployeeRoles } = require("../models");
-const faker = require("faker")
+const {faker} = require("@faker-js/faker");
+
 
 const roles = []
 
@@ -9,7 +10,7 @@ for (let i = 0; i < 4; i++) {
             roleTitle: faker.commerce.department(),
             description: faker.lorem.lines(1),
             thumbnail: faker.image.image(),
-            isActive: faker.random.arrayElement([true, false]),
+            isActive: faker.helpers.arrayElement([true, false]),
             
         }
     )

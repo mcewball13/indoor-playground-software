@@ -1,5 +1,5 @@
 const { CustomerGuardianHasCustomerMinor } = require("../models");
-const faker = require("faker");
+const {faker} = require("@faker-js/faker");
 
 const guardians = [];
 

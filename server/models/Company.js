@@ -1,7 +1,6 @@
 const {Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection');
 const moment = require('moment');
-const Datatype = require('faker/lib/datatype');
 
 const currentDate = moment().format("MM/DD/YYYY")
 

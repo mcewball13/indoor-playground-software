@@ -1,5 +1,6 @@
 const {CustomerGuardian } = require("../models");
-const faker = require("faker")
+const {faker} = require("@faker-js/faker");
+
 
 const guardians = []
 
@@ -16,7 +17,7 @@ for (let i = 0; i < 8; i++) {
             addressCity: faker.address.cityName(),
             addressState: faker.address.stateAbbr(),
             addressZip: faker.address.zipCode(),
-            addressPhone: faker.phone.phoneNumber(),
+            addressPhone: faker.phone.number(),
             storedValue: faker.finance.amount(1,200,2),
             notes: faker.lorem.paragraph(3),
             isAccountOwner: true,
