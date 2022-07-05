@@ -243,7 +243,7 @@ function AuthProvider({ children }) {
     const response = await axios({
       url: '/api/auth/customers/login',
       method: 'POST',
-      baseURL: '/',
+      baseURL: process.env.NODE_ENV === "development" ? 'http://localhost:3031' : '/',
       data: {
         email,
         password,
@@ -268,7 +268,7 @@ function AuthProvider({ children }) {
     const response = await axios({
       url: `/graphql`,
       method: 'POST',
-      baseURL: 'http://localhost:3031',
+      baseURL: process.env.NODE_ENV === "development" ? 'http://localhost:3031' : '/',
       data: {
         query: EMAIL_EXISTS,
         variables: {
