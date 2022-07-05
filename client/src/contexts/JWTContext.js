@@ -210,7 +210,7 @@ function AuthProvider({ children }) {
     const response = await axios({
       url: '/graphql',
       method: 'POST',
-      baseURL: 'http://localhost:3031',
+      baseURL: process.env.NODE_ENV === "development" ? 'http://localhost:3031' : '/',
       data: {
         query: ADD_NEW_CUSTOMER,
 
