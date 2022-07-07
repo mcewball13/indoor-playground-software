@@ -11,8 +11,12 @@ const SessionProducts = require("./SessionProducts");
 const SessionTypes = require("./SessionTypes");
 const SessionSchedules = require("./SessionSchedules");
 const ProductCategories = require("./ProductCategories");
+const ProductImages = require("./ProductImages");
 
+// ===========================================================
 // Create associations with the main company
+// ===========================================================
+
 Company.hasMany(Locations, {
     foreignKey: "company_id",
 });
@@ -40,7 +44,9 @@ Locations.hasMany(SessionProducts, {
     onDelete: "set null",
 });
 
+// ===========================================================
 // create employee relationships
+// ===========================================================
 
 Locations.hasMany(Employees, {
     foreignKey: "location_id",
@@ -58,7 +64,10 @@ CustomerGuardian.belongsTo(Memberships, {
     unique: false,
 });
 
+// ===========================================================
 // Waiver relationships
+// ===========================================================
+
 SignedWaivers.belongsTo(CustomerGuardian, {
     foreignKey: "guardian_id",
     unique: false,
@@ -76,15 +85,18 @@ SignedWaivers.belongsTo(CustomerMinor, {
     unique: false,
 });
 
+// ===========================================================
 // Create the many to many association with itself for account owners and other adults on the same account.
+// ===========================================================
 
 CustomerGuardian.belongsToMany(CustomerGuardian, {
     through: "customer_guardian_has_customer_guardian",
     as: "guardiansInGuardians",
     foreignKey: "guardian_id",
 });
-
+// ===========================================================
 // Create the many to many relationship with guardians and minors
+// ===========================================================
 
 CustomerGuardian.belongsToMany(CustomerMinor, {
     through: {
@@ -105,24 +117,38 @@ CustomerMinor.belongsToMany(CustomerGuardian, {
     foreignKey: "minor_id",
 });
 
+// ===========================================================
 //  Create the relationship with the session products
-
+// ===========================================================
 SessionSchedules.hasMany(SessionProducts, {
     foreignKey: "session_schedule_id",
     unique: false,
     onDelete: "set null",
 });
+SessionProducts.belongsTo(SessionSchedules, {
+    foreignKey: "session_schedule_id",
+    unique: false,
+});
+
+
+
+
+// ===========================================================
+// exports
+// ===========================================================
+
 module.exports = {
-    CustomerGuardian,
-    CustomerMinor,
     Company,
-    Locations,
+    CustomerGuardian,
     CustomerGuardianHasCustomerMinor,
+    CustomerMinor,
     Employees,
     EmployeeRoles,
-    ProductCategories,
-    SessionTypes,
-    SessionSchedules,
-    SessionProducts,
+    Locations,
     Memberships,
+    SessionSchedules,
+    SessionTypes,
+    SessionProducts,
+    ProductCategories,
+    ProductImages,
 };
