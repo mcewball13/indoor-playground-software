@@ -12,6 +12,7 @@ const SessionTypes = require("./SessionTypes");
 const SessionSchedules = require("./SessionSchedules");
 const ProductCategories = require("./ProductCategories");
 const ProductImages = require("./ProductImages");
+const ProductTag = require("./ProductTag");
 
 // ===========================================================
 // Create associations with the main company
@@ -129,9 +130,26 @@ SessionProducts.belongsTo(SessionSchedules, {
     foreignKey: "session_schedule_id",
     unique: false,
 });
-
-
-
+SessionProducts.hasMany(ProductImages, {
+    foreignKey: "session_product_id",
+    unique: false,
+    onDelete: "set null",
+});
+ProductCategories.hasMany(SessionProducts, {
+    foreignKey: "category_id",
+    unique: false,
+    onDelete: "set null",
+});
+ProductTag.belongsToMany(SessionProducts, {
+    through: "session_product_has_product_tag",
+    as: "sessionProducts",
+    foreignKey: "product_tag_id",
+});
+SessionProducts.belongsToMany(ProductTag, {
+    through: "session_product_has_product_tag",
+    as: "productTags",
+    foreignKey: "session_product_id",
+});
 
 // ===========================================================
 // exports
