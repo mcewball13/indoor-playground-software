@@ -16,13 +16,5 @@
   "devDependencies": {
     "concurrently": "^5.1.0"
   },
-  "dependencies": {
-    "@date-io/date-fns": "^2.11.0",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.2",
-    "mysql2": "^2.3.3",
-    "nodemon": "^2.0.15",
-    "sequelize": "^7.0.0-alpha.1"
-  },
   "homepage": "https://github.com/mcewball13/hotel-redux#readme"
 }

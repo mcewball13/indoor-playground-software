@@ -42,9 +42,11 @@ export default function CartSidebar() {
   const setBgColor = (isWaiverSigned) => {
     if (isWaiverSigned) {
       return 'success.lighter';
-    } else if (isWaiverSigned === false) {
+    } 
+    if (isWaiverSigned === false) {
       return 'warning.lighter';
-    } else {
+    } 
+    if (isWaiverSigned === true) {
       return 'white.main';
     }
   };
