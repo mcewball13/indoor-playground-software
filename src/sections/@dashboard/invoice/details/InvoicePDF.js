@@ -168,7 +168,7 @@ export default function InvoicePDF({ invoice }) {
             </View>
           </View>
         </View>
-
+        
         <View style={[styles.gridContainer, styles.footer]}>
           <View style={styles.col8}>
             <Text style={styles.subtitle2}>NOTES</Text>
