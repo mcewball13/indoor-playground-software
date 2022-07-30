@@ -29,6 +29,8 @@ import useSettings from '../../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../../hooks/useTable';
 // _mock_
 import { _userList } from '../../../_mock';
+// queries
+import {GET_ALL_CUSTOMERS} from '../../../utils/gql/queries/customerQueries';
 // layouts
 import Layout from '../../../layouts';
 // components
