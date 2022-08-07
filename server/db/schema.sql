@@ -1,3 +1,0 @@
-DROP DATABASE IF EXISTS bloksy_db;
-
-CREATE DATABASE bloksy_db;
