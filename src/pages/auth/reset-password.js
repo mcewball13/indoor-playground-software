@@ -61,7 +61,7 @@ export default function ResetPassword() {
               </>
             ) : (
               <Box sx={{ textAlign: 'center' }}>
-                <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} />
+                {/* <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} /> */}
 
                 <Typography variant="h3" gutterBottom>
                   Request sent successfully
