@@ -21,6 +21,9 @@ export const PATH_AUTH = {
 };
 
 export const PATH_PAGE = {
+  customer: {
+    new: '/customer/new-customer',
+  },
   signWaiver: '/waiver/sign-waiver',
   signWaiverSuccess: '/waiver/signed-waiver-confirmation',
   comingSoon: '/coming-soon',

@@ -11,11 +11,14 @@ import { LoadingButton } from '@mui/lab';
 import { PATH_AUTH } from '../../../routes/paths';
 // components
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
+import { useSelector } from '../../../redux/store';
 
 // ----------------------------------------------------------------------
 
 export default function ResetPasswordForm() {
   const { push } = useRouter();
+
+  const {resetEmail} = useSelector((state) => state.newWaiverForm);
 
   const ResetPasswordSchema = Yup.object().shape({
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
