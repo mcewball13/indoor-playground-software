@@ -1,8 +1,9 @@
+import { useState } from 'react';
 // next
-import NextLink from 'next/link';
+import {Link as RouterLink} from 'next/link';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Button, Container, Typography } from '@mui/material';
+import { Button, Container, Typography, Box } from '@mui/material';
 // routes
 import { PATH_AUTH } from '../../routes/paths';
 // layouts
@@ -14,7 +15,7 @@ import { ResetPasswordForm } from '../../sections/auth/reset-password';
 
 // ----------------------------------------------------------------------
 
-const ContentStyle = styled('div')(({ theme }) => ({
+const RootStyle = styled('div')(({ theme }) => ({
   maxWidth: 480,
   margin: 'auto',
   minHeight: '100vh',
@@ -33,28 +34,53 @@ ResetPassword.getLayout = function getLayout(page) {
 // ----------------------------------------------------------------------
 
 export default function ResetPassword() {
+  const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+
   return (
-    <Page title="Reset Password">
-      <Container>
-        <ContentStyle sx={{ textAlign: 'center' }}>
-          <Typography variant="h3" paragraph>
-            Forgot your password?
-          </Typography>
+    <Page title="Reset Password" sx={{ height: 1 }}>
+      <RootStyle>
 
-          <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-            Please enter the email address associated with your account and We will email you a link to reset your
-            password.
-          </Typography>
+        <Container>
+          <Box sx={{ maxWidth: 480, mx: 'auto' }}>
+            {!sent ? (
+              <>
+                <Typography variant="h3" paragraph>
+                  Forgot your password?
+                </Typography>
+                <Typography sx={{ color: 'text.secondary', mb: 5 }}>
+                  Please enter the email address associated with your account and We will email you a link to reset your
+                  password.
+                </Typography>
 
-          <ResetPasswordForm />
+                <ResetPasswordForm onSent={() => setSent(true)} onGetEmail={(value) => setEmail(value)} />
 
-          <NextLink href={PATH_AUTH.login} passHref>
-            <Button fullWidth size="large" sx={{ mt: 1 }}>
-              Back
-            </Button>
-          </NextLink>
-        </ContentStyle>
-      </Container>
+                <Button fullWidth size="large" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 1 }}>
+                  Back
+                </Button>
+              </>
+            ) : (
+              <Box sx={{ textAlign: 'center' }}>
+                {/* <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} /> */}
+
+                <Typography variant="h3" gutterBottom>
+                  Request sent successfully
+                </Typography>
+                <Typography>
+                  We have sent a confirmation email to &nbsp;
+                  <strong>{email}</strong>
+                  <br />
+                  Please check your email.
+                </Typography>
+
+                <Button size="large" variant="contained" component={RouterLink} to={PATH_AUTH.verify} sx={{ mt: 5 }}>
+                  Enter Code
+                </Button>
+              </Box>
+            )}
+          </Box>
+        </Container>
+      </RootStyle>
     </Page>
   );
 }
