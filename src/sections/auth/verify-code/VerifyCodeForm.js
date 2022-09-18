@@ -69,7 +69,6 @@ export default function VerifyCodeForm() {
 
   const handlePaste = (event) => {
     let data = event.clipboardData.getData('text');
-
     data = data.split('');
 
     [].forEach.call(document.querySelectorAll('.field-code'), (node, index) => {
