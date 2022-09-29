@@ -312,8 +312,8 @@ function AuthProvider({ children }) {
   };
 
   const submitSignedWaiver = async ({ signedWaiver, customerId }) => {
-    // change to axios.post when we have a completed backend
-    // // =========================================================================
+    // TODO change to axios.post when we have a completed backend
+    // =========================================================================
     await axios({
       url: `/api/graphql/`,
       method: 'POST',

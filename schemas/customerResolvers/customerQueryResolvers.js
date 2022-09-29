@@ -36,7 +36,7 @@ module.exports = {
         return true;
       }
     } catch (error) {
-      throw new AuthenticationError('Internal Server Error, Please try again');
+      return new AuthenticationError('Internal Server Error, Please try again');
     }
   },
 };
