@@ -63,7 +63,7 @@ module.exports = {
             };
         } catch (error) {
             console.log(error);
-            throw new AuthenticationError(
+            return new AuthenticationError(
                 "Internal Seerver Error, Please try again"
             );
         }
