@@ -9,6 +9,7 @@
     "lint:es": "eslint --ext .js,.jsx .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
     "dev": "next dev -p 3030",
+    "seed": "node seeds/",
     "start": "next start",
     "build": "next build",
     "build-netlify": "next build && cp -r .next _next && mv _next .next/",
