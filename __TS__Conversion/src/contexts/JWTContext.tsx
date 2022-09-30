@@ -3,7 +3,7 @@ import { createContext, ReactNode, useEffect, useReducer } from 'react';
 import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
 // @types
-import { ActionMap, AuthState, AuthUser, AuthCustomer, JWTContextType } from '../@types/auth';
+import { ActionMap, AuthState, AuthUser, JWTContextType } from '../@types/auth';
 
 // ----------------------------------------------------------------------
 
@@ -23,13 +23,14 @@ type JWTAuthPayload = {
   [Types.Login]: {
     user: AuthUser;
   };
+  // [Types.CustomerRegister]: {
+  //   customer: AuthCustomer;
+  // };
   [Types.Logout]: undefined;
   [Types.Register]: {
     user: AuthUser;
   };
-  [Types.CustomerRegister]: {
-    customer: AuthCustomer;
-  };
+  
 };
 
 export type JWTActions = ActionMap<JWTAuthPayload>[keyof ActionMap<JWTAuthPayload>];
@@ -38,7 +39,6 @@ const initialState: AuthState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
-  customer: null,
 };
 
 const JWTReducer = (state: AuthState, action: JWTActions) => {
@@ -68,12 +68,12 @@ const JWTReducer = (state: AuthState, action: JWTActions) => {
         isAuthenticated: true,
         user: action.payload.user,
       };
-    case 'CUSTOMER_REGISTER':
-      return {
-        ...state,
-        isAuthenticated: true,
-        customer: action.payload.customer,
-      };
+    // case 'CUSTOMER_REGISTER':
+    //   return {
+    //     ...state,
+    //     isAuthenticated: true,
+    //     customer: action.payload.customer,
+    //   };
 
     default:
       return state;
