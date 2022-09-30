@@ -8,6 +8,7 @@ import { EMAIL_EXISTS } from '../utils/gql/queries/customerQueries';
 
 // ----------------------------------------------------------------------
 
+
 const initialState = {
   isAuthenticated: false,
   isCustomerAuthenticated: false,
