@@ -14,17 +14,16 @@ export type ActionMap<M extends { [index: string]: any }> = {
 };
 
 export type AuthUser = null | Record<string, any>;
-export type AuthCustomer = null | Record<string, any>;
+// export type AuthCustomer = null | Record<string, any>;
 
 export type AuthState = {
   isAuthenticated: boolean;
   isInitialized: boolean;
   user: AuthUser;
-  customer: AuthCustomer;
 };
 
 export type JWTContextType = {
-  customer: AuthCustomer;
+  // customer: AuthCustomer;
   isAuthenticated: boolean;
   isCustomerAuthenticated: boolean;
   isInitialized: boolean;
