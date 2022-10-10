@@ -63,6 +63,7 @@ const JWTReducer = (state: AuthState, action: JWTActions) => {
       };
 
     case 'REGISTER':
+      
       return {
         ...state,
         isAuthenticated: true,

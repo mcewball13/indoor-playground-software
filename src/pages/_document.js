@@ -29,6 +29,8 @@ export default class MyDocument extends Document {
 
           <meta name="theme-color" content={palette.light.primary.main} />
 
+          <meta name="google-site-verification" content="ug_Sc-97j3G44uHIytJ4wmeQBOHx6dgSaHaM5AnQ6wc" />
+
           <link rel="manifest" href="/manifest.json" />
 
           <link rel="preconnect" href="https://fonts.gstatic.com" />
