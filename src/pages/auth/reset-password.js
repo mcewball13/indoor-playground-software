@@ -36,7 +36,6 @@ ResetPassword.getLayout = function getLayout(page) {
 export default function ResetPassword() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
-  Boolean(email);
 
   return (
     <Page title="Reset Password" sx={{ height: 1 }}>
