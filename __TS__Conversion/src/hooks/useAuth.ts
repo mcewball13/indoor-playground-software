@@ -10,7 +10,7 @@ import { AuthContext } from '../contexts/JWTContext';
 const useAuth = () => {
   const context = useContext(AuthContext);
 
-  if (!context) throw new Error('Auth context must be use inside AuthProvider');
+  if (!context) throw new Error('Auth context must be used inside AuthProvider');
 
   return context;
 };

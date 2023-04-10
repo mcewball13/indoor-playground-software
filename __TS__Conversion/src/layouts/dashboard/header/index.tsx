@@ -1,6 +1,6 @@
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, Typography } from '@mui/material';
 // hooks
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';

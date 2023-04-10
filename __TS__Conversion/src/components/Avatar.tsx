@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar as MUIAvatar, AvatarProps } from '@mui/material';
-
 // ----------------------------------------------------------------------
 
 type AvatarColor = 'default' | 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';

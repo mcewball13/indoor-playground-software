@@ -32,4 +32,13 @@ module.exports = withTM({
     AUTH0_CLIENT_ID: '',
     AUTH0_DOMAIN: '',
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/dashboard/app/',
+        permanent: false,
+      },
+    ];
+  }
 });
