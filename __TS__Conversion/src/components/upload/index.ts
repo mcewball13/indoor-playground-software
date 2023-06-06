@@ -1,9 +1,10 @@
-export * from './type';
+export * from './types';
 
-export { default as BlockContent } from './BlockContent';
-export { default as RejectionFiles } from './RejectionFiles';
-export { default as MultiFilePreview } from './MultiFilePreview';
+export { default as RejectionFiles } from './errors-rejection-files';
 
-export { default as UploadAvatar } from './UploadAvatar';
-export { default as UploadMultiFile } from './UploadMultiFile';
-export { default as UploadSingleFile } from './UploadSingleFile';
+export { default as MultiFilePreview } from './preview-multi-file';
+export { default as SingleFilePreview } from './preview-single-file';
+
+export { default as Upload } from './upload';
+export { default as UploadBox } from './upload-box';
+export { default as UploadAvatar } from './upload-avatar';
