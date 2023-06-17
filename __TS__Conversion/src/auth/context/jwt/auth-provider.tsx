@@ -16,7 +16,14 @@ import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
 
 // ----------------------------------------------------------------------
 
-enum Types {
+enum UserTypes {
+  INITIAL = 'INITIAL',
+  LOGIN = 'LOGIN',
+  REGISTER = 'REGISTER',
+  LOGOUT = 'LOGOUT',
+}
+
+enum CustomerTypes {
   INITIAL = 'INITIAL',
   LOGIN = 'LOGIN',
   REGISTER = 'REGISTER',
@@ -24,16 +31,16 @@ enum Types {
 }
 
 type Payload = {
-  [Types.INITIAL]: {
+  [UserTypes.INITIAL]: {
     user: AuthUserType;
   };
-  [Types.LOGIN]: {
+  [UserTypes.LOGIN]: {
     user: AuthUserType;
   };
-  [Types.REGISTER]: {
+  [UserTypes.REGISTER]: {
     user: AuthUserType;
   };
-  [Types.LOGOUT]: undefined;
+  [UserTypes.LOGOUT]: undefined;
 };
 
 type ActionsType = ActionMapType<Payload>[keyof ActionMapType<Payload>];
@@ -46,25 +53,25 @@ const initialState: AuthStateType = {
 };
 
 const reducer = (state: AuthStateType, action: ActionsType) => {
-  if (action.type === Types.INITIAL) {
+  if (action.type === UserTypes.INITIAL) {
     return {
       loading: false,
       user: action.payload.user,
     };
   }
-  if (action.type === Types.LOGIN) {
+  if (action.type === UserTypes.LOGIN) {
     return {
       ...state,
       user: action.payload.user,
     };
   }
-  if (action.type === Types.REGISTER) {
+  if (action.type === UserTypes.REGISTER) {
     return {
       ...state,
       user: action.payload.user,
     };
   }
-  if (action.type === Types.LOGOUT) {
+  if (action.type === UserTypes.LOGOUT) {
     return {
       ...state,
       user: null,
@@ -96,14 +103,14 @@ export function AuthProvider({ children }: Props) {
         const { user } = response.data;
 
         dispatch({
-          type: Types.INITIAL,
+          type: UserTypes.INITIAL,
           payload: {
             user,
           },
         });
       } else {
         dispatch({
-          type: Types.INITIAL,
+          type: UserTypes.INITIAL,
           payload: {
             user: null,
           },
@@ -112,7 +119,7 @@ export function AuthProvider({ children }: Props) {
     } catch (error) {
       console.error(error);
       dispatch({
-        type: Types.INITIAL,
+        type: UserTypes.INITIAL,
         payload: {
           user: null,
         },
@@ -138,7 +145,7 @@ export function AuthProvider({ children }: Props) {
     setSession(accessToken);
 
     dispatch({
-      type: Types.LOGIN,
+      type: UserTypes.LOGIN,
       payload: {
         user,
       },
@@ -162,7 +169,7 @@ export function AuthProvider({ children }: Props) {
       sessionStorage.setItem(STORAGE_KEY, accessToken);
 
       dispatch({
-        type: Types.REGISTER,
+        type: UserTypes.REGISTER,
         payload: {
           user,
         },
@@ -175,7 +182,7 @@ export function AuthProvider({ children }: Props) {
   const logout = useCallback(async () => {
     setSession(null);
     dispatch({
-      type: Types.LOGOUT,
+      type: UserTypes.LOGOUT,
     });
   }, []);
 
