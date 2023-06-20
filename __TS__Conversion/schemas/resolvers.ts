@@ -6,12 +6,12 @@ const customerQueryResolvers = require('./customerResolvers/customerQueryResolve
 const { CustomerGuardian, CustomerMinor, CustomerGuardianHasCustomerMinor, Employee } = require("../server/models");
 const { signToken } = require("../src/utils/auth");
 
-const resolvers = {
+const resolvers : {Query: any, Mutation: any} = {
     Query: {
         ...employeeQueries,
         ...customerQueryResolvers,
 
-        allCustomers: async (parent, args, context) => {
+        allCustomers: async (parent: any, args: any, context: any) => {
             try {
                 const guardianData = await CustomerGuardian.findAll({
                     include: [
@@ -31,7 +31,7 @@ const resolvers = {
             }
         },
 
-        singleCustomer: async (parent, { id }, context) => {
+        singleCustomer: async (parent: any, { id }: {id: number}, context: any) => {
             try {
                 const customer = await CustomerGuardian.findByPk(id);
                 return customer;
@@ -45,7 +45,7 @@ const resolvers = {
 
         ...customerAuthMutations,
         // create user data
-        addUser: async (parents, { input }) => {
+        addUser: async (parents: any, { input }: {input: string}) => {
             console.log(input);
             const employee = await Employee.create(input);
             console.log(employee);
@@ -53,7 +53,7 @@ const resolvers = {
 
             return { token, employee };
         },
-        loginUser: async (parents, { email, password }) => {
+        loginUser: async (parents: any, { email, password }: {email: string, password: string}) => {
             // check to see if the email is found
             const userData = await Employee.findOne({
                 where: {
@@ -85,4 +85,5 @@ const resolvers = {
     },
 };
 
-module.exports = resolvers;
+export default resolvers;
+// module.exports = resolvers;

@@ -20,13 +20,45 @@ cloudinary.config({
     secure: true,
 });
 
+type CustomerGuardianType = {
+    id: number,
+    guardianFirstName: string,
+    guardianLastName: string,
+    displayName: string,
+    birthday: Date,
+    email: string,
+    password: string,
+    addressStreet: string,
+    addressCity: string,
+    addressState: string,
+    addressZipCode: string,
+    phoneNumber: string,
+    photoURL: string,
+    storedValue: number,
+    notes: string,
+    isAccountOwner: boolean,
+    isBanned: boolean,
+    resetPasswordToken: string,
+    resetPasswordExpires: number,
+    resetPasswordTokenUsed: boolean
+}
+
+type CustomerMinorType = {
+    id: number,
+    minorFirstName: string,
+    minorLastName: string,
+    minorBirthday: Date,
+    email: string,
+    notes: string
+}
+
 // email client instance
 const sgMail = require("@sendgrid/mail");
 const SignedWaivers = require("../../../server/models/SignedWaivers");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 module.exports = {
-    customerLogin: async (parent, { email, password }, context) => {
+    customerLogin: async (parent: any, { email, password }: {email: string, password: string}, context: any) => {
         try {
             const existingCustomerData = await CustomerGuardian.findOne({
                 where: {
@@ -68,7 +100,7 @@ module.exports = {
             );
         }
     },
-    customerRegister: async (parent, { guardians, minors = []}, context) => {
+    customerRegister: async (parent: any, { guardians, minors = []}: {guardians: CustomerGuardianType, minors: any[]}, context: any) => {
         console.log(guardians)
         try {
             const newCustomerData = await CustomerGuardian.create({
@@ -89,7 +121,7 @@ module.exports = {
                 minorsWithIdArr
             );
             // map through newCusomerMinoeDataArr and add customeguardian id to each minor create cusomterguardianhascustomerminor
-            newCustomerMinorDataArr.map(async (minor) => {
+            newCustomerMinorDataArr.map(async (minor: CustomerMinorType) => {
                 await CustomerGuardianHasCustomerMinor.create({
                     guardian_id: newCustomerData.id,
                     minor_id: minor.id,
@@ -127,11 +159,11 @@ module.exports = {
             );
         }
     },
-    submitSignedWaiver: async (parent, { signedWaiver, customerId }, context) => {
+    submitSignedWaiver: async (parent: any, { signedWaiver, customerId } : {signedWaiver: string, customerId: number}, context: any) => {
         try {
             // generate randome UUID for signed waiver
             const UUID = randomUUID();
-            let signedWaiverURL;
+            let signedWaiverURL: string;
             // upload signed waiver to cloudinary
             await cloudinary.uploader.upload(
                 signedWaiver,
@@ -139,7 +171,7 @@ module.exports = {
                     public_id: `pdfs/customer-pdfs/${UUID}`,
                     overwrite: true,
                 },
-                function (error, result) {
+                function (error: any, result: any) {
                     // set the signed waiver url
                     signedWaiverURL = result.url;
                     console.log(result, error);
@@ -159,10 +191,10 @@ module.exports = {
                 ],
             });
             // create a minor list to update
-            const minorIds = customerResponse.minors.map((minor) => minor.id);
+            const minorIds = customerResponse.minors.map((minor: CustomerMinorType) => minor.id);
             // if the customer has minors create the links in the signedWaiver table
             if (minorIds.length > 0) {
-                await minorIds.map((minorId) =>
+                await minorIds.map((minorId: number) =>
                     SignedWaivers.create({
                         waiverURL: signedWaiverURL,
                         guardian_id: customerId,
