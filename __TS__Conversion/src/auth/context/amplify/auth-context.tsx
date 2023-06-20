@@ -2,7 +2,7 @@
 
 import { createContext } from 'react';
 //
-import { AmplifyContextType } from '../../types';
+import { AmplifyContextType } from '../jwt/user/types';
 
 // ----------------------------------------------------------------------
 

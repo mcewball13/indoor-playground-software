@@ -5,8 +5,8 @@ import { useEffect, useReducer, useCallback, useMemo } from 'react';
 import axios, { API_ENDPOINTS } from 'src/utils/axios';
 //
 import { AuthContext } from './auth-context';
-import { isValidToken, setSession } from './utils';
-import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
+import { isValidToken, setSession } from '../utils';
+import { ActionMapType, AuthStateType, AuthUserType } from './types';
 
 // ----------------------------------------------------------------------
 
@@ -17,13 +17,6 @@ import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
 // ----------------------------------------------------------------------
 
 enum UserTypes {
-  INITIAL = 'INITIAL',
-  LOGIN = 'LOGIN',
-  REGISTER = 'REGISTER',
-  LOGOUT = 'LOGOUT',
-}
-
-enum CustomerTypes {
   INITIAL = 'INITIAL',
   LOGIN = 'LOGIN',
   REGISTER = 'REGISTER',

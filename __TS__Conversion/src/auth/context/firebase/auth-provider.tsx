@@ -20,7 +20,7 @@ import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestor
 import { FIREBASE_API } from 'src/config-global';
 //
 import { AuthContext } from './auth-context';
-import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
+import { ActionMapType, AuthStateType, AuthUserType } from '../jwt/user/types';
 
 // ----------------------------------------------------------------------
 

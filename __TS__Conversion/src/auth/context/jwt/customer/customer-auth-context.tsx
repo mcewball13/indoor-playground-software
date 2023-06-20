@@ -1,9 +1,9 @@
 'use client';
 
 import { createContext } from 'react';
-//
-import { Auth0ContextType } from '../jwt/user/types';
+
+import { CustomerJWTContextType } './types'
 
 // ----------------------------------------------------------------------
 
-export const AuthContext = createContext({} as Auth0ContextType);
+export const CustomerAuthContext = createContext({} as CustomerJWTContextType);

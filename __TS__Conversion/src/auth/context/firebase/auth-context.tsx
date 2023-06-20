@@ -2,7 +2,7 @@
 
 import { createContext } from 'react';
 //
-import { FirebaseContextType } from '../../types';
+import { FirebaseContextType } from '../jwt/user/types';
 
 // ----------------------------------------------------------------------
 

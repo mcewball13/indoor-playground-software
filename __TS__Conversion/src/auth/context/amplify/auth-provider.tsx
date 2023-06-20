@@ -6,7 +6,7 @@ import { Auth } from '@aws-amplify/auth';
 import { AMPLIFY_API } from 'src/config-global';
 //
 import { AuthContext } from './auth-context';
-import { ActionMapType, AuthStateType, AuthUserType } from '../../types';
+import { ActionMapType, AuthStateType, AuthUserType } from '../jwt/user/types';
 
 // ----------------------------------------------------------------------
 
