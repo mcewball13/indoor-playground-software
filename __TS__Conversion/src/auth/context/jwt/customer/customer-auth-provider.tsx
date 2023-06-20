@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useReducer } from 'react';
+import { memo, useCallback, useEffect, useMemo, useReducer } from 'react';
 // utils
 import axios, { API_ENDPOINTS } from 'src/utils/axios';
 
@@ -100,33 +100,30 @@ export default function CustomerAuthProvider({ children }: Props) {
     initialize();
   }, [initialize]);
 
-  const login = useCallback(
-    async (email: string, password: string) => {
-      try {
-        // TODO: Add API call
-        const response = await axios.post(API_ENDPOINTS.auth.login, {
-          email,
-          password,
-        });
+  const login = useCallback(async (email: string, password: string) => {
+    try {
+      // TODO Add API call
+      const response = await axios.post(API_ENDPOINTS.auth.login, {
+        email,
+        password,
+      });
 
-        const { customer, accessToken } = response.data;
+      const { customer, accessToken } = response.data;
 
-        setSession(accessToken);
+      setSession(accessToken);
 
-        dispatch({
-          type: CustomerTypes.LOGIN,
-          payload: { customer },
-        });
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    },
-    [dispatch]
-  );
+      dispatch({
+        type: CustomerTypes.LOGIN,
+        payload: { customer },
+      });
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }, []);
 
   const register = useCallback(
-    async (email, password, firstName, lastName) => {
+    async (email: string, password: string, firstName: string, lastName: string) => {
       try {
         const response = await axios.post(API_ENDPOINTS.auth.register, {
           email,
@@ -148,23 +145,32 @@ export default function CustomerAuthProvider({ children }: Props) {
         throw error;
       }
     },
-    [dispatch]
+    []
   );
 
   const logout = useCallback(async () => {
     setSession(null);
     dispatch({ type: CustomerTypes.LOGOUT });
-  }, [dispatch]);
+  }, []);
 
-  const value = useMemo(
+  const checkAuthenticated = state.customer ? 'authenticated' : 'unauthenticated';
+
+  const status = state.loading ? 'loading' : checkAuthenticated;
+
+  const memoizedValue = useMemo(
     () => ({
-      ...state,
+      customer: state.customer,
+      method: 'jwt',
+      loading: status === 'loading',
+      authenticated: status === 'authenticated',
+      unauthenticated: status === 'unauthenticated',
+      //
       login,
       register,
       logout,
     }),
-    [state, login, register, logout]
+    [login, register, logout, state.customer, status]
   );
 
-  return <CustomerAuthContext.Provider value={value}>{children}</CustomerAuthContext.Provider>;
+  return <CustomerAuthContext.Provider value={memoizedValue}>{children}</CustomerAuthContext.Provider>;
 }
