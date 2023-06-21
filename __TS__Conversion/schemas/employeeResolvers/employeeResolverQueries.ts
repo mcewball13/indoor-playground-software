@@ -1,7 +1,7 @@
 const { CustomerGuardian, Employee, EmployeeRoles, Locations } = require('../../server/models');
 
-module.exports = {
-  allEmployees: async (parent, args, context) => {
+export default {
+  allEmployees: async (parent: any, args: any, context: any) => {
     try {
       const guardianData = await Employee.findAll({});
       console.log(guardianData);
@@ -10,7 +10,7 @@ module.exports = {
       console.log(error);
     }
   },
-  getRoles: async (parent, args, context) => {
+  getRoles: async (parent: any, args: any, context: any) => {
     try {
       const roleData = await EmployeeRoles.findAll({});
       return roleData;
@@ -18,7 +18,7 @@ module.exports = {
       console.log(error);
     }
   },
-  addEmployeeFormFill: async (parent, args, context) => {
+  addEmployeeFormFill: async (parent: any, args: any, context: any) => {
     try {
       const formFillData = await Employee.findAll({
         attributes: { exclude: ['password'] },

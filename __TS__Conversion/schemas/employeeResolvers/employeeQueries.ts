@@ -1,7 +1,7 @@
 const { CustomerGuardian, Employee } = require('../server/models');
 
-module.exports = {
-  allEmployees: async (parent, args, context) => {
+export default {
+  allEmployees: async (parent: any, args: any, context: any) => {
     try {
       const guardianData = await Employee.findAll({});
       console.log(guardianData);
