@@ -52,28 +52,6 @@ type OptionType = {
   label: string;
 };
 
-type FormValuesProps = {
-  age: number;
-  email: string;
-  editor: string;
-  slider: number;
-  switch: boolean;
-  fullName: string;
-  password: string;
-  checkbox: boolean;
-  radioGroup: string;
-  multiUpload: File[];
-  endDate: Date | null;
-  singleSelect: string;
-  autocomplete: OptionType | null;
-  multiSelect: string[];
-  sliderRange: number[];
-  startDate: Date | null;
-  confirmPassword: string;
-  multiCheckbox: string[];
-  singleUpload: File | null;
-};
-
 export const defaultValues = {
   age: 0,
   email: '',
@@ -110,7 +88,7 @@ type Props = {
 export default function ReactHookForm({ debug }: Props) {
   const password = useBoolean();
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(FormSchema),
     defaultValues,
   });
@@ -126,14 +104,15 @@ export default function ReactHookForm({ debug }: Props) {
 
   const values = watch();
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
+  const onSubmit = handleSubmit(async (data) => {
+    try {
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      console.info('DATA', data);
       reset();
-    },
-    [reset]
-  );
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const handleDropSingleFile = useCallback(
     (acceptedFiles: File[]) => {
@@ -173,7 +152,7 @@ export default function ReactHookForm({ debug }: Props) {
         </Backdrop>
       )}
 
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
         <Box
           gap={5}
           display="grid"

@@ -26,8 +26,6 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { fTimestamp } from 'src/utils/format-time';
 // _mock
 import { _invoices, INVOICE_SERVICE_OPTIONS } from 'src/_mock';
-// types
-import { IInvoice, IInvoiceTableFilters, IInvoiceTableFilterValue } from 'src/types/invoice';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -35,7 +33,6 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { isDateError } from 'src/components/custom-date-range-picker';
 import {
   useTable,
   getComparator,
@@ -46,6 +43,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+// types
+import { IInvoice, IInvoiceTableFilters, IInvoiceTableFilterValue } from 'src/types/invoice';
 //
 import InvoiceAnalytic from '../invoice-analytic';
 import InvoiceTableRow from '../invoice-table-row';
@@ -64,7 +63,7 @@ const TABLE_HEAD = [
   { id: '' },
 ];
 
-const defaultFilters = {
+const defaultFilters: IInvoiceTableFilters = {
   name: '',
   service: [],
   status: 'all',
@@ -89,7 +88,10 @@ export default function InvoiceListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const dateError = isDateError(filters.startDate, filters.endDate);
+  const dateError =
+    filters.startDate && filters.endDate
+      ? filters.startDate.getTime() > filters.endDate.getTime()
+      : false;
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -315,6 +317,7 @@ export default function InvoiceListView() {
             filters={filters}
             onFilters={handleFilters}
             //
+            dateError={dateError}
             serviceOptions={INVOICE_SERVICE_OPTIONS.map((option) => option.name)}
           />
 

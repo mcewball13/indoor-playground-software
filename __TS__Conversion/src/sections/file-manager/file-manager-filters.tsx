@@ -28,7 +28,6 @@ type Props = {
   onFilters: (name: string, value: IFileFilterValue) => void;
   //
   dateError: boolean;
-  //
   typeOptions: string[];
 };
 
@@ -41,7 +40,6 @@ export default function FileManagerFilters({
   onFilters,
   //
   dateError,
-  //
   typeOptions,
 }: Props) {
   const popover = usePopover();

@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useEffect, useMemo, useReducer } from 'react';
 // utils
-import axios, { API_ENDPOINTS } from 'src/utils/axios';
+import axios, { endpoints } from 'src/utils/axios';
 
 import { CustomerAuthContext } from './customer-auth-context';
 import { isValidToken, setSession } from '../utils';

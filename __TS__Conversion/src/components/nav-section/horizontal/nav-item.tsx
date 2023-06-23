@@ -35,7 +35,16 @@ const NavItem = forwardRef<HTMLDivElement, Props>(
         config={config}
         {...other}
       >
-        {icon && <StyledIcon size={config.iconSize}>{icon}</StyledIcon>}
+        {icon && (
+          <StyledIcon
+            size={config.iconSize}
+            sx={{
+              ...(subItem && { mr: 1.5 }),
+            }}
+          >
+            {icon}
+          </StyledIcon>
+        )}
 
         {!(config.hiddenLabel && !subItem) && (
           <ListItemText

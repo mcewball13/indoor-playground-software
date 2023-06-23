@@ -18,18 +18,24 @@ import KanbanInputName from './kanban-input-name';
 
 type Props = {
   columnName: string;
-  onDelete: VoidFunction;
-  onUpdate: (name: string) => void;
+  onDeleteColumn: VoidFunction;
+  onClearColumn: VoidFunction;
+  onUpdateColumn: (inputName: string) => void;
 };
 
-export default function KanbanColumnToolBar({ columnName, onDelete, onUpdate }: Props) {
+export default function KanbanColumnToolBar({
+  columnName,
+  onDeleteColumn,
+  onClearColumn,
+  onUpdateColumn,
+}: Props) {
   const renameRef = useRef<HTMLInputElement>(null);
 
-  const [value, setValue] = useState(columnName);
-
-  const confirm = useBoolean();
-
   const popover = usePopover();
+
+  const confirmDialog = useBoolean();
+
+  const [name, setName] = useState(columnName);
 
   useEffect(() => {
     if (popover.open) {
@@ -39,20 +45,20 @@ export default function KanbanColumnToolBar({ columnName, onDelete, onUpdate }: 
     }
   }, [popover.open]);
 
-  const handleChangeColumnName = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+  const handleChangeName = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
   }, []);
 
-  const handleUpdateColumn = useCallback(
+  const handleKeyUpUpdateColumn = useCallback(
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
         if (renameRef.current) {
           renameRef.current.blur();
         }
-        onUpdate(value);
+        onUpdateColumn(name);
       }
     },
-    [onUpdate, value]
+    [name, onUpdateColumn]
   );
 
   return (
@@ -67,9 +73,9 @@ export default function KanbanColumnToolBar({ columnName, onDelete, onUpdate }: 
         <KanbanInputName
           inputRef={renameRef}
           placeholder="Section name"
-          value={value}
-          onChange={handleChangeColumnName}
-          onKeyUp={handleUpdateColumn}
+          value={name}
+          onChange={handleChangeName}
+          onKeyUp={handleKeyUpUpdateColumn}
         />
 
         <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
@@ -85,9 +91,24 @@ export default function KanbanColumnToolBar({ columnName, onDelete, onUpdate }: 
           width: 160,
         }}
       >
+        <MenuItem onClick={popover.onClose}>
+          <Iconify icon="solar:pen-bold" />
+          Rename
+        </MenuItem>
+
         <MenuItem
           onClick={() => {
-            confirm.onTrue();
+            onClearColumn();
+            popover.onClose();
+          }}
+        >
+          <Iconify icon="solar:eraser-bold" />
+          Clear
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            confirmDialog.onTrue();
             popover.onClose();
           }}
           sx={{ color: 'error.main' }}
@@ -95,16 +116,11 @@ export default function KanbanColumnToolBar({ columnName, onDelete, onUpdate }: 
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
         </MenuItem>
-
-        <MenuItem onClick={popover.onClose}>
-          <Iconify icon="solar:pen-bold" />
-          Rename
-        </MenuItem>
       </CustomPopover>
 
       <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
+        open={confirmDialog.value}
+        onClose={confirmDialog.onFalse}
         title="Delete"
         content={
           <>
@@ -119,8 +135,8 @@ export default function KanbanColumnToolBar({ columnName, onDelete, onUpdate }: 
             variant="contained"
             color="error"
             onClick={() => {
-              onDelete();
-              confirm.onFalse();
+              onDeleteColumn();
+              confirmDialog.onFalse();
             }}
           >
             Delete

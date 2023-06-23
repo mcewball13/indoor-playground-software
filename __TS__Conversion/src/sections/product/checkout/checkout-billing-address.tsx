@@ -2,16 +2,15 @@
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
-// types
-import { IProductCheckoutState } from 'src/types/product';
 // _mock
 import { _addressBooks } from 'src/_mock';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-// types
-import { IAddressItem } from 'src/types/address';
 // components
 import Iconify from 'src/components/iconify';
+// types
+import { IAddressItem } from 'src/types/address';
+import { ICheckout } from 'src/types/product';
 //
 import { AddressNewForm, AddressItem } from '../../address';
 import CheckoutSummary from './checkout-summary';
@@ -19,7 +18,7 @@ import CheckoutSummary from './checkout-summary';
 // ----------------------------------------------------------------------
 
 type Props = {
-  checkout: IProductCheckoutState;
+  checkout: ICheckout;
   onBackStep: VoidFunction;
   onCreateBilling: (address: IAddressItem) => void;
 };

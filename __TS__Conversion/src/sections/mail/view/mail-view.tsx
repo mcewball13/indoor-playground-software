@@ -5,20 +5,19 @@ import { useEffect, useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-// routes
-import { useSearchParams } from 'src/routes/hook';
-// redux
-import { useDispatch } from 'src/redux/store';
-import { getMail, getLabels, getMails } from 'src/redux/slices/mail';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
+// routes
+import { paths } from 'src/routes/paths';
+import { useRouter, useSearchParams } from 'src/routes/hook';
+// api
+import { useGetLabels, useGetMails, useGetMail } from 'src/api/mail';
 // components
 import EmptyContent from 'src/components/empty-content';
 import { LoadingScreen } from 'src/components/loading-screen';
 import { useSettingsContext } from 'src/components/settings';
 //
-import { useMail } from '../hooks';
 import MailNav from '../mail-nav';
 import MailList from '../mail-list';
 import MailHeader from '../mail-header';
@@ -27,61 +26,16 @@ import MailDetails from '../mail-details';
 
 // ----------------------------------------------------------------------
 
-function useInitial() {
-  const dispatch = useDispatch();
+const LABEL_INDEX = 'inbox';
+
+export default function MailView() {
+  const router = useRouter();
 
   const searchParams = useSearchParams();
 
-  const labelParam = searchParams.get('label');
+  const selectedLabelId = searchParams.get('label') || LABEL_INDEX;
 
-  const mailParam = searchParams.get('id');
-
-  const getLabelsCallback = useCallback(() => {
-    dispatch(getLabels());
-  }, [dispatch]);
-
-  const getMailsCallback = useCallback(() => {
-    dispatch(getMails(labelParam));
-  }, [dispatch, labelParam]);
-
-  const getMailCallback = useCallback(() => {
-    if (mailParam) {
-      dispatch(getMail(mailParam));
-    }
-  }, [dispatch, mailParam]);
-
-  useEffect(() => {
-    getLabelsCallback();
-  }, [getLabelsCallback]);
-
-  useEffect(() => {
-    getMailsCallback();
-  }, [getMailsCallback]);
-
-  useEffect(() => {
-    getMailCallback();
-  }, [getMailCallback]);
-
-  return null;
-}
-
-// ----------------------------------------------------------------------
-
-export default function MailView() {
-  useInitial();
-
-  const {
-    mail,
-    mails,
-    mailParam,
-    mailsStatus,
-    onClickMail,
-    onClickNavItem,
-    //
-    labels,
-    labelParam,
-    labelsStatus,
-  } = useMail();
+  const selectedMailId = searchParams.get('id') || '';
 
   const upMd = useResponsive('up', 'md');
 
@@ -93,17 +47,13 @@ export default function MailView() {
 
   const openCompose = useBoolean();
 
-  const handleOpenCompose = useCallback(() => {
-    if (openCompose.value) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [openCompose.value]);
+  const { labels, labelsLoading } = useGetLabels();
 
-  useEffect(() => {
-    handleOpenCompose();
-  }, [handleOpenCompose]);
+  const { mails, mailsLoading, mailsError, mailsEmpty } = useGetMails(selectedLabelId);
+
+  const { mail, mailLoading, mailError } = useGetMail(selectedMailId);
+
+  const firstMailId = mails.allIds[0] || '';
 
   const handleToggleCompose = useCallback(() => {
     if (openNav.value) {
@@ -111,6 +61,59 @@ export default function MailView() {
     }
     openCompose.onToggle();
   }, [openCompose, openNav]);
+
+  const handleClickLabel = useCallback(
+    (labelId: string) => {
+      if (!upMd) {
+        openNav.onFalse();
+      }
+
+      if (labelId) {
+        const href =
+          labelId !== LABEL_INDEX
+            ? `${paths.dashboard.mail}?label=${labelId}`
+            : paths.dashboard.mail;
+        router.push(href);
+      }
+    },
+    [openNav, router, upMd]
+  );
+
+  const handleClickMail = useCallback(
+    (mailId: string) => {
+      if (!upMd) {
+        openMail.onFalse();
+      }
+
+      const href =
+        selectedLabelId !== LABEL_INDEX
+          ? `${paths.dashboard.mail}?id=${mailId}&label=${selectedLabelId}`
+          : `${paths.dashboard.mail}?id=${mailId}`;
+
+      router.push(href);
+    },
+    [openMail, router, selectedLabelId, upMd]
+  );
+
+  useEffect(() => {
+    if (mailsError || mailError) {
+      router.push(paths.dashboard.mail);
+    }
+  }, [mailError, mailsError, router]);
+
+  useEffect(() => {
+    if (!selectedMailId && firstMailId) {
+      handleClickMail(firstMailId);
+    }
+  }, [firstMailId, handleClickMail, selectedMailId]);
+
+  useEffect(() => {
+    if (openCompose.value) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [openCompose.value]);
 
   const renderLoading = (
     <LoadingScreen
@@ -123,7 +126,7 @@ export default function MailView() {
 
   const renderEmpty = (
     <EmptyContent
-      title={`Nothing in ${labelParam}`}
+      title={`Nothing in ${selectedLabelId}`}
       description="This folder is empty"
       imgUrl="/assets/icons/empty/ic_folder_empty.svg"
       sx={{
@@ -136,35 +139,35 @@ export default function MailView() {
 
   const renderMailNav = (
     <MailNav
-      loading={labelsStatus.loading}
+      loading={labelsLoading}
       openNav={openNav.value}
       onCloseNav={openNav.onFalse}
       //
       labels={labels}
-      labelParam={labelParam}
+      selectedLabelId={selectedLabelId}
+      handleClickLabel={handleClickLabel}
       //
       onToggleCompose={handleToggleCompose}
-      onClickNavItem={onClickNavItem}
     />
   );
 
   const renderMailList = (
     <MailList
       mails={mails}
-      loading={mailsStatus.loading}
+      loading={mailsLoading}
       //
       openMail={openMail.value}
       onCloseMail={openMail.onFalse}
-      onClickMail={onClickMail}
+      onClickMail={handleClickMail}
       //
-      currentLabel={labelParam}
-      selectedMail={(id: string) => mailParam === id}
+      selectedLabelId={selectedLabelId}
+      selectedMailId={selectedMailId}
     />
   );
 
   const renderMailDetails = (
     <>
-      {mailsStatus.empty ? (
+      {mailsEmpty ? (
         <EmptyContent
           imgUrl="/assets/icons/empty/ic_email_disabled.svg"
           sx={{
@@ -209,7 +212,7 @@ export default function MailView() {
           {!upMd && (
             <MailHeader
               onOpenNav={openNav.onTrue}
-              onOpenMail={mailsStatus.empty ? null : openMail.onTrue}
+              onOpenMail={mailsEmpty ? null : openMail.onTrue}
             />
           )}
 
@@ -225,9 +228,9 @@ export default function MailView() {
           >
             {renderMailNav}
 
-            {mailsStatus.empty ? renderEmpty : renderMailList}
+            {mailsEmpty ? renderEmpty : renderMailList}
 
-            {mailsStatus.loading ? renderLoading : renderMailDetails}
+            {mailLoading ? renderLoading : renderMailDetails}
           </Stack>
         </Stack>
       </Container>

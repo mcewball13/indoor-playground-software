@@ -23,6 +23,7 @@ type Props = {
   filters: IInvoiceTableFilters;
   onFilters: (name: string, value: IInvoiceTableFilterValue) => void;
   //
+  dateError: boolean;
   serviceOptions: string[];
 };
 
@@ -30,6 +31,7 @@ export default function InvoiceTableToolbar({
   filters,
   onFilters,
   //
+  dateError,
   serviceOptions,
 }: Props) {
   const popover = usePopover();
@@ -118,7 +120,12 @@ export default function InvoiceTableToolbar({
           label="End date"
           value={filters.endDate}
           onChange={handleFilterEndDate}
-          slotProps={{ textField: { fullWidth: true } }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              error: dateError,
+            },
+          }}
           sx={{
             maxWidth: { md: 180 },
           }}

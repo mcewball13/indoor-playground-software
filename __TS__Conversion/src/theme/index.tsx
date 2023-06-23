@@ -48,7 +48,6 @@ export default function ThemeProvider({ children }: Props) {
       typography,
       shape: { borderRadius: 8 },
     }),
-
     []
   );
 

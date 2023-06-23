@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 // hooks
 import { useResponsive } from 'src/hooks/use-responsive';
 // types
-import { IMailListState } from 'src/types/mail';
+import { IMails } from 'src/types/mail';
 // components
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -19,14 +19,14 @@ import { MailItemSkeleton } from './mail-skeleton';
 
 type Props = {
   loading: boolean;
-  mails: IMailListState;
+  mails: IMails;
   //
   openMail: boolean;
   onCloseMail: VoidFunction;
   onClickMail: (id: string) => void;
   //
-  currentLabel: string;
-  selectedMail: (id: string) => boolean;
+  selectedLabelId: string;
+  selectedMailId: string;
 };
 
 export default function MailList({
@@ -37,10 +37,33 @@ export default function MailList({
   onCloseMail,
   onClickMail,
   //
-  currentLabel,
-  selectedMail,
+  selectedLabelId,
+  selectedMailId,
 }: Props) {
   const mdUp = useResponsive('up', 'md');
+
+  const renderSkeleton = (
+    <>
+      {[...Array(8)].map((_, index) => (
+        <MailItemSkeleton key={index} />
+      ))}
+    </>
+  );
+
+  const renderList = (
+    <>
+      {mails.allIds.map((mailId) => (
+        <MailItem
+          key={mailId}
+          mail={mails.byId[mailId]}
+          selected={selectedMailId === mailId}
+          onClickMail={() => {
+            onClickMail(mailId);
+          }}
+        />
+      ))}
+    </>
+  );
 
   const renderContent = (
     <>
@@ -58,27 +81,15 @@ export default function MailList({
           />
         ) : (
           <Typography variant="h6" sx={{ textTransform: 'capitalize' }}>
-            {currentLabel}
+            {selectedLabelId}
           </Typography>
         )}
       </Stack>
 
       <Scrollbar sx={{ px: 2 }}>
-        {(loading ? [...Array(8)] : mails.allIds).map((mailId, index) =>
-          mailId ? (
-            <MailItem
-              key={mailId}
-              mail={mails.byId[mailId]}
-              selected={selectedMail(mailId)}
-              onClickMail={() => {
-                onCloseMail();
-                onClickMail(mailId);
-              }}
-            />
-          ) : (
-            <MailItemSkeleton key={index} />
-          )
-        )}
+        {loading && renderSkeleton}
+
+        {!!mails.allIds.length && renderList}
       </Scrollbar>
     </>
   );

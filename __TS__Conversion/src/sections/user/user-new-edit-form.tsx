@@ -24,7 +24,6 @@ import { countries } from 'src/assets/data';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-import { CustomFile } from 'src/components/upload';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSwitch,
@@ -34,10 +33,6 @@ import FormProvider, {
 } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
-
-interface FormValuesProps extends Omit<IUserItem, 'avatarUrl'> {
-  avatarUrl: CustomFile | string | null;
-}
 
 type Props = {
   currentUser?: IUserItem;
@@ -58,30 +53,33 @@ export default function UserNewEditForm({ currentUser }: Props) {
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
     role: Yup.string().required('Role is required'),
-    avatarUrl: Yup.mixed().required('Avatar is required'),
+    zipCode: Yup.string().required('Zip code is required'),
+    avatarUrl: Yup.mixed<any>().nullable().required('Avatar is required'),
+    // not required
+    status: Yup.string(),
+    isVerified: Yup.boolean(),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
+      city: currentUser?.city || '',
+      role: currentUser?.role || '',
       email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
+      state: currentUser?.state || '',
+      status: currentUser?.status || '',
       address: currentUser?.address || '',
       country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
       zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || null,
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
       company: currentUser?.company || '',
-      role: currentUser?.role || '',
+      avatarUrl: currentUser?.avatarUrl || null,
+      phoneNumber: currentUser?.phoneNumber || '',
+      isVerified: currentUser?.isVerified || true,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
   );
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -97,20 +95,17 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
   const values = watch();
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-        router.push(paths.dashboard.user.list);
-        console.info('DATA', data);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [currentUser, enqueueSnackbar, reset, router]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
+      router.push(paths.dashboard.user.list);
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -128,13 +123,17 @@ export default function UserNewEditForm({ currentUser }: Props) {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         <Grid xs={12} md={4}>
           <Card sx={{ pt: 10, pb: 5, px: 3 }}>
             {currentUser && (
               <Label
-                color={values.status === 'active' ? 'success' : 'error'}
+                color={
+                  (values.status === 'active' && 'success') ||
+                  (values.status === 'banned' && 'error') ||
+                  'warning'
+                }
                 sx={{ position: 'absolute', top: 24, right: 24 }}
               >
                 {values.status}

@@ -20,12 +20,13 @@ import { RouterLink } from 'src/routes/components';
 import { fShortenNumber } from 'src/utils/format-number';
 // _mock
 import { POST_PUBLISH_OPTIONS } from 'src/_mock';
+// api
+import { useGetPost } from 'src/api/blog';
 // components
 import Iconify from 'src/components/iconify';
 import Markdown from 'src/components/markdown';
 import EmptyContent from 'src/components/empty-content';
 //
-import { useBlog } from '../hooks';
 import PostDetailsHero from '../post-details-hero';
 import PostCommentList from '../post-comment-list';
 import PostCommentForm from '../post-comment-form';
@@ -39,19 +40,13 @@ export default function PostDetailsView() {
 
   const { title } = params;
 
-  const { post, postStatus, getPost } = useBlog();
-
   const [publish, setPublish] = useState('');
+
+  const { post, postLoading, postError } = useGetPost(`${title}`);
 
   const handleChangePublish = useCallback((newValue: string) => {
     setPublish(newValue);
   }, []);
-
-  useEffect(() => {
-    if (title) {
-      getPost(title);
-    }
-  }, [getPost, title]);
 
   useEffect(() => {
     if (post) {
@@ -64,7 +59,7 @@ export default function PostDetailsView() {
   const renderError = (
     <EmptyContent
       filled
-      title={`${postStatus.error?.message}`}
+      title={`${postError?.message}`}
       action={
         <Button
           component={RouterLink}
@@ -170,7 +165,11 @@ export default function PostDetailsView() {
 
   return (
     <Container maxWidth={false}>
-      {postStatus.loading ? renderSkeleton : <>{postStatus.error ? renderError : renderPost}</>}
+      {postLoading && renderSkeleton}
+
+      {postError && renderError}
+
+      {post && renderPost}
     </Container>
   );
 }

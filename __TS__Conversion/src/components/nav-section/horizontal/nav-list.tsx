@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 // @mui
 import Stack from '@mui/material/Stack';
+import Popover from '@mui/material/Popover';
 import { appBarClasses } from '@mui/material/AppBar';
-import Popover, { popoverClasses } from '@mui/material/Popover';
 // routes
 import { usePathname } from 'src/routes/hook';
 import { useActiveLink } from 'src/routes/hook/use-active-link';
@@ -95,18 +95,20 @@ export default function NavList({ data, depth, hasChild, config }: NavListRootPr
               ? { vertical: 'top', horizontal: 'left' }
               : { vertical: 'center', horizontal: 'left' }
           }
-          PaperProps={{
-            onMouseEnter: handleOpen,
-            onMouseLeave: handleClose,
+          slotProps={{
+            paper: {
+              onMouseEnter: handleOpen,
+              onMouseLeave: handleClose,
+              sx: {
+                width: 160,
+                ...(open && {
+                  pointerEvents: 'auto',
+                }),
+              },
+            },
           }}
           sx={{
             pointerEvents: 'none',
-            [`& .${popoverClasses.paper}`]: {
-              width: 160,
-              ...(open && {
-                pointerEvents: 'auto',
-              }),
-            },
           }}
         >
           <NavSubList data={data.children} depth={depth} config={config} />

@@ -11,10 +11,10 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { fShortenNumber } from 'src/utils/format-number';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
-// types
-import { IProductReview } from 'src/types/product';
 // components
 import Iconify from 'src/components/iconify';
+// types
+import { IProductReview } from 'src/types/product';
 //
 import ProductReviewList from './product-review-list';
 import ProductReviewNewForm from './product-review-new-form';

@@ -14,13 +14,10 @@ import DialogContent from '@mui/material/DialogContent';
 import FormHelperText from '@mui/material/FormHelperText';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 // types
-import { IProductReviewNewForm } from 'src/types/product';
 // components
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
-
-type FormValuesProps = IProductReviewNewForm;
 
 interface Props extends DialogProps {
   onClose: VoidFunction;
@@ -28,20 +25,20 @@ interface Props extends DialogProps {
 
 export default function ProductReviewNewForm({ onClose, ...other }: Props) {
   const ReviewSchema = Yup.object().shape({
-    rating: Yup.mixed().required('Rating is required'),
+    rating: Yup.number().min(1, 'Rating must be greater than or equal to 1'),
     review: Yup.string().required('Review is required'),
     name: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
   });
 
   const defaultValues = {
-    rating: null,
+    rating: 0,
     review: '',
     name: '',
     email: '',
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(ReviewSchema),
     defaultValues,
   });
@@ -53,19 +50,16 @@ export default function ProductReviewNewForm({ onClose, ...other }: Props) {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        onClose();
-        console.info('DATA', data);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [onClose, reset]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      onClose();
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const onCancel = useCallback(() => {
     onClose();
@@ -74,7 +68,7 @@ export default function ProductReviewNewForm({ onClose, ...other }: Props) {
 
   return (
     <Dialog onClose={onClose} {...other}>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
         <DialogTitle> Add Review </DialogTitle>
 
         <DialogContent>

@@ -74,7 +74,7 @@ export default function ChatRoom({ participants, conversation }: Props) {
     </>
   );
 
-  const renderBtn = (
+  const renderToggleBtn = (
     <IconButton
       onClick={handleToggleNav}
       sx={{
@@ -112,7 +112,7 @@ export default function ChatRoom({ participants, conversation }: Props) {
 
   return (
     <Box sx={{ position: 'relative' }}>
-      {renderBtn}
+      {renderToggleBtn}
 
       {lgUp ? (
         <Stack

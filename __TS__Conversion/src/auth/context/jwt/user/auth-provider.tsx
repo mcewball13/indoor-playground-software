@@ -2,10 +2,10 @@
 
 import { useEffect, useReducer, useCallback, useMemo } from 'react';
 // utils
-import axios, { API_ENDPOINTS } from 'src/utils/axios';
+import axios, { endpoints } from 'src/utils/axios';
 //
 import { AuthContext } from './auth-context';
-import { isValidToken, setSession } from '../utils';
+import { isValidToken, setSession } from './utils';
 import { ActionMapType, AuthStateType, AuthUserType } from './types';
 
 // ----------------------------------------------------------------------
@@ -16,7 +16,7 @@ import { ActionMapType, AuthStateType, AuthUserType } from './types';
 
 // ----------------------------------------------------------------------
 
-enum UserTypes {
+enum Types {
   INITIAL = 'INITIAL',
   LOGIN = 'LOGIN',
   REGISTER = 'REGISTER',
@@ -24,16 +24,16 @@ enum UserTypes {
 }
 
 type Payload = {
-  [UserTypes.INITIAL]: {
+  [Types.INITIAL]: {
     user: AuthUserType;
   };
-  [UserTypes.LOGIN]: {
+  [Types.LOGIN]: {
     user: AuthUserType;
   };
-  [UserTypes.REGISTER]: {
+  [Types.REGISTER]: {
     user: AuthUserType;
   };
-  [UserTypes.LOGOUT]: undefined;
+  [Types.LOGOUT]: undefined;
 };
 
 type ActionsType = ActionMapType<Payload>[keyof ActionMapType<Payload>];
@@ -46,25 +46,25 @@ const initialState: AuthStateType = {
 };
 
 const reducer = (state: AuthStateType, action: ActionsType) => {
-  if (action.type === UserTypes.INITIAL) {
+  if (action.type === Types.INITIAL) {
     return {
       loading: false,
       user: action.payload.user,
     };
   }
-  if (action.type === UserTypes.LOGIN) {
+  if (action.type === Types.LOGIN) {
     return {
       ...state,
       user: action.payload.user,
     };
   }
-  if (action.type === UserTypes.REGISTER) {
+  if (action.type === Types.REGISTER) {
     return {
       ...state,
       user: action.payload.user,
     };
   }
-  if (action.type === UserTypes.LOGOUT) {
+  if (action.type === Types.LOGOUT) {
     return {
       ...state,
       user: null,
@@ -91,19 +91,19 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const response = await axios.get(API_ENDPOINTS.auth.me);
+        const response = await axios.get(endpoints.auth.me);
 
         const { user } = response.data;
 
         dispatch({
-          type: UserTypes.INITIAL,
+          type: Types.INITIAL,
           payload: {
             user,
           },
         });
       } else {
         dispatch({
-          type: UserTypes.INITIAL,
+          type: Types.INITIAL,
           payload: {
             user: null,
           },
@@ -112,7 +112,7 @@ export function AuthProvider({ children }: Props) {
     } catch (error) {
       console.error(error);
       dispatch({
-        type: UserTypes.INITIAL,
+        type: Types.INITIAL,
         payload: {
           user: null,
         },
@@ -131,14 +131,14 @@ export function AuthProvider({ children }: Props) {
       password,
     };
 
-    const response = await axios.post(API_ENDPOINTS.auth.login, data);
+    const response = await axios.post(endpoints.auth.login, data);
 
     const { accessToken, user } = response.data;
 
     setSession(accessToken);
 
     dispatch({
-      type: UserTypes.LOGIN,
+      type: Types.LOGIN,
       payload: {
         user,
       },
@@ -155,14 +155,14 @@ export function AuthProvider({ children }: Props) {
         lastName,
       };
 
-      const response = await axios.post(API_ENDPOINTS.auth.register, data);
+      const response = await axios.post(endpoints.auth.register, data);
 
       const { accessToken, user } = response.data;
 
       sessionStorage.setItem(STORAGE_KEY, accessToken);
 
       dispatch({
-        type: UserTypes.REGISTER,
+        type: Types.REGISTER,
         payload: {
           user,
         },
@@ -175,7 +175,7 @@ export function AuthProvider({ children }: Props) {
   const logout = useCallback(async () => {
     setSession(null);
     dispatch({
-      type: UserTypes.LOGOUT,
+      type: Types.LOGOUT,
     });
   }, []);
 

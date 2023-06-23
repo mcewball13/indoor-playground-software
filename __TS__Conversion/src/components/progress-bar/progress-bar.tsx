@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-globals */
-
 'use client';
 
 import { useEffect } from 'react';
@@ -14,18 +12,20 @@ export default function ProgressBar() {
 
     const handleAnchorClick = (event: MouseEvent) => {
       const targetUrl = (event.currentTarget as HTMLAnchorElement).href;
-      const currentUrl = location.href;
+      const currentUrl = window.location.href;
       if (targetUrl !== currentUrl) {
         NProgress.start();
       }
     };
 
     const handleMutation: MutationCallback = () => {
-      const anchorElements = document.querySelectorAll('a');
+      const anchorElements: NodeListOf<HTMLAnchorElement> = document.querySelectorAll('a[href]');
+
       anchorElements.forEach((anchor) => anchor.addEventListener('click', handleAnchorClick));
     };
 
     const mutationObserver = new MutationObserver(handleMutation);
+
     mutationObserver.observe(document, { childList: true, subtree: true });
 
     window.history.pushState = new Proxy(window.history.pushState, {

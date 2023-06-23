@@ -1,7 +1,6 @@
 'use client';
 
 import * as Yup from 'yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -20,20 +19,18 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  email: string;
-};
-
 export default function ModernForgotPasswordView() {
-  const ResetPasswordSchema = Yup.object().shape({
+  const ForgotPasswordSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
   });
 
-  const methods = useForm<FormValuesProps>({
-    resolver: yupResolver(ResetPasswordSchema),
-    defaultValues: {
-      email: '',
-    },
+  const defaultValues = {
+    email: '',
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(ForgotPasswordSchema),
+    defaultValues,
   });
 
   const {
@@ -41,14 +38,14 @@ export default function ModernForgotPasswordView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(async (data: FormValuesProps) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  });
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
@@ -98,7 +95,7 @@ export default function ModernForgotPasswordView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       {renderForm}

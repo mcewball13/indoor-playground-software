@@ -172,10 +172,12 @@ export default function MenuView() {
               anchorEl={isOpenMaxHeight}
               onClose={handleMaxHeightClose}
               open={Boolean(isOpenMaxHeight)}
-              PaperProps={{
-                style: {
-                  maxHeight: 48 * 4.5,
-                  width: '20ch',
+              slotProps={{
+                paper: {
+                  sx: {
+                    width: '20ch',
+                    maxHeight: 48 * 4.5,
+                  },
                 },
               }}
             >

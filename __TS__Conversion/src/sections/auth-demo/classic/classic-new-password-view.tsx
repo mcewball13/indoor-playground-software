@@ -1,7 +1,6 @@
 'use client';
 
 import * as Yup from 'yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -23,13 +22,6 @@ import FormProvider, { RHFTextField, RHFCode } from 'src/components/hook-form';
 import { SentIcon } from 'src/assets/icons';
 
 // ----------------------------------------------------------------------
-
-type FormValuesProps = {
-  code: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 
 export default function ClassicNewPasswordView() {
   const password = useBoolean();
@@ -63,14 +55,14 @@ export default function ClassicNewPasswordView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(async (data: FormValuesProps) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  });
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
@@ -168,7 +160,7 @@ export default function ClassicNewPasswordView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       {renderForm}

@@ -22,7 +22,7 @@ type ItemProps = {
   description: string;
   avatarUrl: string;
   rating: number;
-  postedAt: Date | string | number;
+  postedAt: Date;
   tags: string[];
 };
 

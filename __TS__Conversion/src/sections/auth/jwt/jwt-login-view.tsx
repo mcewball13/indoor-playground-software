@@ -2,7 +2,7 @@
 
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -14,8 +14,8 @@ import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 // routes
 import { paths } from 'src/routes/paths';
-import { useSearchParams } from 'src/routes/hook';
 import { RouterLink } from 'src/routes/components';
+import { useSearchParams, useRouter } from 'src/routes/hook';
 // config
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 // hooks
@@ -28,13 +28,10 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  email: string;
-  password: string;
-};
-
 export default function JwtLoginView() {
   const { login } = useAuthContext();
+
+  const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -54,7 +51,7 @@ export default function JwtLoginView() {
     password: 'demo1234',
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,
   });
@@ -65,20 +62,17 @@ export default function JwtLoginView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await login?.(data.email, data.password);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await login?.(data.email, data.password);
 
-        window.location.href = returnTo || PATH_AFTER_LOGIN;
-      } catch (error) {
-        console.error(error);
-        reset();
-        setErrorMsg(typeof error === 'string' ? error : error.message);
-      }
-    },
-    [login, reset, returnTo]
-  );
+      router.push(returnTo || PATH_AFTER_LOGIN);
+    } catch (error) {
+      console.error(error);
+      reset();
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+    }
+  });
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
@@ -133,7 +127,7 @@ export default function JwtLoginView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       <Alert severity="info" sx={{ mb: 3 }}>

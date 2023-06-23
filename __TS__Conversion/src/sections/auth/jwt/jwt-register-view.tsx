@@ -2,7 +2,7 @@
 
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -16,8 +16,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useBoolean } from 'src/hooks/use-boolean';
 // routes
 import { paths } from 'src/routes/paths';
-import { useSearchParams } from 'src/routes/hook';
 import { RouterLink } from 'src/routes/components';
+import { useSearchParams, useRouter } from 'src/routes/hook';
 // config
 import { PATH_AFTER_LOGIN } from 'src/config-global';
 // auth
@@ -28,15 +28,10 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-};
-
 export default function JwtRegisterView() {
   const { register } = useAuthContext();
+
+  const router = useRouter();
 
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -60,7 +55,7 @@ export default function JwtRegisterView() {
     password: '',
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });
@@ -71,19 +66,17 @@ export default function JwtRegisterView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await register?.(data.email, data.password, data.firstName, data.lastName);
-        window.location.href = returnTo || PATH_AFTER_LOGIN;
-      } catch (error) {
-        console.error(error);
-        reset();
-        setErrorMsg(typeof error === 'string' ? error : error.message);
-      }
-    },
-    [register, reset, returnTo]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await register?.(data.email, data.password, data.firstName, data.lastName);
+
+      router.push(returnTo || PATH_AFTER_LOGIN);
+    } catch (error) {
+      console.error(error);
+      reset();
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+    }
+  });
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
@@ -117,7 +110,7 @@ export default function JwtRegisterView() {
   );
 
   const renderForm = (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={2.5}>
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 

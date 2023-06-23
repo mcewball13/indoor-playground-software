@@ -1,7 +1,6 @@
 'use client';
 
 import * as Yup from 'yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -22,11 +21,6 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  email: string;
-  password: string;
-};
-
 export default function ModernLoginView() {
   const password = useBoolean();
 
@@ -40,7 +34,7 @@ export default function ModernLoginView() {
     password: '',
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,
   });
@@ -50,14 +44,14 @@ export default function ModernLoginView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(async (data: FormValuesProps) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  });
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
@@ -119,7 +113,7 @@ export default function ModernLoginView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       {renderForm}

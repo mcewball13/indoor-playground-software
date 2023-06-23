@@ -10,15 +10,15 @@ import SearchNotFound from 'src/components/search-not-found';
 // ----------------------------------------------------------------------
 
 type Props = {
-  searchQuery: string;
-  searchResults: IChatParticipant[];
+  query: string;
+  results: IChatParticipant[];
   onClickResult: (contact: IChatParticipant) => void;
 };
 
-export default function ChatNavSearchResults({ searchQuery, searchResults, onClickResult }: Props) {
-  const totalResults = searchResults.length;
+export default function ChatNavSearchResults({ query, results, onClickResult }: Props) {
+  const totalResults = results.length;
 
-  const notFound = !totalResults && !!searchQuery;
+  const notFound = !totalResults && !!query;
 
   return (
     <>
@@ -34,7 +34,7 @@ export default function ChatNavSearchResults({ searchQuery, searchResults, onCli
 
       {notFound ? (
         <SearchNotFound
-          query={searchQuery}
+          query={query}
           sx={{
             p: 3,
             mx: 'auto',
@@ -44,7 +44,7 @@ export default function ChatNavSearchResults({ searchQuery, searchResults, onCli
         />
       ) : (
         <>
-          {searchResults.map((result) => (
+          {results.map((result) => (
             <ListItemButton
               key={result.id}
               onClick={() => onClickResult(result)}

@@ -1,7 +1,6 @@
 'use client';
 
 import * as Yup from 'yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -23,24 +22,22 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  email: string;
-};
-
 export default function AmplifyForgotPasswordView() {
   const { forgotPassword } = useAuthContext();
 
   const router = useRouter();
 
-  const ResetPasswordSchema = Yup.object().shape({
+  const ForgotPasswordSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
   });
 
-  const methods = useForm<FormValuesProps>({
-    resolver: yupResolver(ResetPasswordSchema),
-    defaultValues: {
-      email: '',
-    },
+  const defaultValues = {
+    email: '',
+  };
+
+  const methods = useForm({
+    resolver: yupResolver(ForgotPasswordSchema),
+    defaultValues,
   });
 
   const {
@@ -48,21 +45,18 @@ export default function AmplifyForgotPasswordView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await forgotPassword?.(data.email);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await forgotPassword?.(data.email);
 
-        const searchParams = new URLSearchParams({ email: data.email }).toString();
+      const searchParams = new URLSearchParams({ email: data.email }).toString();
 
-        const href = `${paths.auth.amplify.newPassword}?${searchParams}`;
-        router.push(href);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [forgotPassword, router]
-  );
+      const href = `${paths.auth.amplify.newPassword}?${searchParams}`;
+      router.push(href);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
@@ -110,7 +104,7 @@ export default function AmplifyForgotPasswordView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       {renderForm}

@@ -9,8 +9,6 @@ import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-// types
-import { ITourItem, ITourFilters, ITourFilterValue } from 'src/types/tour';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // utils
@@ -24,7 +22,8 @@ import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { isDateError } from 'src/components/custom-date-range-picker';
+// types
+import { ITourItem, ITourFilters, ITourFilterValue } from 'src/types/tour';
 //
 import TourList from '../tour-list';
 import TourSort from '../tour-sort';
@@ -34,7 +33,7 @@ import TourFiltersResult from '../tour-filters-result';
 
 // ----------------------------------------------------------------------
 
-const defaultFilters = {
+const defaultFilters: ITourFilters = {
   destination: [],
   tourGuides: [],
   services: [],
@@ -58,7 +57,10 @@ export default function TourListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const dateError = isDateError(filters.startDate, filters.endDate);
+  const dateError =
+    filters.startDate && filters.endDate
+      ? filters.startDate.getTime() > filters.endDate.getTime()
+      : false;
 
   const dataFiltered = applyFilter({
     inputData: _tours,
@@ -119,7 +121,8 @@ export default function TourListView() {
       direction={{ xs: 'column', sm: 'row' }}
     >
       <TourSearch
-        search={search}
+        query={search.query}
+        results={search.results}
         onSearch={handleSearch}
         hrefItem={(id: string) => paths.dashboard.tour.details(id)}
       />
