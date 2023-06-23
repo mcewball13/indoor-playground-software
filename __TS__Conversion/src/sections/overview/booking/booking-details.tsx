@@ -26,8 +26,8 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 type RowProps = {
   id: string;
-  checkIn: Date | string | number;
-  checkOut: Date | string | number;
+  checkIn: Date;
+  checkOut: Date;
   status: string;
   destination: {
     name: string;

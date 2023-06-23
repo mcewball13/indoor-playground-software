@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 // utils
 import { fDate } from 'src/utils/format-time';
 // hooks
@@ -28,6 +29,7 @@ const VIEW_OPTIONS = [
 type Props = {
   date: Date;
   view: ICalendarView;
+  loading: boolean;
   onToday: VoidFunction;
   onNextDate: VoidFunction;
   onPrevDate: VoidFunction;
@@ -38,6 +40,7 @@ type Props = {
 export default function CalendarToolbar({
   date,
   view,
+  loading,
   onToday,
   onNextDate,
   onPrevDate,
@@ -56,7 +59,7 @@ export default function CalendarToolbar({
         direction="row"
         alignItems="center"
         justifyContent="space-between"
-        sx={{ p: 2.5, pr: 2 }}
+        sx={{ p: 2.5, pr: 2, position: 'relative' }}
       >
         {smUp && (
           <Button
@@ -91,6 +94,13 @@ export default function CalendarToolbar({
             <Iconify icon="ic:round-filter-list" />
           </IconButton>
         </Stack>
+
+        {loading && (
+          <LinearProgress
+            color="inherit"
+            sx={{ height: 2, width: 1, position: 'absolute', bottom: 0, left: 0 }}
+          />
+        )}
       </Stack>
 
       <CustomPopover

@@ -7,15 +7,15 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 // redux
 import { useDispatch } from 'src/redux/store';
-import { getCart } from 'src/redux/slices/product';
+import { getCart } from 'src/redux/slices/checkout';
 // _mock
 import { PRODUCT_CHECKOUT_STEPS } from 'src/_mock/_product';
-// types
-import { ICheckoutCartItem } from 'src/types/product';
 // components
 import { useSettingsContext } from 'src/components/settings';
+// types
+import { ICheckoutCartItem } from 'src/types/product';
 //
-import { useProduct } from '../../hooks';
+import { useCheckout } from '../../hooks';
 import CheckoutCart from '../checkout-cart';
 import CheckoutSteps from '../checkout-steps';
 import CheckoutPayment from '../checkout-payment';
@@ -57,7 +57,7 @@ export default function CheckoutView() {
     onApplyShipping,
     onIncreaseQuantity,
     onDecreaseQuantity,
-  } = useProduct();
+  } = useCheckout();
 
   const { cart, billing, activeStep } = checkout;
 

@@ -18,15 +18,13 @@ import SearchNotFound from 'src/components/search-not-found';
 // ----------------------------------------------------------------------
 
 type Props = {
-  search: {
-    query: string;
-    results: ITourItem[];
-  };
+  query: string;
+  results: ITourItem[];
   onSearch: (inputValue: string) => void;
   hrefItem: (id: string) => string;
 };
 
-export default function TourSearch({ search, onSearch, hrefItem }: Props) {
+export default function TourSearch({ query, results, onSearch, hrefItem }: Props) {
   const router = useRouter();
 
   const handleClick = (id: string) => {
@@ -34,9 +32,9 @@ export default function TourSearch({ search, onSearch, hrefItem }: Props) {
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (search.query) {
+    if (query) {
       if (event.key === 'Enter') {
-        const selectProduct = search.results.filter((tour) => tour.name === search.query)[0];
+        const selectProduct = results.filter((tour) => tour.name === query)[0];
 
         handleClick(selectProduct.id);
       }
@@ -48,10 +46,10 @@ export default function TourSearch({ search, onSearch, hrefItem }: Props) {
       sx={{ width: { xs: 1, sm: 260 } }}
       autoHighlight
       popupIcon={null}
-      options={search.results}
+      options={results}
       onInputChange={(event, newValue) => onSearch(newValue)}
       getOptionLabel={(option) => option.name}
-      noOptionsText={<SearchNotFound query={search.query} sx={{ bgcolor: 'unset' }} />}
+      noOptionsText={<SearchNotFound query={query} sx={{ bgcolor: 'unset' }} />}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       slotProps={{
         popper: {

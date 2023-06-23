@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -43,14 +42,10 @@ const NOTIFICATIONS = [
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  selected: string[];
-};
-
 export default function AccountNotifications() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     defaultValues: {
       selected: ['activity_comments', 'application_product'],
     },
@@ -65,18 +60,15 @@ export default function AccountNotifications() {
 
   const values = watch();
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        enqueueSnackbar('Update success!');
-        console.info('DATA', data);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [enqueueSnackbar]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      enqueueSnackbar('Update success!');
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const getSelected = (selectedItems: string[], item: string) =>
     selectedItems.includes(item)
@@ -84,7 +76,7 @@ export default function AccountNotifications() {
       : [...selectedItems, item];
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack component={Card} spacing={3} sx={{ p: 3 }}>
         {NOTIFICATIONS.map((notification) => (
           <Grid key={notification.subheader} container spacing={3}>

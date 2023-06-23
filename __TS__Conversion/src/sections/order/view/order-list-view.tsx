@@ -16,8 +16,6 @@ import TableContainer from '@mui/material/TableContainer';
 // routes
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hook';
-// types
-import { IOrderItem, IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
 // _mock
 import { _orders, ORDER_STATUS_OPTIONS } from 'src/_mock';
 // utils
@@ -31,7 +29,6 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { isDateError } from 'src/components/custom-date-range-picker';
 import {
   useTable,
   getComparator,
@@ -42,6 +39,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+// types
+import { IOrderItem, IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
 //
 import OrderTableRow from '../order-table-row';
 import OrderTableToolbar from '../order-table-toolbar';
@@ -61,7 +60,7 @@ const TABLE_HEAD = [
   { id: '', width: 88 },
 ];
 
-const defaultFilters = {
+const defaultFilters: IOrderTableFilters = {
   name: '',
   status: 'all',
   startDate: null,
@@ -83,7 +82,10 @@ export default function OrderListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const dateError = isDateError(filters.startDate, filters.endDate);
+  const dateError =
+    filters.startDate && filters.endDate
+      ? filters.startDate.getTime() > filters.endDate.getTime()
+      : false;
 
   const dataFiltered = applyFilter({
     inputData: tableData,

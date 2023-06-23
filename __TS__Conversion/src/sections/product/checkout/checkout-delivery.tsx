@@ -6,10 +6,10 @@ import CardHeader from '@mui/material/CardHeader';
 import Card, { CardProps } from '@mui/material/Card';
 import ListItemText from '@mui/material/ListItemText';
 import Paper, { PaperProps } from '@mui/material/Paper';
-// types
-import { ICheckoutDeliveryOption } from 'src/types/product';
 // components
 import Iconify from 'src/components/iconify';
+// types
+import { ICheckoutDeliveryOption } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 

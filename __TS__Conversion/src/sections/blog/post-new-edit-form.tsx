@@ -41,10 +41,6 @@ type Props = {
   currentPost?: IPostItem;
 };
 
-interface FormValuesProps extends Omit<IPostItem, 'coverUrl'> {
-  coverUrl: CustomFile | string | null;
-}
-
 export default function PostNewEditForm({ currentPost }: Props) {
   const router = useRouter();
 
@@ -57,10 +53,13 @@ export default function PostNewEditForm({ currentPost }: Props) {
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     description: Yup.string().required('Description is required'),
+    content: Yup.string().required('Content is required'),
+    coverUrl: Yup.mixed<any>().nullable().required('Cover is required'),
     tags: Yup.array().min(2, 'Must have at least 2 tags'),
     metaKeywords: Yup.array().min(1, 'Meta keywords is required'),
-    coverUrl: Yup.mixed().required('Cover is required'),
-    content: Yup.string().required('Content is required'),
+    // not required
+    metaTitle: Yup.string(),
+    metaDescription: Yup.string(),
   });
 
   const defaultValues = useMemo(
@@ -70,15 +69,14 @@ export default function PostNewEditForm({ currentPost }: Props) {
       content: currentPost?.content || '',
       coverUrl: currentPost?.coverUrl || null,
       tags: currentPost?.tags || [],
+      metaKeywords: currentPost?.metaKeywords || [],
       metaTitle: currentPost?.metaTitle || '',
       metaDescription: currentPost?.metaDescription || '',
-      metaKeywords: currentPost?.metaKeywords || [],
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentPost]
   );
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(NewBlogSchema),
     defaultValues,
   });
@@ -99,21 +97,18 @@ export default function PostNewEditForm({ currentPost }: Props) {
     }
   }, [currentPost, defaultValues, reset]);
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        preview.onFalse();
-        enqueueSnackbar(currentPost ? 'Update success!' : 'Create success!');
-        router.push(paths.dashboard.post.root);
-        console.info('DATA', data);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [currentPost, enqueueSnackbar, preview, reset, router]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      preview.onFalse();
+      enqueueSnackbar(currentPost ? 'Update success!' : 'Create success!');
+      router.push(paths.dashboard.post.root);
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -294,7 +289,7 @@ export default function PostNewEditForm({ currentPost }: Props) {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         {renderDetails}
 
@@ -308,14 +303,16 @@ export default function PostNewEditForm({ currentPost }: Props) {
         content={values.content}
         description={values.description}
         coverUrl={
-          typeof values.coverUrl === 'string' ? values.coverUrl : values.coverUrl?.preview || ''
+          typeof values.coverUrl === 'string'
+            ? values.coverUrl
+            : `${(values.coverUrl as CustomFile)?.preview}`
         }
         //
         open={preview.value}
         isValid={isValid}
         isSubmitting={isSubmitting}
         onClose={preview.onFalse}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
       />
     </FormProvider>
   );

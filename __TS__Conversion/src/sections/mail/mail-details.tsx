@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import Tooltip from '@mui/material/Tooltip';
 import Collapse from '@mui/material/Collapse';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
@@ -82,15 +83,32 @@ export default function MailDetails({ mail, renderLabel }: Props) {
           checkedIcon={<Iconify icon="eva:star-fill" />}
           checked={mail.isStarred}
         />
+
         <Checkbox
           color="warning"
           icon={<Iconify icon="material-symbols:label-important-rounded" />}
           checkedIcon={<Iconify icon="material-symbols:label-important-rounded" />}
           checked={mail.isImportant}
         />
-        <IconButton>
-          <Iconify icon="solar:trash-bin-trash-bold" />
-        </IconButton>
+
+        <Tooltip title="Archive">
+          <IconButton>
+            <Iconify icon="solar:archive-down-minimlistic-bold" />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Mark Unread">
+          <IconButton>
+            <Iconify icon="fluent:mail-unread-20-filled" />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Trash">
+          <IconButton>
+            <Iconify icon="solar:trash-bin-trash-bold" />
+          </IconButton>
+        </Tooltip>
+
         <IconButton>
           <Iconify icon="eva:more-vertical-fill" />
         </IconButton>

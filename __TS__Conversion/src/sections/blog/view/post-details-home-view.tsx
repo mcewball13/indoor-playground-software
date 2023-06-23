@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 // @mui
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -18,13 +17,13 @@ import { useParams } from 'src/routes/hook';
 import { RouterLink } from 'src/routes/components';
 // utils
 import { fShortenNumber } from 'src/utils/format-number';
+// api
+import { useGetPost, useGetLatestPosts } from 'src/api/blog';
 // components
 import Iconify from 'src/components/iconify';
 import Markdown from 'src/components/markdown';
 import EmptyContent from 'src/components/empty-content';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-//
-import { useBlog } from '../hooks';
 import PostList from '../post-list';
 import PostCommentList from '../post-comment-list';
 import PostCommentForm from '../post-comment-form';
@@ -38,19 +37,9 @@ export default function PostDetailsHomeView() {
 
   const { title } = params;
 
-  const { post, latestPosts, getPost, getLatestPosts, postStatus } = useBlog();
+  const { post, postError, postLoading } = useGetPost(`${title}`);
 
-  useEffect(() => {
-    if (title) {
-      getLatestPosts(title);
-    }
-  }, [getLatestPosts, title]);
-
-  useEffect(() => {
-    if (title) {
-      getPost(title);
-    }
-  }, [getPost, title]);
+  const { latestPosts, latestPostsLoading } = useGetLatestPosts(`${title}`);
 
   const renderSkeleton = <PostDetailsSkeleton />;
 
@@ -58,7 +47,7 @@ export default function PostDetailsHomeView() {
     <Container sx={{ my: 10 }}>
       <EmptyContent
         filled
-        title={`${postStatus.error?.message}`}
+        title={`${postError?.message}`}
         action={
           <Button
             component={RouterLink}
@@ -180,7 +169,7 @@ export default function PostDetailsHomeView() {
 
       <PostList
         posts={latestPosts.slice(latestPosts.length - 4)}
-        loading={!latestPosts.length}
+        loading={latestPostsLoading}
         disabledIndex
       />
     </>
@@ -188,7 +177,11 @@ export default function PostDetailsHomeView() {
 
   return (
     <>
-      {postStatus.loading ? renderSkeleton : <>{postStatus.error ? renderError : renderPost}</>}
+      {postLoading && renderSkeleton}
+
+      {postError && renderError}
+
+      {post && renderPost}
 
       <Container sx={{ pb: 15 }}>{!!latestPosts.length && renderLatestPosts}</Container>
     </>

@@ -10,8 +10,6 @@ import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-// types
-import { IJobItem, IJobFilters, IJobFilterValue } from 'src/types/job';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // _mock
@@ -30,6 +28,8 @@ import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+// types
+import { IJobItem, IJobFilters, IJobFilterValue } from 'src/types/job';
 //
 import JobList from '../job-list';
 import JobSort from '../job-sort';
@@ -39,7 +39,7 @@ import JobFiltersResult from '../job-filters-result';
 
 // ----------------------------------------------------------------------
 
-const defaultFilters = {
+const defaultFilters: IJobFilters = {
   roles: [],
   locations: [],
   benefits: [],
@@ -117,7 +117,8 @@ export default function JobListView() {
       direction={{ xs: 'column', sm: 'row' }}
     >
       <JobSearch
-        search={search}
+        query={search.query}
+        results={search.results}
         onSearch={handleSearch}
         hrefItem={(id: string) => paths.dashboard.job.details(id)}
       />

@@ -26,12 +26,12 @@ const LABEL_ICONS = {
 // ----------------------------------------------------------------------
 
 type Props = {
-  active: boolean;
+  selected: boolean;
   label: IMailLabel;
   onClickNavItem: VoidFunction;
 };
 
-export default function MailNavItem({ active, label, onClickNavItem, ...other }: Props) {
+export default function MailNavItem({ selected, label, onClickNavItem, ...other }: Props) {
   const { unreadCount, color, name } = label;
 
   const labelIcon = (LABEL_ICONS as Record<string, IconifyProps>)[label.id];
@@ -44,7 +44,7 @@ export default function MailNavItem({ active, label, onClickNavItem, ...other }:
         px: 0,
         height: 40,
         color: 'text.secondary',
-        ...(active && {
+        ...(selected && {
           color: 'text.primary',
         }),
         '&:hover': {
@@ -66,7 +66,7 @@ export default function MailNavItem({ active, label, onClickNavItem, ...other }:
         primary={name}
         primaryTypographyProps={{
           textTransform: 'capitalize',
-          typography: active ? 'subtitle2' : 'body2',
+          typography: selected ? 'subtitle2' : 'body2',
         }}
       />
 

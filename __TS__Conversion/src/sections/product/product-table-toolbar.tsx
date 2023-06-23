@@ -10,11 +10,11 @@ import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-// types
-import { IProductTableFilters, IProductTableFilterValue } from 'src/types/product';
 // components
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+// types
+import { IProductTableFilters, IProductTableFilterValue } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 

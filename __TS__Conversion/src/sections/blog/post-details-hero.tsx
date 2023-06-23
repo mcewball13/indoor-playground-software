@@ -14,12 +14,12 @@ import { _socials } from 'src/_mock';
 import { useResponsive } from 'src/hooks/use-responsive';
 // utils
 import { fDate } from 'src/utils/format-time';
-// types
-import { IPostHero } from 'src/types/blog';
 // theme
 import { bgGradient } from 'src/theme/css';
 // components
 import Iconify from 'src/components/iconify';
+// types
+import { IPostHero } from 'src/types/blog';
 
 // ----------------------------------------------------------------------
 

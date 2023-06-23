@@ -54,8 +54,9 @@ export default function DashboardLayout({ children }: Props) {
 
         <Box
           sx={{
-            display: { lg: 'flex' },
-            minHeight: { lg: 1 },
+            minHeight: 1,
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
           }}
         >
           {lgUp ? renderNavMini : renderNavVertical}
@@ -72,8 +73,9 @@ export default function DashboardLayout({ children }: Props) {
 
       <Box
         sx={{
-          display: { lg: 'flex' },
-          minHeight: { lg: 1 },
+          minHeight: 1,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
         }}
       >
         {renderNavVertical}

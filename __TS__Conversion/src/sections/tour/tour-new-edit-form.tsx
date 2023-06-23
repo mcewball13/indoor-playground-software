@@ -18,17 +18,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { useResponsive } from 'src/hooks/use-responsive';
 // routes
 import { paths } from 'src/routes/paths';
-// types
-import { ITourGuide, ITourItem } from 'src/types/tour';
+import { useRouter } from 'src/routes/hook';
 // assets
 import { countries } from 'src/assets/data';
 // _mock
 import { _tourGuides, TOUR_SERVICE_OPTIONS, _tags } from 'src/_mock';
 // components
 import Iconify from 'src/components/iconify';
-import { CustomFile } from 'src/components/upload';
 import { useSnackbar } from 'src/components/snackbar';
-import { useRouter } from 'src/routes/hook';
 import FormProvider, {
   RHFEditor,
   RHFUpload,
@@ -36,16 +33,14 @@ import FormProvider, {
   RHFAutocomplete,
   RHFMultiCheckbox,
 } from 'src/components/hook-form';
+// types
+import { ITourGuide, ITourItem } from 'src/types/tour';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   currentTour?: ITourItem;
 };
-
-interface FormValuesProps extends Omit<ITourItem, 'images'> {
-  images: (CustomFile | string)[];
-}
 
 export default function TourNewEditForm({ currentTour }: Props) {
   const router = useRouter();
@@ -65,8 +60,14 @@ export default function TourNewEditForm({ currentTour }: Props) {
     services: Yup.array().min(2, 'Must have at least 2 services'),
     destination: Yup.string().required('Destination is required'),
     available: Yup.object().shape({
-      startDate: Yup.date().required('Start date date is required').typeError(''),
-      endDate: Yup.date().required('End date date is required').typeError(''),
+      startDate: Yup.mixed<any>().nullable().required('Start date is required'),
+      endDate: Yup.mixed<any>()
+        .required('End date is required')
+        .test(
+          'date-min',
+          'End date must be later than start date',
+          (value, { parent }) => value.getTime() > parent.startDate.getTime()
+        ),
     }),
   });
 
@@ -86,11 +87,10 @@ export default function TourNewEditForm({ currentTour }: Props) {
         endDate: currentTour?.available.endDate || null,
       },
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentTour]
   );
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(NewTourSchema),
     defaultValues,
   });
@@ -112,20 +112,17 @@ export default function TourNewEditForm({ currentTour }: Props) {
     }
   }, [currentTour, defaultValues, reset]);
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
-        router.push(paths.dashboard.tour.root);
-        console.info('DATA', data);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [currentTour, enqueueSnackbar, reset, router]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
+      router.push(paths.dashboard.tour.root);
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -405,7 +402,7 @@ export default function TourNewEditForm({ currentTour }: Props) {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         {renderDetails}
 

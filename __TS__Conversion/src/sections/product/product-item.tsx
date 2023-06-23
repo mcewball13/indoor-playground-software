@@ -11,19 +11,19 @@ import { RouterLink } from 'src/routes/components';
 import { fCurrency } from 'src/utils/format-number';
 // redux
 import { useDispatch } from 'src/redux/store';
-import { addToCart } from 'src/redux/slices/product';
-// types
-import { IProduct } from 'src/types/product';
+import { addToCart } from 'src/redux/slices/checkout';
 // components
 import Label from 'src/components/label';
 import Image from 'src/components/image';
 import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
+// types
+import { IProductItem } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProduct;
+  product: IProductItem;
 };
 
 export default function ProductItem({ product }: Props) {

@@ -7,12 +7,12 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 // routes
 import { paths } from 'src/routes/paths';
-// types
-import { IProductCheckoutState } from 'src/types/product';
 // components
 import Iconify from 'src/components/iconify';
 import { RouterLink } from 'src/routes/components';
 import EmptyContent from 'src/components/empty-content';
+// types
+import { ICheckout } from 'src/types/product';
 //
 import CheckoutSummary from './checkout-summary';
 import CheckoutCartProductList from './checkout-cart-product-list';
@@ -20,7 +20,7 @@ import CheckoutCartProductList from './checkout-cart-product-list';
 // ----------------------------------------------------------------------
 
 type Props = {
-  checkout: IProductCheckoutState;
+  checkout: ICheckout;
   onNextStep: VoidFunction;
   onApplyDiscount: (value: number) => void;
   onDeleteCart: (productId: string) => void;

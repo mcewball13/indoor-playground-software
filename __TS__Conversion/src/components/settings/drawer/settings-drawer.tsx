@@ -85,7 +85,7 @@ export default function SettingsDrawer() {
         value={settings.themeContrast}
         onChange={(newValue: string) => settings.onUpdate('themeContrast', newValue)}
         options={['default', 'bold']}
-        icons={['contrast_bold', 'contrast']}
+        icons={['contrast', 'contrast_bold']}
       />
     </div>
   );
@@ -100,7 +100,7 @@ export default function SettingsDrawer() {
         value={settings.themeDirection}
         onChange={(newValue: string) => settings.onUpdate('themeDirection', newValue)}
         options={['ltr', 'rtl']}
-        icons={['align_right', 'align_left']}
+        icons={['align_left', 'align_right']}
       />
     </div>
   );

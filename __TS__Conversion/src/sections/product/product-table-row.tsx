@@ -13,8 +13,6 @@ import ListItemText from '@mui/material/ListItemText';
 import LinearProgress from '@mui/material/LinearProgress';
 // utils
 import { fCurrency } from 'src/utils/format-number';
-// types
-import { IProduct } from 'src/types/product';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // components
@@ -22,11 +20,13 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+// types
+import { IProductItem } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IProduct;
+  row: IProductItem;
   selected: boolean;
   onEditRow: VoidFunction;
   onViewRow: VoidFunction;

@@ -15,24 +15,20 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hook';
 // utils
 import { fShortenNumber, fCurrency } from 'src/utils/format-number';
-// types
-import { IProduct, ICheckoutCartItem } from 'src/types/product';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
+// types
+import { IProductItem, ICheckoutCartItem } from 'src/types/product';
 //
-import { IncrementerButton } from './_common';
+import IncrementerButton from './common/incrementer-button';
 
 // ----------------------------------------------------------------------
 
-interface FormValuesProps extends Omit<ICheckoutCartItem, 'colors'> {
-  colors: string;
-}
-
 type Props = {
-  product: IProduct;
+  product: IProductItem;
   cart: ICheckoutCartItem[];
   disabledActions?: boolean;
   onGotoStep: (step: number) => void;
@@ -82,7 +78,7 @@ export default function ProductDetailsSummary({
     quantity: available < 1 ? 0 : 1,
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     defaultValues,
   });
 
@@ -97,24 +93,21 @@ export default function ProductDetailsSummary({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        if (!existProduct) {
-          onAddCart({
-            ...data,
-            colors: [values.colors],
-            subTotal: data.price * data.quantity,
-          });
-        }
-        onGotoStep(0);
-        router.push(paths.product.checkout);
-      } catch (error) {
-        console.error(error);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      if (!existProduct) {
+        onAddCart({
+          ...data,
+          colors: [values.colors],
+          subTotal: data.price * data.quantity,
+        });
       }
-    },
-    [existProduct, onAddCart, onGotoStep, router, values.colors]
-  );
+      onGotoStep(0);
+      router.push(paths.product.checkout);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const handleAddCart = useCallback(() => {
     try {
@@ -313,7 +306,7 @@ export default function ProductDetailsSummary({
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack spacing={3} sx={{ pt: 3 }} {...other}>
         <Stack spacing={2} alignItems="flex-start">
           {renderLabels}

@@ -5,10 +5,10 @@ import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Stack, { StackProps } from '@mui/material/Stack';
-// types
-import { IProductFilters, IProductFilterValue } from 'src/types/product';
 // components
 import Iconify from 'src/components/iconify';
+// types
+import { IProductFilters, IProductFilterValue } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
