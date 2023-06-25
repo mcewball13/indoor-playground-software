@@ -81,6 +81,8 @@ type Props = {
   children: React.ReactNode;
 };
 
+// TODO: Add customer auth provider back in and test why it's not working
+
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en" className={primaryFont.className}>
@@ -105,7 +107,7 @@ export default function RootLayout({ children }: Props) {
                         <SettingsDrawer />
                         <ProgressBar />
                         <AuthConsumer>
-                          <CustomerAuthConsumer>{children}</CustomerAuthConsumer>
+                          {children}
                         </AuthConsumer>
                       </SnackbarProvider>
                     </MotionLazy>

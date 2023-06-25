@@ -1,10 +1,14 @@
-import { GraphQLError } from 'graphql'
+import { GraphQLError } from 'graphql';
 const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 const { randomUUID } = require('crypto');
 const cloudinary = require('cloudinary').v2;
 
-const { CustomerGuardian, CustomerMinor, CustomerGuardianHasCustomerMinor } = require('../../server/models');
+const {
+  CustomerGuardian,
+  CustomerMinor,
+  CustomerGuardianHasCustomerMinor,
+} = require('../../server/models');
 const generateHtmlEmail = require('../../src/utils/emailHtml');
 const generatePlainEmail = require('../../src/utils/emailPlain');
 const { signToken } = require('../../src/utils/auth');
@@ -36,13 +40,11 @@ export default {
         return true;
       }
     } catch (error) {
-      throw new GraphQLError(
-        "Something went wrong, please try again.", {
-            extensions: {
-                code: "INTERNAL_SERVER_ERROR",
-            },
-        }
-    );
+      throw new GraphQLError('Something went wrong, please try again.', {
+        extensions: {
+          code: 'INTERNAL_SERVER_ERROR',
+        },
+      });
     }
   },
 };

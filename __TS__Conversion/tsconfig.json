@@ -2,11 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "noEmit": true,
     "allowJs": true,
@@ -29,15 +25,16 @@
       {
         "name": "next"
       }
-    ],
+    ]
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "server/models/CustomerGuardianHasCustomerMinor.js", "server/models/index.js", "server/config/connection.js"  ],
-  "exclude": [
-    "node_modules"
-  ]
+    ".next/types/**/*.ts",
+    "server/models/CustomerGuardianHasCustomerMinor.js",
+    "server/models/index.js",
+    "server/config/connection.js"
+  ],
+  "exclude": ["node_modules"]
 }

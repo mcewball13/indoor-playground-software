@@ -3,7 +3,12 @@ import { GraphQLError } from 'graphql';
 import employeeQueries from './employeeResolvers/employeeResolverQueries';
 import customerAuthMutations from './customerResolvers/auth/customerAuthMutationResolvers';
 import customerQueryResolvers from './customerResolvers/customerQueryResolvers';
-import { CustomerGuardian, CustomerMinor, CustomerGuardianHasCustomerMinor, Employees } from '../server/models';
+import {
+  CustomerGuardian,
+  CustomerMinor,
+  CustomerGuardianHasCustomerMinor,
+  Employees,
+} from '../server/models';
 import { signToken } from '../../src/utils/auth';
 
 export const resolvers = {
@@ -27,7 +32,7 @@ export const resolvers = {
       }
     },
 
-    singleCustomer: async (parent: unknown, { id }:  Record<string, any>, context: any) => {
+    singleCustomer: async (parent: unknown, { id }: Record<string, any>, context: any) => {
       try {
         const customer = await CustomerGuardian.findByPk(id);
         return customer;
