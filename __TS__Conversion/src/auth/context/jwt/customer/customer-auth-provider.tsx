@@ -65,13 +65,13 @@ const reducer = (state: AuthStateTypeCustomer, action: ActionsType) => {
 
 // ----------------------------------------------------------------------
 
-const CUSTOMER_STORAGE_KEY = 'customerAcceeToken';
+const CUSTOMER_STORAGE_KEY = 'customerAccessToken';
 
 type Props = {
   children: React.ReactNode;
 };
 
-export default function CustomerAuthProvider({ children }: Props) {
+export function CustomerAuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const initialize = useCallback(async () => {
@@ -81,7 +81,7 @@ export default function CustomerAuthProvider({ children }: Props) {
       if (customerAccessToken && isValidToken(customerAccessToken)) {
         setSession(customerAccessToken);
 
-        const response = await axios.get(API_ENDPOINTS.auth.me);
+        const response = await axios.get(endpoints.auth.me);
 
         dispatch({
           type: CustomerTypes.INITIAL,
@@ -103,7 +103,7 @@ export default function CustomerAuthProvider({ children }: Props) {
   const login = useCallback(async (email: string, password: string) => {
     try {
       // TODO Add API call
-      const response = await axios.post(API_ENDPOINTS.auth.login, {
+      const response = await axios.post(endpoints.auth.login, {
         email,
         password,
       });
@@ -125,7 +125,7 @@ export default function CustomerAuthProvider({ children }: Props) {
   const register = useCallback(
     async (email: string, password: string, firstName: string, lastName: string) => {
       try {
-        const response = await axios.post(API_ENDPOINTS.auth.register, {
+        const response = await axios.post(endpoints.auth.register, {
           email,
           password,
           firstName,

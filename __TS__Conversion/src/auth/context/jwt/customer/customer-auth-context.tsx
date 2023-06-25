@@ -2,7 +2,7 @@
 
 import { createContext } from 'react';
 
-import { CustomerJWTContextType } './types'
+import { CustomerJWTContextType } from './types'
 
 // ----------------------------------------------------------------------
 

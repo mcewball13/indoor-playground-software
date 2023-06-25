@@ -2,15 +2,15 @@
 
 import { useContext } from 'react';
 //
-import { AuthContext } from '../context/jwt/user/auth-context';
+import { CustomerAuthContext } from '../context/jwt/customer/customer-auth-context';
 // import { AuthContext } from '../context/auth0/auth-context';
 // import { AuthContext } from '../context/amplify/auth-context';
 // import { AuthContext } from '../context/firebase/auth-context';
 
 // ----------------------------------------------------------------------
 
-export const useAuthContext = () => {
-  const context = useContext(AuthContext);
+export const useCustomerAuthContext = () => {
+  const context = useContext(CustomerAuthContext);
 
   if (!context) throw new Error('useAuthContext context must be use inside AuthProvider');
 
