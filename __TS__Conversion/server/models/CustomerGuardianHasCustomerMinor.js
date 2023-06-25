@@ -1,29 +1,26 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class SignedWaivers extends Model {}
+class CustomerGuardianHasCustomerMinor extends Model {}
 
-SignedWaivers.init(
+CustomerGuardianHasCustomerMinor.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    waiverURL: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [1],
-      },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
   },
   {
     sequelize,
     freezeTableName: true,
     underscored: true,
-    modelName: 'signed_waivers',
+    modelName: 'customer_guardian_has_customer_minor',
   }
 );
 
-module.exports = SignedWaivers;
+module.exports = CustomerGuardianHasCustomerMinor;

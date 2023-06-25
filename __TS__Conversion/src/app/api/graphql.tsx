@@ -34,8 +34,8 @@ const apolloServer = new ApolloServer({
 
 startServerAndCreateNextHandler(apolloServer);
 
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};

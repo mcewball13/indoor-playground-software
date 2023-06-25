@@ -36,7 +36,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "server/models/CustomerGuardianHasCustomerMinor.js", "server/models/index.js", "server/config/connection.js"  ],
   "exclude": [
     "node_modules"
   ]

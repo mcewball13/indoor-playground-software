@@ -1,20 +1,19 @@
+const Company = require("./Company");
+const Locations = require("./Location");
+const CustomerGuardian = require("./CustomerGuardian");
+const CustomerMinor = require("./CustomerMinor");
+const CustomerGuardianHasCustomerMinor = require("./CustomerGuardianHasCustomerMinor");
+const Employees = require("./Employees");
+const EmployeeRoles = require("./EmployeeRoles");
+const Memberships = require("./Memberships");
+const SignedWaivers = require("./SignedWaivers");
+const SessionProducts = require("./SessionProducts");
+const SessionTypes = require("./SessionTypes");
+const SessionSchedules = require("./SessionSchedules");
+const ProductCategories = require("./ProductCategories");
+const ProductImages = require("./ProductImages");
+const ProductTag = require("./ProductTag");
 
-// convert the above to import statement
-import Company from './Company';
-import Locations from './Location';
-import CustomerGuardian from './CustomerGuardian';
-import CustomerMinor from './CustomerMinor';
-import CustomerGuardianHasCustomerMinor from './CustomerGuardianHasCustomerMinor';
-import Employees from './Employees';
-import EmployeeRoles from './EmployeeRoles';
-import Memberships from './Memberships';
-import SignedWaivers from './SignedWaivers';
-import SessionProducts from './SessionProducts';
-import SessionTypes from './SessionTypes';
-import SessionSchedules from './SessionSchedules';
-import ProductCategories from './ProductCategories';
-import ProductImages from './ProductImages';
-import ProductTag from './ProductTag';
 
 // ===========================================================
 // Create associations with the main company
@@ -144,7 +143,7 @@ SessionProducts.belongsToMany(ProductTag, {
 // exports
 // ===========================================================
 
-export {
+module.exports = {
     Company,
     CustomerGuardian,
     CustomerGuardianHasCustomerMinor,
