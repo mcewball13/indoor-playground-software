@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const sequelize = require('../config/connection').default;
 const moment = require('moment');
 
 const currentDate = moment().format('MM/DD/YYYY');

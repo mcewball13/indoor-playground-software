@@ -39,11 +39,10 @@ Company.hasMany(CustomerMinor, {
 
 Locations.hasMany(EmployeeRoles, {
     foreignKey: "location_id",
-    unique: false,
+    
 });
 Locations.hasMany(SessionProducts, {
-    foreignKey: "locations_id",
-    unique: false, // This is to allow multiple products to be assigned to a location
+    foreignKey: "locations_id", // This is to allow multiple products to be assigned to a location
     onDelete: "set null",
 });
 
@@ -60,11 +59,9 @@ Employees.belongsTo(EmployeeRoles, {
 });
 Memberships.hasMany(CustomerGuardian, {
     foreignKey: "membership_id",
-    unique: false,
 });
 CustomerGuardian.belongsTo(Memberships, {
     foreignKey: "membership_id",
-    unique: false,
 });
 
 // ===========================================================
@@ -73,19 +70,15 @@ CustomerGuardian.belongsTo(Memberships, {
 
 SignedWaivers.belongsTo(CustomerGuardian, {
     foreignKey: "guardian_id",
-    unique: false,
 });
 CustomerGuardian.hasMany(SignedWaivers, {
     foreignKey: "guardian_id",
-    unique: false,
 });
 CustomerMinor.hasMany(SignedWaivers, {
     foreignKey: "minor_id",
-    unique: false,
 });
 SignedWaivers.belongsTo(CustomerMinor, {
     foreignKey: "minor_id",
-    unique: false,
 });
 
 // ===========================================================
@@ -103,8 +96,7 @@ CustomerGuardian.belongsToMany(CustomerGuardian, {
 
 CustomerGuardian.belongsToMany(CustomerMinor, {
     through: {
-        model: "customer_guardian_has_customer_minor",
-        attributes: [],
+        model: CustomerGuardianHasCustomerMinor,
         unique: false,
     },
     as: "minors",
@@ -112,9 +104,8 @@ CustomerGuardian.belongsToMany(CustomerMinor, {
 });
 CustomerMinor.belongsToMany(CustomerGuardian, {
     through: {
-        model: "customer_guardian_has_customer_minor",
+        model: CustomerGuardianHasCustomerMinor,
         unique: false,
-        attributes: [],
     },
     as: "guardians",
     foreignKey: "minor_id",
@@ -125,21 +116,17 @@ CustomerMinor.belongsToMany(CustomerGuardian, {
 // ===========================================================
 SessionSchedules.hasMany(SessionProducts, {
     foreignKey: "session_schedule_id",
-    unique: false,
     onDelete: "set null",
 });
 SessionProducts.belongsTo(SessionSchedules, {
     foreignKey: "session_schedule_id",
-    unique: false,
 });
 SessionProducts.hasMany(ProductImages, {
     foreignKey: "session_product_id",
-    unique: false,
     onDelete: "set null",
 });
 ProductCategories.hasMany(SessionProducts, {
     foreignKey: "category_id",
-    unique: false,
     onDelete: "set null",
 });
 ProductTag.belongsToMany(SessionProducts, {

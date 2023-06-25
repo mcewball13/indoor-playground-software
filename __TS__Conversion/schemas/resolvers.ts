@@ -17,10 +17,6 @@ export const resolvers = {
           include: [
             {
               model: CustomerMinor,
-              through: {
-                model: CustomerGuardianHasCustomerMinor,
-                attributes: [],
-              },
               as: 'minors',
             },
           ],

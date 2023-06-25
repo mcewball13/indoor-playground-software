@@ -1,7 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
 import sequelize from '../config/connection';
 
-class CustomerGuardianHasCustomerMinor extends Model {}
+class CustomerGuardianHasCustomerMinor extends Model<InferAttributes<CustomerGuardianHasCustomerMinor>, InferCreationAttributes<CustomerGuardianHasCustomerMinor>> {
+  declare id: number;
+  declare createdAt: Date;
+}
 
 CustomerGuardianHasCustomerMinor.init(
   {
