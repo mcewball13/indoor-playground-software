@@ -21,7 +21,7 @@ const sgMail = require('@sendgrid/mail');
 const SignedWaivers = require('../../server/models/SignedWaivers');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-module.exports = {
+export default {
   emailExists: async (parent, { email }, context) => {
     try {
       const customerGuardianData = await CustomerGuardian.findOne({
