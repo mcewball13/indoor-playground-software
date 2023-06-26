@@ -1,8 +1,10 @@
+console.log('typeDefs');
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 
 import { typeDefs, resolvers } from '../../../schemas';
 // import Cors from 'micro-cors';
+
 
 const apolloServer = new ApolloServer({
   typeDefs,
@@ -34,8 +36,8 @@ const apolloServer = new ApolloServer({
 
 startServerAndCreateNextHandler(apolloServer);
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };

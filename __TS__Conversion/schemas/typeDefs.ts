@@ -1,4 +1,4 @@
- const typeDefs = `#graphql
+const typeDefs = `#graphql
   type EmployeeAuth{
     token: ID!
     employee: Employee
@@ -118,4 +118,4 @@
   }
 `;
 
-
+export default typeDefs;

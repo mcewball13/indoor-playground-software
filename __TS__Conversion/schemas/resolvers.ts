@@ -45,14 +45,14 @@ export const resolvers = {
   Mutation: {
     ...customerAuthMutations,
     // create user data
-    addUser: async (parents: unknown, { input }: any) => {
-      console.log(input);
-      const employee = await Employees.create(input);
-      console.log(employee);
-      const token = signToken(employee);
+    // addUser: async (parents: unknown, { input }: any) => {
+    //   console.log(input);
+    //   const employee = await Employees.create(input);
+    //   console.log(employee);
+    //   const token = signToken(employee);
 
-      return { token, employee };
-    },
+    //   return { token, employee };
+    // },
     loginUser: async (parents: unknown, { email, password }: Record<string, any>) => {
       // check to see if the email is found
       const userData = await Employees.findOne({
@@ -88,3 +88,4 @@ export const resolvers = {
     },
   },
 };
+ export default resolvers;
