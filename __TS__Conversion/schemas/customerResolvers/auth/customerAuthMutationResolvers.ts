@@ -1,4 +1,4 @@
-const { AuthenticationError } = require('apollo-server-micro');
+const { GraphQLError } = require('graphql');
 const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
 const { randomUUID } = require('crypto');
@@ -24,9 +24,8 @@ cloudinary.config({
 const sgMail = require('@sendgrid/mail');
 const SignedWaivers = require('../../../server/models/SignedWaivers');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-module.exports = {
-  customerLogin: async (parent, { email, password }, context) => {
+export default {
+  customerLogin: async (parent:unknown, { email, password }: Record<string, any>, context: any) => {
     try {
       const existingCustomerData = await CustomerGuardian.findOne({
         where: {
@@ -41,12 +40,20 @@ module.exports = {
         ],
       });
       if (!existingCustomerData) {
-        throw new AuthenticationError('Incorrect credentials, Please try again');
+        throw new GraphQLError('Incorrect credentials, Please try again', {
+          extensions: {
+            code: 'UNAUTHENTICATED',
+          },
+        });
       }
       const validPassword = await existingCustomerData.checkPassword(password);
 
       if (!validPassword) {
-        throw new AuthenticationError('Incorrect credentials, Please try again');
+        throw new GraphQLError('Incorrect credentials, Please try again', {
+          extensions: {
+            code: 'UNAUTHENTICATED',
+          },
+        });
       }
       const { id, email: customerEmail } = existingCustomerData.dataValues;
       const customerAccessToken = signToken({ id, customerEmail });
@@ -57,10 +64,14 @@ module.exports = {
       };
     } catch (error) {
       console.log(error);
-      return new AuthenticationError('Internal Seerver Error, Please try again');
+      return new GraphQLError('Internal Seerver Error, Please try again', {
+        extensions: {
+          code: 'INTERNAL_SERVER_ERROR',
+        },
+      });
     }
   },
-  customerRegister: async (parent, { guardians, minors = [] }, context) => {
+  customerRegister: async (parent:unknown, { guardians, minors = [] }: Record<string, any>, context: any) => {
     console.log(guardians);
     try {
       const newCustomerData = await CustomerGuardian.create({
@@ -112,10 +123,10 @@ module.exports = {
       };
     } catch (error) {
       console.log(error);
-      throw new AuthenticationError('Internal Server Error, Please try again');
+      throw new GraphQLError('Internal Server Error, Please try again');
     }
   },
-  submitSignedWaiver: async (parent, { signedWaiver, customerId }, context) => {
+  submitSignedWaiver: async (parent:unknown, { signedWaiver, customerId }: Record<string, any>, context: any) => {
     try {
       // generate randome UUID for signed waiver
       const UUID = randomUUID();
@@ -177,7 +188,7 @@ module.exports = {
       };
     } catch (error) {
       console.log(error);
-      throw new AuthenticationError(error);
+      throw new GraphQLError(error);
     }
   },
 };

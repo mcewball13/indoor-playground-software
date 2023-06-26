@@ -26,7 +26,7 @@ const SignedWaivers = require('../../server/models/SignedWaivers');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export default {
-  emailExists: async (parent, { email }, context) => {
+  emailExists: async (parent: unknown, { email }: Record<string, any>, context: any) => {
     try {
       const customerGuardianData = await CustomerGuardian.findOne({
         attributes: { exclude: ['password'] },
