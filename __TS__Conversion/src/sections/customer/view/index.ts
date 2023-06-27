@@ -1,1 +1,1 @@
-// export { default as ContactView } from './contact-view';
+export { default as NewCustomerView } from './new-customer-view';

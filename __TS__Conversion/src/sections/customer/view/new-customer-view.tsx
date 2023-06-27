@@ -4,24 +4,24 @@ import { capitalCase, paramCase } from 'change-case';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 // components
-import { DialogAnimate } from '../../components/animate';
-import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import Image from '../../components/Image';
+import { DialogAnimate } from '../../../components/animate';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import Image from '../../../components/image';
 import Page from '../../components/Page';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // utils
-import { closeModal, setSelectedAvatar } from '../../redux/slices/waiverFormSlice';
-import { useDispatch, useSelector } from '../../redux/store';
-// routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { closeModal, setSelectedAvatar } from '../../../redux/slices/waiverFormSlice';
+import { useDispatch, useSelector } from '../../../redux/store';
+// routes 
+import { paths } from '../../../routes/paths';
 // sections
 import UserWaiverForm from '../../sections/@dashboard/user/UserWaiverForm';
 // slices
 // _mock_
-import { _userList } from '../../_mock';
+import { _userList } from '../../../_mock/_user';
 // avatars
-import avatars from '../../assets/avatars';
+import avatars from '../../../assets/avatars';
 
 // ----------------------------------------------------------------------
 
@@ -54,13 +54,16 @@ export default function NewCustomer() {
   return (
     <Page title="Create a new account">
       <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
+        <CustomBreadcrumbs
           heading={!isEdit ? 'Create a new account' : 'Edit user'}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.list },
+            { name: 'Dashboard', href: paths.dashboard.root },
+            { name: 'User', href: paths.dashboard.user.list },
             { name: !isEdit ? 'New user' : capitalCase(name) },
           ]}
+          // sx={{
+          //   mb: { xs: 3, md: 5 },
+          // }}
         />
 
         <UserWaiverForm
