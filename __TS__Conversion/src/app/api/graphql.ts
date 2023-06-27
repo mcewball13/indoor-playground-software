@@ -1,10 +1,9 @@
 console.log('typeDefs');
 import { ApolloServer } from '@apollo/server';
-import { startServerAndCreateNextHandler } from '@as-integrations/next'
+import { startServerAndCreateNextHandler } from '@as-integrations/next';
 
-import { typeDefs, resolvers } from '../../../schemas';
+import { typeDefs, resolvers } from '../../schemas';
 // import Cors from 'micro-cors';
-
 
 const apolloServer = new ApolloServer({
   typeDefs,
@@ -12,7 +11,6 @@ const apolloServer = new ApolloServer({
 });
 
 // const cors = Cors();
-
 
 // export default cors(async function handler(req, res) {
 //   res.setHeader("Access-Control-Allow-Credentials", "true");

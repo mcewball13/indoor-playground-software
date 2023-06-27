@@ -8,10 +8,10 @@ import {
   CustomerMinor,
   CustomerGuardianHasCustomerMinor,
   Employees,
-} from '../server/models';
-import { signToken } from '../../src/utils/auth';
+} from '../../server/models';
+import { signToken } from '../../../src/utils/auth';
 
-export const resolvers = {
+const resolvers = {
   Query: {
     ...employeeQueries,
     ...customerQueryResolvers,
@@ -88,4 +88,4 @@ export const resolvers = {
     },
   },
 };
- export default resolvers;
+export default resolvers;

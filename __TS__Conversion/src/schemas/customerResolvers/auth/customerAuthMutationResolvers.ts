@@ -8,10 +8,10 @@ const {
   CustomerGuardian,
   CustomerMinor,
   CustomerGuardianHasCustomerMinor,
-} = require('../../../server/models');
-const generateHtmlEmail = require('../../../src/utils/emailHtml');
-const generatePlainEmail = require('../../../src/utils/emailPlain');
-const { signToken } = require('../../../src/utils/auth');
+} = require('../../../../server/models');
+const generateHtmlEmail = require('../../../../src/utils/emailHtml');
+const generatePlainEmail = require('../../../../src/utils/emailPlain');
+const { signToken } = require('../../../../src/utils/auth');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -22,8 +22,9 @@ cloudinary.config({
 
 // email client instance
 const sgMail = require('@sendgrid/mail');
-const SignedWaivers = require('../../../server/models/SignedWaivers');
+const SignedWaivers = require('../../../../server/models/SignedWaivers');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 export default {
   customerLogin: async (parent:unknown, { email, password }: Record<string, any>, context: any) => {
     try {

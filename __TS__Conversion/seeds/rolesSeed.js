@@ -7,7 +7,7 @@ for (let i = 0; i < 4; i++) {
   _ROLES.push({
     roleTitle: faker.commerce.department(),
     description: faker.lorem.lines(1),
-    thumbnail: faker.image.image(),
+    thumbnail: faker.image.url(),
     isActive: faker.helpers.arrayElement([true, false]),
   });
 }
