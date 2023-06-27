@@ -1,4 +1,4 @@
-const { CustomerGuardian, Employee, EmployeeRoles, Locations } = require('../../server/models');
+const { CustomerGuardian, Employee, EmployeeRoles, Locations } = require('../../../server/models');
 
 module.exports = {
   allEmployees: async (parent, args, context) => {

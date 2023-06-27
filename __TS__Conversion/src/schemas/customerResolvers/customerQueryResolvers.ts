@@ -1,17 +1,7 @@
 import { GraphQLError } from 'graphql';
-const nodemailer = require('nodemailer');
-const randomstring = require('randomstring');
-const { randomUUID } = require('crypto');
-const cloudinary = require('cloudinary').v2;
+import { v2 as cloudinary } from 'cloudinary';
 
-const {
-  CustomerGuardian,
-  CustomerMinor,
-  CustomerGuardianHasCustomerMinor,
-} = require('../../server/models');
-const generateHtmlEmail = require('../../src/utils/emailHtml');
-const generatePlainEmail = require('../../src/utils/emailPlain');
-const { signToken } = require('../../src/utils/auth');
+import { CustomerGuardian } from '../../../server/models';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -21,9 +11,11 @@ cloudinary.config({
 });
 
 // email client instance
-const sgMail = require('@sendgrid/mail');
-const SignedWaivers = require('../../server/models/SignedWaivers');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+import sgMail from '@sendgrid/mail';
+
+if (typeof process.env.SENDGRID_API_KEY === 'string') {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 export default {
   emailExists: async (parent: unknown, { email }: Record<string, any>, context: any) => {
