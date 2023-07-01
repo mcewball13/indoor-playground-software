@@ -19,6 +19,7 @@ import AccountBilling from '../account-billing';
 import AccountSocialLinks from '../account-social-links';
 import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
+import { RHFTextField } from '../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -86,6 +87,7 @@ export default function AccountView() {
           <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
         ))}
       </Tabs>
+        <RHFTextField name={'Seach...'} placeholder='Search...'/>
 
       {currentTab === 'general' && <AccountGeneral />}
 
