@@ -1,6 +1,6 @@
 // @mui
 import { Box, Container, Dialog, DialogTitle, Grid } from '@mui/material';
-import { capitalCase, paramCase } from 'change-case';
+import { capitalCase, paramCase } from 'change-case'; //Come back to this
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 // components
@@ -9,12 +9,12 @@ import Image from '../../../components/image';
 // hooks
 
 // utils
-import { closeModal, setSelectedAvatar } from '../../redux/slices/waiverFormSlice';
-import { useDispatch, useSelector } from '../../redux/store';
+import { closeModal, setSelectedAvatar } from '../../redux/slices/waiverFormSlice'; //Talk to Mike first (auth related - Provider/Consumer)
+import { useDispatch, useSelector } from '../../redux/store'; //See above
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { paths } from '../../../routes/paths';
 // sections
-import UserWaiverForm from '../../sections/@dashboard/user/UserWaiverForm';
+import UserWaiverForm from '../UserWaiverForm';
 // slices
 // _mock_
 import { _userList } from '../../_mock';
@@ -23,7 +23,13 @@ import avatars from '../../assets/avatars';
 
 // ----------------------------------------------------------------------
 
+
+
 export default function NewCustomer() {
+
+  // importing dashboard from paths
+  const { dashboard } = paths;
+
   const dispatch = useDispatch();
   const { pathname, query } = useRouter();
   const { name = '' } = query;
