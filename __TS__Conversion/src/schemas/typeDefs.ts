@@ -21,6 +21,7 @@ const typeDefs = `#graphql
     id: ID!
     guardianFirstName: String!
     guardianLastName: String!
+    email: String!
     displayName: String!
     minors: [CustomerMinor]
   }
@@ -108,6 +109,7 @@ const typeDefs = `#graphql
     getRoles: [Role]
     addEmployeeFormFill: EmployeeForm
     emailExists(email: String!): Boolean
+    userAccountAutoSearch(filter: String!): [CustomerGuardian]
   }
   type Mutation{
     customerLogin(email: String!, password: String!): CustomerAuth

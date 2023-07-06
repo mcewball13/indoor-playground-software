@@ -5,6 +5,9 @@ import { useState, useCallback } from 'react';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Container from '@mui/material/Container';
+import InputAdornment from '@mui/material/InputAdornment';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 // routes
 import { paths } from 'src/routes/paths';
 // _mock
@@ -19,7 +22,8 @@ import AccountBilling from '../account-billing';
 import AccountSocialLinks from '../account-social-links';
 import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
-import { RHFTextField } from '../../../components/hook-form';
+import FormProvider, { RHFTextField } from '../../../components/hook-form';
+import { Stack } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +66,25 @@ export default function AccountView() {
     setCurrentTab(newValue);
   }, []);
 
+  const defaultValues = {
+    search: '',
+  };
+
+  const methods = useForm({
+    defaultValues
+  });
+
+  const { handleSubmit } = methods;
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -76,18 +99,32 @@ export default function AccountView() {
         }}
       />
 
-      <Tabs
-        value={currentTab}
-        onChange={handleChangeTab}
+      <Stack
+        direction="row"
+        gap={2}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       >
-        {TABS.map((tab) => (
-          <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
-        ))}
-      </Tabs>
-        <RHFTextField name={'Seach...'} placeholder='Search...'/>
+        <Tabs value={currentTab} onChange={handleChangeTab}>
+          {TABS.map((tab) => (
+            <Tab key={tab.value} label={tab.label} icon={tab.icon} value={tab.value} />
+          ))}
+        </Tabs>
+        <FormProvider methods={methods}>
+          <RHFTextField
+            name={'Seach...'}
+            placeholder="Search..."
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify icon="eva:search-outline" sx={{color: 'text.disabled' }}/>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </FormProvider>
+      </Stack>
 
       {currentTab === 'general' && <AccountGeneral />}
 

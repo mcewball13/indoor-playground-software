@@ -1,5 +1,6 @@
 import { GraphQLError } from 'graphql';
 import { v2 as cloudinary } from 'cloudinary';
+import { Op } from 'sequelize';
 
 import { CustomerGuardian } from '../../../server/models';
 
@@ -38,5 +39,17 @@ export default {
         },
       });
     }
+  },
+  userAccountAutoSearch: async(parent: unknown, { filter }: string, context: any) => {
+   return CustomerGuardian.findAll({
+      where: {
+        [Op.or]: [
+          { guardianFirstName: { [Op.like]: `%${filter}%`,},},
+          { guardianLastName: { [Op.like]: `%${filter}%`, },},
+          { email: { [Op.like]: `%${filter}%`, },},
+          { phoneNumber: { [Op.like]: `%${filter}%`, },},
+        ],
+      },
+    });
   },
 };
