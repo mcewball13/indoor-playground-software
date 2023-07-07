@@ -101,39 +101,28 @@ export default function AccountGeneral() {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3, textAlign: 'center' }}>
+        <Grid xs={12}>
+          <Card
+            sx={{
+              px: 3,
+              height: 80,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <RHFUploadAvatar
+              isCAPage={true}
               name="photoURL"
               maxSize={3145728}
               onDrop={handleDrop}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 3,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.disabled',
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
             />
-
-            <RHFSwitch
-              name="isPublic"
-              labelPlacement="start"
-              label="Public Profile"
-              sx={{ mt: 5 }}
-            />
-
-            <Button variant="soft" color="error" sx={{ mt: 3 }}>
-              Delete User
-            </Button>
+            <Typography variant="h5">
+              Account Owner: <strong>{user?.displayName}</strong>
+            </Typography>
+            <Typography variant="subtitle2">
+              Last visited: <strong>67 Days ago</strong>
+            </Typography>
           </Card>
         </Grid>
 
@@ -193,6 +182,13 @@ export default function AccountGeneral() {
                 Save Changes
               </LoadingButton>
             </Stack>
+          </Card>
+        </Grid>
+        <Grid xs={12} md={4}>
+          <Card sx={{ p: 3 }}>
+            <Typography variant="h5" textAlign="center">
+              Guardians and Minors
+            </Typography>
           </Card>
         </Grid>
       </Grid>

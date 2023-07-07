@@ -1,1 +1,1 @@
-export { default as CustomerAccountView } from './user-account-view';
+export { default as CustomerAccountView } from './customer-account-view';

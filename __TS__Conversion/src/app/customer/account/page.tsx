@@ -1,5 +1,5 @@
 // sections
-import { AccountView } from 'src/sections/account/view';
+import { CustomerAccountView } from 'src/sections/customer-account/view';
 
 // ----------------------------------------------------------------------
 
@@ -8,5 +8,5 @@ export const metadata = {
 };
 
 export default function AccountPage() {
-  return null;
+  return <CustomerAccountView />;
 }
