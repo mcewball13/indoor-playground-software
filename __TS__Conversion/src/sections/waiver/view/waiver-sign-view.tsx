@@ -1,3 +1,5 @@
+'use client'
+
 // @mui
 import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
