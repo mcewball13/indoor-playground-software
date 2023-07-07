@@ -25,6 +25,7 @@ import FormProvider, {
   RHFUploadAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
+import { IconButton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -98,6 +99,44 @@ export default function AccountGeneral() {
     [setValue]
   );
 
+  function randomDateWithinLastYear() {
+    // Get today's date
+    var today = new Date();
+
+    // Subtract 365 days from today's date
+    var lastYear = new Date();
+    lastYear.setDate(today.getDate() - 365);
+
+    // Get the difference in milliseconds
+    var diff = today.getTime() - lastYear.getTime();
+
+    // Generate a random number in the range [0, diff]
+    var randomMillis = Math.random() * diff;
+
+    // Add the random milliseconds to the date from one year ago
+    var randomDate = new Date(lastYear.getTime() + randomMillis);
+
+    return randomDate;
+  }
+
+  const _testData = [
+    {
+      displayName: 'John Doe',
+      age: 34,
+      waiverLastSigned: randomDateWithinLastYear(),
+    },
+    {
+      displayName: 'Jane Doe',
+      age: 32,
+      waiverLastSigned: randomDateWithinLastYear(),
+    },
+    {
+      displayName: 'John Smith',
+      age: 6,
+      waiverLastSigned: randomDateWithinLastYear(),
+    },
+  ];
+  console.log(_testData);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -186,9 +225,23 @@ export default function AccountGeneral() {
         </Grid>
         <Grid xs={12} md={4}>
           <Card sx={{ p: 3 }}>
-            <Typography variant="h5" textAlign="center">
-              Guardians and Minors
-            </Typography>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="h5" textAlign="center">
+                Guardians and Minors
+              </Typography>
+              <IconButton color="default">
+                <Iconify icon="eva:more-vertical-fill" />
+              </IconButton>
+              <Stack spacing={1}>
+                {_testData.map((person, i) => (
+                  <Stack key={i} direction="row" justifyContent="space-between">
+                    <Typography variant="h6">{person.displayName}</Typography>
+                    <Typography variant="h6">{person.age}</Typography>
+                    {/* <Typography variant="h6">{person.waiverLastSigned}</Typography> */}
+                  </Stack>
+                ))}
+              </Stack>
+            </Stack>
           </Card>
         </Grid>
       </Grid>
