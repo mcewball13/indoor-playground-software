@@ -106,19 +106,20 @@ export default function AccountGeneral() {
     {
       displayName: 'John Doe',
       age: 34,
-      waiverLastSigned: 'nearing',
+      waiverLastSigned: 'warning',
     },
     {
       displayName: 'Jane Doe',
       age: 32,
-      waiverLastSigned: 'expired',
+      waiverLastSigned: 'error',
     },
     {
       displayName: 'John Smith',
       age: 6,
-      waiverLastSigned: 'active',
+      waiverLastSigned: 'success',
     },
-  ];
+  ] as const;
+
   console.log(_testData);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -208,7 +209,7 @@ export default function AccountGeneral() {
           </Grid>
           <Grid xs={12} md={4}>
             <Card sx={{ p: 3 }}>
-              <Stack direction="row" justifyContent="space-between">
+              <Stack sx={{ mb: 1 }} direction="row" justifyContent="space-between">
                 <Typography variant="h5" textAlign="center">
                   Guardians and Minors
                 </Typography>
@@ -218,12 +219,20 @@ export default function AccountGeneral() {
               </Stack>
               <Stack spacing={1}>
                 {_testData.map((person, i) => (
-                  <Stack key={i} direction="row" justifyContent="space-between">
-                    <Stack direction="row">
-                      <Label variant="soft">{person.age}</Label>
+                  <Stack
+                    sx={{ py: 1, ml: 1, justifyContent: 'space-between' }}
+                    key={i}
+                    direction="row"
+                  >
+                    <Stack direction="row" gap={1} alignItems="center">
+                      <Label variant="soft" color={person.waiverLastSigned}>
+                        {person.age}
+                      </Label>
                       <Typography variant="h6">{person.displayName}</Typography>
                     </Stack>
-                    <Typography variant="subtitle2">{person.waiverLastSigned}</Typography>
+                    <IconButton color="default">
+                      <Iconify icon="eva:more-vertical-fill" />
+                    </IconButton>
                   </Stack>
                 ))}
               </Stack>
