@@ -26,6 +26,7 @@ import FormProvider, {
   RHFAutocomplete,
 } from 'src/components/hook-form';
 import { IconButton } from '@mui/material';
+import Label from '../../components/label/label';
 
 // ----------------------------------------------------------------------
 
@@ -99,41 +100,23 @@ export default function AccountGeneral() {
     [setValue]
   );
 
-  function randomDateWithinLastYear() {
-    // Get today's date
-    var today = new Date();
-
-    // Subtract 365 days from today's date
-    var lastYear = new Date();
-    lastYear.setDate(today.getDate() - 365);
-
-    // Get the difference in milliseconds
-    var diff = today.getTime() - lastYear.getTime();
-
-    // Generate a random number in the range [0, diff]
-    var randomMillis = Math.random() * diff;
-
-    // Add the random milliseconds to the date from one year ago
-    var randomDate = new Date(lastYear.getTime() + randomMillis);
-
-    return randomDate;
-  }
+  // write a function that creates a random date from today to 354 days ago and checks how close it is to today. If it's over return 'expired' if it's within 2 months return 'nearing' it it's none return 'active'
 
   const _testData = [
     {
       displayName: 'John Doe',
       age: 34,
-      waiverLastSigned: randomDateWithinLastYear(),
+      waiverLastSigned: 'nearing',
     },
     {
       displayName: 'Jane Doe',
       age: 32,
-      waiverLastSigned: randomDateWithinLastYear(),
+      waiverLastSigned: 'expired',
     },
     {
       displayName: 'John Smith',
       age: 6,
-      waiverLastSigned: randomDateWithinLastYear(),
+      waiverLastSigned: 'active',
     },
   ];
   console.log(_testData);
@@ -164,85 +147,88 @@ export default function AccountGeneral() {
             </Typography>
           </Card>
         </Grid>
-
-        <Grid xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
-            <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-              }}
-            >
-              <RHFTextField name="displayName" label="Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-              <RHFTextField name="address" label="Address" />
-
-              <RHFAutocomplete
-                name="country"
-                label="Country"
-                options={countries.map((country) => country.label)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
-                  )[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
-                    </li>
-                  );
+        <Grid container xs={12}>
+          <Grid xs={12} md={8}>
+            <Card sx={{ p: 3 }}>
+              <Box
+                rowGap={3}
+                columnGap={2}
+                display="grid"
+                gridTemplateColumns={{
+                  xs: 'repeat(1, 1fr)',
+                  sm: 'repeat(2, 1fr)',
                 }}
-              />
+              >
+                <RHFTextField name="displayName" label="Name" />
+                <RHFTextField name="email" label="Email Address" />
+                <RHFTextField name="phoneNumber" label="Phone Number" />
+                <RHFTextField name="address" label="Address" />
 
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-            </Box>
+                <RHFAutocomplete
+                  name="country"
+                  label="Country"
+                  options={countries.map((country) => country.label)}
+                  getOptionLabel={(option) => option}
+                  renderOption={(props, option) => {
+                    const { code, label, phone } = countries.filter(
+                      (country) => country.label === option
+                    )[0];
 
-            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="About" />
+                    if (!label) {
+                      return null;
+                    }
 
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Save Changes
-              </LoadingButton>
-            </Stack>
-          </Card>
-        </Grid>
-        <Grid xs={12} md={4}>
-          <Card sx={{ p: 3 }}>
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="h5" textAlign="center">
-                Guardians and Minors
-              </Typography>
-              <IconButton color="default">
-                <Iconify icon="eva:more-vertical-fill" />
-              </IconButton>
+                    return (
+                      <li {...props} key={label}>
+                        <Iconify
+                          key={label}
+                          icon={`circle-flags:${code.toLowerCase()}`}
+                          width={28}
+                          sx={{ mr: 1 }}
+                        />
+                        {label} ({code}) +{phone}
+                      </li>
+                    );
+                  }}
+                />
+
+                <RHFTextField name="state" label="State/Region" />
+                <RHFTextField name="city" label="City" />
+                <RHFTextField name="zipCode" label="Zip/Code" />
+              </Box>
+
+              <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+                <RHFTextField name="about" multiline rows={4} label="About" />
+
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  Save Changes
+                </LoadingButton>
+              </Stack>
+            </Card>
+          </Grid>
+          <Grid xs={12} md={4}>
+            <Card sx={{ p: 3 }}>
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="h5" textAlign="center">
+                  Guardians and Minors
+                </Typography>
+                <IconButton color="default">
+                  <Iconify icon="eva:more-vertical-fill" />
+                </IconButton>
+              </Stack>
               <Stack spacing={1}>
                 {_testData.map((person, i) => (
                   <Stack key={i} direction="row" justifyContent="space-between">
-                    <Typography variant="h6">{person.displayName}</Typography>
-                    <Typography variant="h6">{person.age}</Typography>
-                    {/* <Typography variant="h6">{person.waiverLastSigned}</Typography> */}
+                    <Stack direction="row">
+                      <Label variant="soft">{person.age}</Label>
+                      <Typography variant="h6">{person.displayName}</Typography>
+                    </Stack>
+                    <Typography variant="subtitle2">{person.waiverLastSigned}</Typography>
                   </Stack>
                 ))}
               </Stack>
-            </Stack>
-          </Card>
+            </Card>
+          </Grid>
         </Grid>
       </Grid>
     </FormProvider>
