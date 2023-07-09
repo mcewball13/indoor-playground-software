@@ -26,6 +26,7 @@ const resolvers = {
             },
           ],
         });
+        console.log(guardianData);
         return guardianData;
       } catch (error) {
         console.log(`error`);

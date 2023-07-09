@@ -3,7 +3,7 @@ const { faker } = require('@faker-js/faker');
 
 const _GUARDIANS = [];
 
-for (let i = 0; i < 8; i++) {
+for (let i = 0; i < 8000; i++) {
   _GUARDIANS.push({
     guardianFirstName: faker.person.firstName(),
     guardianLastName: faker.person.lastName(),
@@ -11,11 +11,11 @@ for (let i = 0; i < 8; i++) {
     birthday: faker.date.past({ years: 50, refDate: new Date('04/04/2000') }),
     password: faker.internet.password(),
     email: faker.internet.email(),
-    addressStreet: faker.location.streetAddress(),
-    addressCity: faker.location.city(),
-    addressState: faker.location.state({ abbreviated: true }),
-    addressZip: faker.location.zipCode(),
-    addressPhone: faker.phone.number(),
+    street: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state({ abbreviated: true }),
+    zipCode: faker.location.zipCode(),
+    phoneNumber: faker.phone.number(),
     storedValue: faker.finance.amount(1, 200, 2),
     notes: faker.lorem.paragraph(3),
     isAccountOwner: true,

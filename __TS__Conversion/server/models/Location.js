@@ -14,23 +14,23 @@ Locations.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    addressStreet: {
+    street: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    addressCity: {
+    city: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    addressState: {
+    state: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    addressZip: {
+    zipCode: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    addressPhone: {
+    phoneNumber: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {},

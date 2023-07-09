@@ -6,12 +6,12 @@ const _COMPANIES = [];
 for (let i = 0; i < 7; i++) {
   _COMPANIES.push({
     companyName: faker.company.name(),
-    dateInBusiness: faker.date.past({years:50}),
-    addressStreet: faker.location.streetAddress(),
-    addressCity: faker.location.city(),
-    addressState: faker.location.state({abbreviated: true}),
-    addressZip: faker.location.zipCode(),
-    addressPhone: faker.phone.number(),
+    dateInBusiness: faker.date.past({ years: 50 }),
+    street: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state({ abbreviated: true }),
+    zipCode: faker.location.zipCode(),
+    phoneNumber: faker.phone.number(),
   });
 }
 

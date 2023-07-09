@@ -6,11 +6,11 @@ const _LOCATIONS = [];
 for (let i = 0; i < 4; i++) {
   _LOCATIONS.push({
     locationName: faker.company.bsNoun(),
-    addressStreet: faker.location.streetAddress(),
-    addressCity: faker.location.city(),
-    addressState: faker.location.state({abbreviated: true}),
-    addressZip: faker.location.zipCode(),
-    addressPhone: faker.phone.number(),
+    street: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state({ abbreviated: true }),
+    zipCode: faker.location.zipCode(),
+    phoneNumber: faker.phone.number(),
     company_id: Math.floor(Math.random() * 7 + 1),
   });
 }

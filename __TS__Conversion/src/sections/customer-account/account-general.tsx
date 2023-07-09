@@ -100,7 +100,6 @@ export default function AccountGeneral() {
     [setValue]
   );
 
-  // write a function that creates a random date from today to 354 days ago and checks how close it is to today. If it's over return 'expired' if it's within 2 months return 'nearing' it it's none return 'active'
 
   const _testData = [
     {

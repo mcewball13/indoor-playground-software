@@ -3,7 +3,7 @@ const { faker } = require('@faker-js/faker');
 
 const _MINORS = [];
 
-for (let i = 0; i < 2000; i++) {
+for (let i = 0; i < 8000; i++) {
   _MINORS.push({
     minorFirstName: faker.person.firstName(),
     minorLastName: faker.person.lastName(),

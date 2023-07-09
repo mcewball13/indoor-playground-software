@@ -42,23 +42,23 @@ Employees.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    addressStreet: {
+    street: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    addressCity: {
+    city: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    addressState: {
+    state: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    addressZip: {
+    zipCode: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    addressPhone: {
+    phoneNumber: {
       type: DataTypes.STRING,
       allowNull: true,
     },

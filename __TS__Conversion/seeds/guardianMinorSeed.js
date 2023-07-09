@@ -3,10 +3,10 @@ const { faker } = require('@faker-js/faker');
 
 const _GUARDIAN_HAS_MINORS = [];
 
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 5000; i++) {
   _GUARDIAN_HAS_MINORS.push({
-    guardian_id: Math.floor(Math.random() * 8 + 1),
-    minor_id: Math.floor(Math.random() * 8 + 1),
+    guardian_id: Math.floor(Math.random() * 8000 + 1),
+    minor_id: Math.floor(Math.random() * 8000 + 1),
   });
 }
 

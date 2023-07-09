@@ -33,11 +33,11 @@ const typeDefs = `#graphql
     email: String!
     password: String!
     preferredName: String
-    addressStreet: String
-    addressCity: String
-    addressState: String
-    addressZip: String
-    addressPhone: String
+    street: String
+    city: String
+    state: String
+    zipCode: String
+    phoneNumber: String
   }
   type Role {
     id: ID!
@@ -49,11 +49,11 @@ const typeDefs = `#graphql
   type Locations {
     id: ID!
     locationName: String!
-    addressStreet: String!
-    addressCity: String!
-    addressState: String!
-    addressZip: String!
-    addressPhone: String!
+    street: String!
+    city: String!
+    state: String!
+    zipCode: String!
+    phoneNumber: String!
   }
   type EmployeeForm {
     roles: [Role]
@@ -70,11 +70,11 @@ const typeDefs = `#graphql
     email: String!
     password: String!
     preferredName: String
-    addressStreet: String
-    addressCity: String
-    addressState: String
-    addressZip: String
-    addressPhone: String
+    street: String
+    city: String
+    state: String
+    zipCode: String
+    phoneNumber: String
   }
   input RegisterNewMinorsInput {
     minorFirstName: String
@@ -90,10 +90,10 @@ const typeDefs = `#graphql
     birthday: String
     isBanned: Boolean
     # isAccountOwner: Boolean
-    addressCity: String
-    addressState: String
-    addressZipCode: String
-    addressStreet: String
+    city: String
+    state: String
+    zipCode: String
+    street: String
     phoneNumber: String
     photoURL: String
     status: String
