@@ -1,15 +1,15 @@
 import { GraphQLError } from 'graphql';
 
-import employeeQueries from './employeeResolvers/employeeResolverQueries';
-import customerAuthMutations from './customerResolvers/auth/customerAuthMutationResolvers';
-import customerQueryResolvers from './customerResolvers/customerQueryResolvers';
+import employeeQueries from './resolvers/employeeResolvers/employeeResolverQueries';
+import customerAuthMutations from './resolvers/customerResolvers/auth/customerAuthMutationResolvers';
+import customerQueryResolvers from './resolvers/customerResolvers/customerQueryResolvers';
 import {
   CustomerGuardian,
   CustomerMinor,
   CustomerGuardianHasCustomerMinor,
   Employees,
-} from '../../server/models';
-import { signToken } from '../../../src/utils/auth';
+} from '../models';
+import { signToken } from '../../../../src/utils/auth';
 
 const resolvers = {
   Query: {

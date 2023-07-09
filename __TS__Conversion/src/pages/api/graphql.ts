@@ -1,12 +1,11 @@
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 
-import { typeDefs, resolvers } from '../../schemas';
+import { schema } from '../../server/schemas';
 // import Cors from 'micro-cors';
 
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
 });
 // const cors = Cors();
 
@@ -31,5 +30,3 @@ const apolloServer = new ApolloServer({
 // });
 
 export default startServerAndCreateNextHandler(apolloServer);
-
-
