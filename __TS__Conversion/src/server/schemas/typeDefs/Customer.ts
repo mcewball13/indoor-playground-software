@@ -22,6 +22,12 @@ type CustomerAuth{
     guardianLastName: String!
     email: String!
     displayName: String!
+    birthday: String!
+    street: String
+    city: String
+    state: String
+    zipCode: String
+    phoneNumber: String
     minors: [CustomerMinor]
   }
 
@@ -60,7 +66,7 @@ type CustomerAuth{
   extend type Query {
     allCustomers: [CustomerGuardian]
     singleCustomer(id: ID!): CustomerGuardian
-    userAccountAutoSearch(filter: String!): [CustomerGuardian]
+    customerAccountAutoSearch(filter: String!): [CustomerGuardian]
   }
 
   extend type Mutation {

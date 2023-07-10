@@ -1,8 +1,8 @@
 import { GraphQLError } from 'graphql';
 
-import employeeQueries from './resolvers/employeeResolvers/employeeResolverQueries';
-import customerAuthMutations from './resolvers/customerResolvers/auth/customerAuthMutationResolvers';
-import customerQueryResolvers from './resolvers/customerResolvers/customerQueryResolvers';
+import employeeQueries from './resolvers/employeeResolvers/employeeQueries';
+import customerAuthMutations from './resolvers/customerResolvers/auth/customerAuthMutations';
+import customerQueryResolvers from './resolvers/customerResolvers/customerQueries';
 import {
   CustomerGuardian,
   CustomerMinor,
@@ -14,34 +14,6 @@ import { signToken } from '../../../../src/utils/auth';
 const resolvers = {
   Query: {
     ...employeeQueries,
-    ...customerQueryResolvers,
-
-    allCustomers: async (parent: any, args: any, context: any) => {
-      try {
-        const guardianData = await CustomerGuardian.findAll({
-          include: [
-            {
-              model: CustomerMinor,
-              as: 'minors',
-            },
-          ],
-        });
-        console.log(guardianData);
-        return guardianData;
-      } catch (error) {
-        console.log(`error`);
-      }
-    },
-
-    singleCustomer: async (parent: unknown, { id }: Record<string, any>, context: any) => {
-      try {
-        const customer = await CustomerGuardian.findByPk(id);
-        return customer;
-      } catch (error) {
-        console.log(error);
-        console.log(error);
-      }
-    },
   },
   Mutation: {
     ...customerAuthMutations,

@@ -3322,6 +3322,13 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-20.3.1.tgz"
   integrity sha512-EhcH/wvidPy1WeML3TtYFGR83UzjxeWRen9V402T8aUGYsCHOmfoisV3ZSg03gAFIbLq8TnWOJ0f4cALtnSEUg==
 
+"@types/nodemailer@^6.4.8":
+  version "6.4.8"
+  resolved "https://registry.yarnpkg.com/@types/nodemailer/-/nodemailer-6.4.8.tgz#f06c661e9b201fc2acc3a00a0fded42ba7eaca9d"
+  integrity sha512-oVsJSCkqViCn8/pEu2hfjwVO+Gb3e+eTWjg3PcjeFKRItfKpKwHphQqbYmPQrlMk+op7pNNWPbsJIEthpFN/OQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/nprogress@^0.2.0":
   version "0.2.0"
   resolved "https://registry.npmjs.org/@types/nprogress/-/nprogress-0.2.0.tgz"
@@ -3358,6 +3365,11 @@
   integrity sha512-IhW3fPW+bkt9MLNlycw8u8fWb7oO7W5URC9MfZYHBlA24rex9rs23D5DETChu1zvgVdc5ka64ICjJOgQMr6Shw==
   dependencies:
     parchment "^1.1.2"
+
+"@types/randomstring@^1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@types/randomstring/-/randomstring-1.1.8.tgz#799ce94adbe162964e655df954bf3dc85576747d"
+  integrity sha512-NPOJcW+TTjT9Qiog0UjSoG3Sj24c7EfzZO39BU9E61D7fQtwNmBNblyQhSsK9+5s9Fm0o31rvX+ZyZkpE/c7jA==
 
 "@types/range-parser@*":
   version "1.2.4"

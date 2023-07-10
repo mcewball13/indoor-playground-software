@@ -16,9 +16,13 @@ export default axiosInstance;
 // ----------------------------------------------------------------------
 
 export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
+  console.log('fetcher args', args)
   const [url, config] = Array.isArray(args) ? args : [args];
+  console.log('fetcher url', url)
+  console.log('fetcher config', config)
 
   const res = await axiosInstance.get(url, { ...config });
+  console.log('fetcher res', res)
 
   return res.data;
 };
