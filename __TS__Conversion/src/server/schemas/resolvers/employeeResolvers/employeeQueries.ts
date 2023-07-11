@@ -41,3 +41,5 @@ const EmployeeQueries: IResolvers = {
     }
   },
 };
+
+export default EmployeeQueries;

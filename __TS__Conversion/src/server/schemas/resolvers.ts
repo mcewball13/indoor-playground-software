@@ -14,6 +14,38 @@ import { signToken } from '../../../../src/utils/auth';
 const resolvers = {
   Query: {
     ...employeeQueries,
+    allCustomers: async (parent: any, args: any, context: any) => {
+      try {
+        const guardianData = await CustomerGuardian.findAll({
+          include: [
+            {
+              model: CustomerMinor,
+              as: 'minors',
+            },
+          ],
+        });
+        console.log(guardianData);
+        return guardianData;
+      } catch (error) {
+        console.log(`error`);
+      }
+    },
+    allCustomersPaginated: async (parent: any, args: any, context: any) => {
+      try {
+        const guardianData = await CustomerGuardian.findAll({
+          include: [
+            {
+              model: CustomerMinor,
+              as: 'minors',
+            },
+          ],
+        });
+        console.log(guardianData);
+        return guardianData;
+      } catch (error) {
+        console.log(`error`);
+      }
+    },
   },
   Mutation: {
     ...customerAuthMutations,

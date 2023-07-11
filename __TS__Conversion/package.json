@@ -60,6 +60,7 @@
     "firebase": "^9.22.2",
     "framer-motion": "^10.12.16",
     "graphql": "^16.7.1",
+    "graphql-request": "^6.1.0",
     "graphql-tools": "^9.0.0",
     "highlight.js": "^11.8.0",
     "i18next": "^23.1.0",
