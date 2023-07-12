@@ -3,7 +3,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { Op } from 'sequelize';
 import { IResolvers } from '@graphql-tools/utils';
 
-import { CustomerGuardian, CustomerMinor } from '../../../models';
+import { CustomerGuardian, CustomerMinor } from '../../../../models';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -80,6 +80,22 @@ const CustomerQueries: IResolvers = {
         ],
       },
     });
+  },
+  allCustomersPaginated: async (parent: any, args: any, context: any) => {
+    try {
+      const guardianData = await CustomerGuardian.findAll({
+        include: [
+          {
+            model: CustomerMinor,
+            as: 'minors',
+          },
+        ],
+      });
+      console.log(guardianData);
+      return guardianData;
+    } catch (error) {
+      console.log(`error`);
+    }
   },
 };
 

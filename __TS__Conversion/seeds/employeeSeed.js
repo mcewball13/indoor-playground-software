@@ -1,4 +1,4 @@
-const { Employees } = require('../server/models');
+const { Employees } = require('../src/server/models');
 
 const _DEFAULT_EMPLOYEE = {
   username: 'demoAdmin',

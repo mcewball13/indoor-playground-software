@@ -1,4 +1,5 @@
 import { GraphQLError } from 'graphql';
+import { IResolvers }  from '@graphql-tools/utils';
 import nodemailer from 'nodemailer';
 import randomstring from 'randomstring';
 import { randomUUID } from 'crypto';
@@ -24,7 +25,7 @@ if (typeof process.env.SENDGRID_API_KEY === 'string') {
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 }
 
-export default {
+const resolvers: IResolvers = {
   customerLogin: async (parent:unknown, { email, password }: Record<string, any>, context: any) => {
     try {
       const existingCustomerData = await CustomerGuardian.findOne({
@@ -191,3 +192,5 @@ export default {
     }
   },
 };
+
+export default resolvers;

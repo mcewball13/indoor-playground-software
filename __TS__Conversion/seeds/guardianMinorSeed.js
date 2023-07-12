@@ -1,4 +1,4 @@
-const { CustomerGuardianHasCustomerMinor } = require('../server/models');
+const { CustomerGuardianHasCustomerMinor } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _GUARDIAN_HAS_MINORS = [];

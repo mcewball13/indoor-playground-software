@@ -1,4 +1,4 @@
-const { Locations } = require('../server/models');
+const { Locations } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _LOCATIONS = [];

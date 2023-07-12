@@ -1,4 +1,4 @@
-const { CustomerMinor } = require('../server/models');
+const { CustomerMinor } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _MINORS = [];

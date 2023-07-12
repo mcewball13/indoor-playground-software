@@ -1,7 +1,7 @@
 import { IResolvers } from '@graphql-tools/utils';
 import { CustomerGuardian, Employees, EmployeeRoles, Locations } from 'src/server/models';
 
-const EmployeeQueries: IResolvers = {
+const UserQueries: IResolvers = {
   allEmployees: async (parent: unknown, args: Record<string, any>, context: any) => {
     try {
       const guardianData = await Employees.findAll({});
@@ -42,4 +42,4 @@ const EmployeeQueries: IResolvers = {
   },
 };
 
-export default EmployeeQueries;
+export default UserQueries;

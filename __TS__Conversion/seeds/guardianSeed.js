@@ -1,4 +1,4 @@
-const { CustomerGuardian } = require('../server/models');
+const { CustomerGuardian } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _GUARDIANS = [];

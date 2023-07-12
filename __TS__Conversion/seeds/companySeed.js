@@ -1,4 +1,4 @@
-const { Company } = require('../server/models');
+const { Company } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _COMPANIES = [];
