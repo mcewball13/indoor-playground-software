@@ -1,13 +1,14 @@
 'use client'
 
 // @mui
-import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
+import { Button, Card, Grid, Stack, Typography } from '@mui/material';
+import Container from '@mui/material/Container'
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { capitalCase } from  'change-case'; 
 import { useEffect, useState, useRef, useMemo } from 'react';
 // import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useRouter } from 'next/router';
+import { useRouter } from 'src/routes/hook'
 import SignatureCanvas from 'react-signature-canvas';
 import { PDFExport} from '@progress/kendo-react-pdf';
 import { drawDOM, exportPDF } from '@progress/kendo-drawing';
@@ -19,62 +20,66 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // components
-import Layout f
-rom '../../../layouts/auth/classic';
+
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 // hooks
 import { useSettingsContext } from 'src/components/settings';
 // utils
-import { waiverText } from '../../../utils/temp-waiver-txt';
+import { waiverText } from '../tempWaiverText';
 
 // routes
 import { paths } from '../../../routes/paths';
 
-import  FormValidationView  from '../../_examples/extra/form-validation-view';
+import  FormProvider  from 'src/components/hook-form';
 import HTMLBlock from './HTML-block-view';
-import JwtRegisterView from '../../auth/jwt/jwt-register-view'
+//import JwtRegisterView from '../../auth/jwt/jwt-register-view'
 import { current } from '@reduxjs/toolkit';
+import { number } from 'yup';
 
 // ----------------------------------------------------------------------
 //waiverText.content
-const safeHTML = DOMPurify.sanitize(waiverText.content);
+const safeHTML = DOMPurify.sanitize(waiverText);
 
-interface signatureBlock {
-   current?: boolean;
-   clientWidth?: number;
 
+//temporary hard code of values
+const JwtRegisterView = {
+  customer: "Jim Halpert",
+  submitSignedWaiver: true,
 }
 
 
 
+
 export default function SignWaiver() {
-  const {pathname, query, push} = useRouter();
+  const {push} = useRouter();
   //waiting on new auth
-  const { customer, submitSignedWaiver } = JwtRegisterView();
-  const { themeStretch } = useSettingsContext();
+  const { customer, submitSignedWaiver } = JwtRegisterView;
+  const settings = useSettingsContext();
   const { enqueueSnackbar} = useSnackbar();
-  const { id = '' } = query;
-  const isEdit = pathname.includes('edit');
-  const signatureRef = useRef({});
-  const signatureBlockCardRef = useRef<signatureBlock>({});
+  // const { id = '' } = query;
+  // const isEdit = pathname.includes('edit');
+  const signatureRef = useRef<HTMLElement | null>(null);
+  const signatureBlockCardRef = useRef<HTMLElement | null>(null);
   const pdfWaiverElement = useRef(null);
   const pdfWaiverElementDownload = useRef(null);
   
   // only update signature width when the signature block is visible
   useEffect(() => {
-    if (signatureBlockCardRef.current !== undefined) {
+    if (signatureBlockCardRef.current !== null) {
       setCanvasWidth(signatureBlockCardRef.current.clientWidth);
     }
   }, [signatureBlockCardRef]);
   
   // set inital canvas width to null on load
-  const [canvasWidth, setCanvasWidth] = useState<signatureBlock>();
+  const [canvasWidth, setCanvasWidth] = useState<number | undefined>();
 
   // set the canvas width to the signature block width on resize
   useEffect(() => {
     const handleResize = () => {
+      if (signatureBlockCardRef.current !== null) {
       setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
-    };
+    }
+  };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -109,8 +114,10 @@ export default function SignWaiver() {
 
   // handler Funtions
   const handleUpdateSignature = async () => {
+    if (signatureRef.current !== null){
     const signatureImg = await signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
     setSignature(signatureImg);
+    }
   };
   const onSubmit = async () => {
     const drawnDOM = await drawDOM(pdfWaiverElement.current, {
@@ -138,14 +145,14 @@ export default function SignWaiver() {
   const handleClearSignature = () => signatureRef.current.clear();
 
   return (
-    <Page title="User: Sign Waiver">
-      <Container maxWidth={themeStretch ? 'false' : 'lg'}>
+
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="Sign Waiver"
           links={[
             { name: 'Edit Account Members', href: `#` },
             { name: 'User', href: paths.dashboard.user.list },
-            { name: !isEdit ? 'New user' : capitalCase('name') },
+            // { name: !isEdit ? 'New user' : capitalCase('name') },
           ]}
         />
         <PDFExport ref={pdfWaiverElementDownload} paperSize="Letter" imageResolution={300} scale={0.55} margin={10}>
@@ -191,7 +198,7 @@ export default function SignWaiver() {
                 ))}
             </Grid>
             <Grid item xs={12}>
-              <FormValidationView methods={methods} onSubmit={handleSubmit(onSubmit)}>
+              <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Card sx={{ border: 1, marginBottom: 3 }} ref={signatureBlockCardRef}>
                   <SignatureCanvas
                     id={`signature`}
@@ -211,11 +218,11 @@ export default function SignWaiver() {
                     Submit Waiver
                   </LoadingButton>
                 </Stack>
-              </FormValidationView>
+              </FormProvider>
             </Grid>
           </Grid>
         </PDFExport>
       </Container>
-    </Page>
+      
   );
 }
