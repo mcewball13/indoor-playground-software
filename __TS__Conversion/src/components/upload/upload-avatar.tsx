@@ -19,6 +19,7 @@ export default function UploadAvatar({
   disabled,
   helperText,
   sx,
+  isCAPage = false,
   ...other
 }: UploadProps) {
   const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
@@ -111,8 +112,8 @@ export default function UploadAvatar({
         sx={{
           p: 1,
           m: 'auto',
-          width: 144,
-          height: 144,
+          width: isCAPage ? 70 : 144,
+          height: isCAPage ? 70 : 144,
           cursor: 'pointer',
           overflow: 'hidden',
           borderRadius: '50%',

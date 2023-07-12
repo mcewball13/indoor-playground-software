@@ -13,6 +13,7 @@ import { IChatParticipant } from 'src/types/chat';
 // components
 import Iconify from 'src/components/iconify';
 import SearchNotFound from 'src/components/search-not-found';
+//
 
 // ----------------------------------------------------------------------
 
@@ -49,6 +50,7 @@ export default function ChatHeaderCompose({ contacts, onAddRecipients }: Props) 
         onInputChange={(event, newValue) => setSearchRecipients(newValue)}
         options={contacts}
         getOptionLabel={(recipient) => recipient.name}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
         renderInput={(params) => <TextField {...params} placeholder="+ Recipients" />}
         renderOption={(props, recipient, { selected }) => (
           <li {...props} key={recipient.id}>
@@ -100,6 +102,7 @@ export default function ChatHeaderCompose({ contacts, onAddRecipients }: Props) 
               key={recipient.id}
               label={recipient.name}
               avatar={<Avatar alt={recipient.name} src={recipient.avatarUrl} />}
+              size="small"
               variant="soft"
             />
           ))

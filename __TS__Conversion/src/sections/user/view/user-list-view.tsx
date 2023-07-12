@@ -18,8 +18,6 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hook';
 import { RouterLink } from 'src/routes/components';
-// types
-import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 // _mock
 import { _userList, _roles, USER_STATUS_OPTIONS } from 'src/_mock';
 // hooks
@@ -41,6 +39,8 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from 'src/components/table';
+// types
+import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 //
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
@@ -59,7 +59,7 @@ const TABLE_HEAD = [
   { id: '', width: 88 },
 ];
 
-const defaultFilters = {
+const defaultFilters: IUserTableFilters = {
   name: '',
   role: [],
   status: 'all',

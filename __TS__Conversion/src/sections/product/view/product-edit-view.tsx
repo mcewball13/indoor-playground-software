@@ -1,14 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
 // @mui
 import Container from '@mui/material/Container';
-// redux
-import { useDispatch, useSelector } from 'src/redux/store';
-import { getProducts } from 'src/redux/slices/product';
 // routes
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hook';
+// api
+import { useGetProduct } from 'src/api/product';
 // components
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -20,19 +18,11 @@ import ProductNewEditForm from '../product-new-edit-form';
 export default function ProductEditView() {
   const settings = useSettingsContext();
 
-  const dispatch = useDispatch();
-
   const params = useParams();
 
   const { id } = params;
 
-  const currentProduct = useSelector((state) =>
-    state.product.products.find((product) => product.id === id)
-  );
-
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+  const { product: currentProduct } = useGetProduct(`${id}`);
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

@@ -15,13 +15,12 @@ import { paths } from 'src/routes/paths';
 // hooks
 import { useResponsive } from 'src/hooks/use-responsive';
 // theme
-import { textGradient, bgGradient, bgBlur } from 'src/theme/css';
 import { secondaryFont } from 'src/theme/typography';
+import { textGradient, bgGradient, bgBlur } from 'src/theme/css';
 // layouts
 import { HEADER } from 'src/layouts/config-layout';
 // components
 import Iconify from 'src/components/iconify';
-import SvgColor from 'src/components/svg-color';
 import { RouterLink } from 'src/routes/components';
 import { MotionContainer, varFade } from 'src/components/animate';
 
@@ -97,6 +96,7 @@ type StyledPolygonProps = {
   opacity?: number;
   anchor?: 'left' | 'right';
 };
+
 const StyledPolygon = styled('div')<StyledPolygonProps>(
   ({ opacity = 1, anchor = 'left', theme }) => ({
     ...bgBlur({
@@ -270,15 +270,21 @@ export default function HomeHero() {
         </Stack>
       </m.div>
 
-      <Stack spacing={3} sx={{ textAlign: 'center', opacity: 0.48 }}>
+      <Stack spacing={3} sx={{ textAlign: 'center' }}>
         <m.div variants={varFade().in}>
-          <Typography variant="overline">Available For</Typography>
+          <Typography variant="overline" sx={{ opacity: 0.4 }}>
+            Available For
+          </Typography>
         </m.div>
 
         <Stack spacing={2} direction="row" justifyContent="center">
-          {['figma', 'js', 'ts', 'nextjs'].map((platform) => (
+          {['figma', 'js', 'ts', 'nextjs', 'vite'].map((platform) => (
             <m.div key={platform} variants={varFade().in}>
-              <SvgColor src={`/assets/icons/platforms/ic_${platform}.svg`} />
+              <Box
+                component="img"
+                src={`/assets/icons/platforms/ic_${platform}.svg`}
+                sx={{ width: 24, height: 24 }}
+              />
             </m.div>
           ))}
         </Stack>
@@ -405,7 +411,7 @@ export default function HomeHero() {
         </StyledWrapper>
       </StyledRoot>
 
-      {renderPolygons}
+      {mdUp && renderPolygons}
 
       <Box sx={{ height: { md: '100vh' } }} />
     </>

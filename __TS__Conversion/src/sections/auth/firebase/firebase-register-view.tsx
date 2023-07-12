@@ -2,7 +2,7 @@
 
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -27,13 +27,6 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-};
-
 export default function FirebaseRegisterView() {
   const { register, loginWithGoogle, loginWithGithub, loginWithTwitter } = useAuthContext();
 
@@ -57,7 +50,7 @@ export default function FirebaseRegisterView() {
     password: '',
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(RegisterSchema),
     defaultValues,
   });
@@ -68,23 +61,20 @@ export default function FirebaseRegisterView() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await register?.(data.email, data.password, data.firstName, data.lastName);
-        const searchParams = new URLSearchParams({ email: data.email }).toString();
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await register?.(data.email, data.password, data.firstName, data.lastName);
+      const searchParams = new URLSearchParams({ email: data.email }).toString();
 
-        const href = `${paths.auth.firebase.verify}?${searchParams}`;
+      const href = `${paths.auth.firebase.verify}?${searchParams}`;
 
-        router.push(href);
-      } catch (error) {
-        console.error(error);
-        reset();
-        setErrorMsg(typeof error === 'string' ? error : error.message);
-      }
-    },
-    [register, reset, router]
-  );
+      router.push(href);
+    } catch (error) {
+      console.error(error);
+      reset();
+      setErrorMsg(typeof error === 'string' ? error : error.message);
+    }
+  });
 
   const handleGoogleLogin = async () => {
     try {
@@ -212,7 +202,7 @@ export default function FirebaseRegisterView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       {renderForm}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
@@ -11,21 +11,19 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
-// redux
-import { useDispatch } from 'src/redux/store';
-import { getProduct } from 'src/redux/slices/product';
 // routes
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hook';
 import { RouterLink } from 'src/routes/components';
+import { useGetProduct } from 'src/api/product';
 // components
 import Iconify from 'src/components/iconify';
 import EmptyContent from 'src/components/empty-content';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import { CartIcon } from '../_common';
-import { useProduct } from '../hooks';
+import { useCheckout } from '../hooks';
+import CartIcon from '../common/cart-icon';
 import ProductDetailsReview from '../product-details-review';
 import { ProductDetailsSkeleton } from '../product-skeleton';
 import ProductDetailsSummary from '../product-details-summary';
@@ -54,34 +52,18 @@ const SUMMARY = [
 
 // ----------------------------------------------------------------------
 
-function useInitial() {
-  const dispatch = useDispatch();
-
+export default function ProductShopDetailsView() {
   const params = useParams();
 
   const { id } = params;
 
-  const getProductCallback = useCallback(() => {
-    if (id) {
-      dispatch(getProduct(id));
-    }
-  }, [dispatch, id]);
-
-  useEffect(() => {
-    getProductCallback();
-  }, [getProductCallback]);
-
-  return null;
-}
-
-export default function ProductShopDetailsView() {
-  useInitial();
-
   const settings = useSettingsContext();
 
-  const { product, checkout, onAddCart, onGotoStep, productStatus } = useProduct();
+  const { checkout, onAddCart, onGotoStep } = useCheckout();
 
   const [currentTab, setCurrentTab] = useState('description');
+
+  const { product, productLoading, productError } = useGetProduct(`${id}`);
 
   const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
     setCurrentTab(newValue);
@@ -92,7 +74,7 @@ export default function ProductShopDetailsView() {
   const renderError = (
     <EmptyContent
       filled
-      title={`${productStatus.error?.message}`}
+      title={`${productError?.message}`}
       action={
         <Button
           component={RouterLink}
@@ -209,11 +191,11 @@ export default function ProductShopDetailsView() {
     >
       <CartIcon totalItems={checkout.totalItems} />
 
-      {productStatus.loading ? (
-        renderSkeleton
-      ) : (
-        <>{productStatus.error ? renderError : renderProduct}</>
-      )}
+      {productLoading && renderSkeleton}
+
+      {productError && renderError}
+
+      {product && renderProduct}
     </Container>
   );
 }

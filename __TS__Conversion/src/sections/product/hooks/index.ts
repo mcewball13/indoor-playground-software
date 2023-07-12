@@ -1,1 +1,1 @@
-export { default as useProduct } from './use-product';
+export { default as useCheckout } from './use-checkout';

@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -10,6 +12,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 }));
 
 
+const waiverText = ""
 const HTMLBlock = ({ waiverText , ...other }) => (
   <Card>
     <RootStyle dangerouslySetInnerHTML={{ __html: waiverText }} {...other} />

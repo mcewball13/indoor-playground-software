@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -26,14 +25,6 @@ import FormProvider, {
 
 // ----------------------------------------------------------------------
 
-interface FormValuesProps extends IAddressItem {
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipCode: string;
-}
-
 type Props = {
   open: boolean;
   onClose: VoidFunction;
@@ -49,6 +40,9 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
     state: Yup.string().required('State is required'),
     country: Yup.string().required('Country is required'),
     zipCode: Yup.string().required('Zip code is required'),
+    // not required
+    addressType: Yup.string(),
+    primary: Yup.boolean(),
   });
 
   const defaultValues = {
@@ -63,7 +57,7 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
     country: '',
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(NewAddressSchema),
     defaultValues,
   });
@@ -73,27 +67,24 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        onCreate({
-          name: data.name,
-          phoneNumber: data.phoneNumber,
-          fullAddress: `${data.address}, ${data.city}, ${data.state}, ${data.country}, ${data.zipCode}`,
-          addressType: data.addressType,
-          primary: data.primary,
-        });
-        onClose();
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [onClose, onCreate]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      onCreate({
+        name: data.name,
+        phoneNumber: data.phoneNumber,
+        fullAddress: `${data.address}, ${data.city}, ${data.state}, ${data.country}, ${data.zipCode}`,
+        addressType: data.addressType,
+        primary: data.primary,
+      });
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider methods={methods} onSubmit={onSubmit}>
         <DialogTitle>New address</DialogTitle>
 
         <DialogContent dividers>

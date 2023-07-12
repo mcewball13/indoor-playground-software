@@ -16,7 +16,7 @@ import { fDateTime } from 'src/utils/format-time';
 type ItemProps = {
   id: string;
   title: string;
-  time: Date | string | number;
+  time: Date;
   type: string;
 };
 

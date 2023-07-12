@@ -7,11 +7,11 @@ import { useAuthContext } from '../hooks';
 
 // ----------------------------------------------------------------------
 
-type GuestGuardProps = {
+type Props = {
   children: React.ReactNode;
 };
 
-export default function GuestGuard({ children }: GuestGuardProps) {
+export default function GuestGuard({ children }: Props) {
   const router = useRouter();
 
   const { authenticated } = useAuthContext();

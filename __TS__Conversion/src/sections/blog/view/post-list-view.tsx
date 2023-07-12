@@ -1,7 +1,7 @@
 'use client';
 
 import orderBy from 'lodash/orderBy';
-import { useEffect, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 // @mui
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -11,26 +11,27 @@ import Container from '@mui/material/Container';
 // routes
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
-// utils
-import axios, { API_ENDPOINTS } from 'src/utils/axios';
-// types
-import { IPostItem, IPostFilters, IPostFilterValue } from 'src/types/blog';
+// hooks
+import { useDebounce } from 'src/hooks/use-debounce';
 // _mock
 import { POST_SORT_OPTIONS } from 'src/_mock';
+// api
+import { useGetPosts, useSearchPosts } from 'src/api/blog';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+// types
+import { IPostItem, IPostFilters, IPostFilterValue } from 'src/types/blog';
 //
-import { useBlog } from '../hooks';
 import PostSort from '../post-sort';
 import PostSearch from '../post-search';
 import PostListHorizontal from '../post-list-horizontal';
 
 // ----------------------------------------------------------------------
 
-const defaultFilters = {
+const defaultFilters: IPostFilters = {
   publish: 'all',
 };
 
@@ -39,20 +40,17 @@ const defaultFilters = {
 export default function PostListView() {
   const settings = useSettingsContext();
 
-  const { posts, getPosts, postsStatus } = useBlog();
-
   const [sortBy, setSortBy] = useState('latest');
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const [search, setSearch] = useState<{ query: string; results: IPostItem[] }>({
-    query: '',
-    results: [],
-  });
+  const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    getPosts();
-  }, [getPosts]);
+  const debouncedQuery = useDebounce(searchQuery);
+
+  const { posts, postsLoading } = useGetPosts();
+
+  const { searchResults, searchLoading } = useSearchPosts(debouncedQuery);
 
   const dataFiltered = applyFilter({
     inputData: posts,
@@ -71,28 +69,8 @@ export default function PostListView() {
     }));
   }, []);
 
-  const handleSearch = useCallback(async (value: string) => {
-    try {
-      setSearch((prevState) => ({
-        ...prevState,
-        query: value,
-      }));
-
-      if (value) {
-        const response = await axios.get(API_ENDPOINTS.post.search, {
-          params: {
-            query: value,
-          },
-        });
-
-        setSearch((prevState) => ({
-          ...prevState,
-          results: response.data.results,
-        }));
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const handleSearch = useCallback((inputValue: string) => {
+    setSearchQuery(inputValue);
   }, []);
 
   const handleFilterPublish = useCallback(
@@ -144,8 +122,10 @@ export default function PostListView() {
         }}
       >
         <PostSearch
-          search={search}
+          query={debouncedQuery}
+          results={searchResults}
           onSearch={handleSearch}
+          loading={searchLoading}
           hrefItem={(title: string) => paths.dashboard.post.details(title)}
         />
 
@@ -182,7 +162,7 @@ export default function PostListView() {
         ))}
       </Tabs>
 
-      <PostListHorizontal posts={dataFiltered} loading={postsStatus.loading} />
+      <PostListHorizontal posts={dataFiltered} loading={postsLoading} />
     </Container>
   );
 }

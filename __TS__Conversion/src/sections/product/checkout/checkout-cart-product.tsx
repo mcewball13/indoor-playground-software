@@ -9,30 +9,25 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 // utils
 import { fCurrency } from 'src/utils/format-number';
-// types
-import { ICheckoutCartItem } from 'src/types/product';
 // components
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
+// types
+import { ICheckoutCartItem } from 'src/types/product';
 //
-import { IncrementerButton } from '../_common';
+import IncrementerButton from '../common/incrementer-button';
 
 // ----------------------------------------------------------------------
 
-type CheckoutProductListRowProps = {
+type Props = {
   row: ICheckoutCartItem;
   onDelete: VoidFunction;
   onDecrease: VoidFunction;
   onIncrease: VoidFunction;
 };
 
-export default function CheckoutCartProduct({
-  row,
-  onDelete,
-  onDecrease,
-  onIncrease,
-}: CheckoutProductListRowProps) {
+export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }: Props) {
   const { name, size, price, colors, coverUrl, quantity, available } = row;
 
   return (

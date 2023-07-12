@@ -1,17 +1,16 @@
 import * as Yup from 'yup';
-import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
 // types
 import {
+  ICheckout,
   ICheckoutCardOption,
   ICheckoutPaymentOption,
   ICheckoutDeliveryOption,
-  IProductCheckoutState,
 } from 'src/types/product';
 // components
 import Iconify from 'src/components/iconify';
@@ -67,17 +66,12 @@ const CARDS_OPTIONS: ICheckoutCardOption[] = [
 ];
 
 type Props = {
-  checkout: IProductCheckoutState;
+  checkout: ICheckout;
   onNextStep: VoidFunction;
   onBackStep: VoidFunction;
   onReset: VoidFunction;
   onGotoStep: (step: number) => void;
   onApplyShipping: (value: number) => void;
-};
-
-type FormValuesProps = {
-  delivery: number;
-  payment: string;
 };
 
 export default function CheckoutPayment({
@@ -99,7 +93,7 @@ export default function CheckoutPayment({
     payment: '',
   };
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(PaymentSchema),
     defaultValues,
   });
@@ -109,17 +103,18 @@ export default function CheckoutPayment({
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = useCallback(async () => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       onNextStep();
       onReset();
+      console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
-  }, [onNextStep, onReset]);
+  });
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
           <CheckoutDelivery onApplyShipping={onApplyShipping} options={DELIVERY_OPTIONS} />

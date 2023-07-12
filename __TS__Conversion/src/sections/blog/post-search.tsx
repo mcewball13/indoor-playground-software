@@ -7,25 +7,24 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
-// types
-import { IPostItem } from 'src/types/blog';
 // components
 import Iconify from 'src/components/iconify';
 import { useRouter } from 'src/routes/hook';
 import SearchNotFound from 'src/components/search-not-found';
+// types
+import { IPostItem } from 'src/types/blog';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  search: {
-    query: string;
-    results: IPostItem[];
-  };
+  query: string;
+  results: IPostItem[];
   onSearch: (inputValue: string) => void;
   hrefItem: (title: string) => string;
+  loading?: boolean;
 };
 
-export default function PostSearch({ search, onSearch, hrefItem }: Props) {
+export default function PostSearch({ query, results, onSearch, hrefItem, loading }: Props) {
   const router = useRouter();
 
   const handleClick = (title: string) => {
@@ -33,9 +32,9 @@ export default function PostSearch({ search, onSearch, hrefItem }: Props) {
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (search.query) {
+    if (query) {
       if (event.key === 'Enter') {
-        handleClick(search.query);
+        handleClick(query);
       }
     }
   };
@@ -43,12 +42,13 @@ export default function PostSearch({ search, onSearch, hrefItem }: Props) {
   return (
     <Autocomplete
       sx={{ width: { xs: 1, sm: 260 } }}
+      loading={loading}
       autoHighlight
       popupIcon={null}
-      options={search.results}
+      options={results}
       onInputChange={(event, newValue) => onSearch(newValue)}
       getOptionLabel={(option) => option.title}
-      noOptionsText={<SearchNotFound query={search.query} sx={{ bgcolor: 'unset' }} />}
+      noOptionsText={<SearchNotFound query={query} sx={{ bgcolor: 'unset' }} />}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       slotProps={{
         popper: {
@@ -76,6 +76,12 @@ export default function PostSearch({ search, onSearch, hrefItem }: Props) {
               <InputAdornment position="start">
                 <Iconify icon="eva:search-fill" sx={{ ml: 1, color: 'text.disabled' }} />
               </InputAdornment>
+            ),
+            endAdornment: (
+              <>
+                {loading ? <Iconify icon="svg-spinners:8-dots-rotate" sx={{ mr: -3 }} /> : null}
+                {params.InputProps.endAdornment}
+              </>
             ),
           }}
         />

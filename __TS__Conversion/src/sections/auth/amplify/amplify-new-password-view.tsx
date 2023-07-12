@@ -28,13 +28,6 @@ import FormProvider, { RHFTextField, RHFCode } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-type FormValuesProps = {
-  code: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
 export default function AmplifyNewPasswordView() {
   const { newPassword, forgotPassword } = useAuthContext();
 
@@ -80,18 +73,15 @@ export default function AmplifyNewPasswordView() {
 
   const values = watch();
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await newPassword?.(data.email, data.code, data.password);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await newPassword?.(data.email, data.code, data.password);
 
-        router.push(paths.auth.amplify.login);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [newPassword, router]
-  );
+      router.push(paths.auth.amplify.login);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const handleResendCode = useCallback(async () => {
     try {
@@ -203,7 +193,7 @@ export default function AmplifyNewPasswordView() {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderHead}
 
       {renderForm}

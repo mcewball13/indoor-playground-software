@@ -1,3 +1,5 @@
+'use client'
+
 // @mui
 import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -17,7 +19,8 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // components
-import Layout from '../../../layouts/auth/classic';
+import Layout f
+rom '../../../layouts/auth/classic';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 // hooks
 import { useSettingsContext } from 'src/components/settings';

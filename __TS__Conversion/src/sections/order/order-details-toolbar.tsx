@@ -19,7 +19,7 @@ type Props = {
   status: string;
   backLink: string;
   orderNumber: string;
-  createdAt: Date | string | number;
+  createdAt: Date;
   onChangeStatus: (newValue: string) => void;
   statusOptions: {
     value: string;

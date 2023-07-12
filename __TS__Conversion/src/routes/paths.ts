@@ -179,4 +179,8 @@ export const paths = {
       },
     },
   },
+  //  API
+  api: {
+    graphql: '/api/graphql',
+  }
 };

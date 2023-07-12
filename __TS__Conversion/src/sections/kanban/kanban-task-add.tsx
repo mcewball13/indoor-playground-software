@@ -69,6 +69,7 @@ export default function KanbanTaskAdd({ status, onAddTask, onCloseAddTask }: Pro
       <Paper
         sx={{
           borderRadius: 1.5,
+          bgcolor: 'background.default',
           boxShadow: (theme) => theme.customShadows.z1,
         }}
       >

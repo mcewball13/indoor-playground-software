@@ -20,7 +20,7 @@ type ItemProps = {
   id: string;
   name: string;
   avatarUrl: string;
-  bookedAt: Date | string | number;
+  bookedAt: Date;
   duration: string;
   guests: string;
   coverUrl: string;

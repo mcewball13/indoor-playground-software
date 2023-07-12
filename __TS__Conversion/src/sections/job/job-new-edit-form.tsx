@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useCallback, useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 // @mui
@@ -31,8 +31,6 @@ import {
   JOB_EMPLOYMENT_TYPE_OPTIONS,
   JOB_WORKING_SCHEDULE_OPTIONS,
 } from 'src/_mock';
-// types
-import { IJobItem } from 'src/types/job';
 // assets
 import { countries } from 'src/assets/data';
 // components
@@ -46,14 +44,14 @@ import FormProvider, {
   RHFAutocomplete,
   RHFMultiCheckbox,
 } from 'src/components/hook-form';
+// types
+import { IJobItem } from 'src/types/job';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   currentJob?: IJobItem;
 };
-
-type FormValuesProps = IJobItem;
 
 export default function JobNewEditForm({ currentJob }: Props) {
   const router = useRouter();
@@ -65,23 +63,25 @@ export default function JobNewEditForm({ currentJob }: Props) {
   const NewJobSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     content: Yup.string().required('Content is required'),
-    //
     employmentTypes: Yup.array().min(1, 'Choose at least one option'),
     role: Yup.string().required('Role is required'),
     skills: Yup.array().min(1, 'Choose at least one option'),
     workingSchedule: Yup.array().min(1, 'Choose at least one option'),
+    benefits: Yup.array().min(1, 'Choose at least one option'),
     locations: Yup.array().min(1, 'Choose at least one option'),
-    expiredDate: Yup.date().required('Expired date is required').typeError(''),
+    expiredDate: Yup.mixed<any>().nullable().required('Expired date is required'),
     salary: Yup.object().shape({
+      type: Yup.string(),
       price: Yup.number().min(1, 'Price is required'),
+      negotiable: Yup.boolean(),
     }),
+    experience: Yup.string(),
   });
 
   const defaultValues = useMemo(
     () => ({
       title: currentJob?.title || '',
       content: currentJob?.content || '',
-      //
       employmentTypes: currentJob?.employmentTypes || [],
       experience: currentJob?.experience || '1 year exp',
       role: currentJob?.role || _roles[1],
@@ -96,11 +96,10 @@ export default function JobNewEditForm({ currentJob }: Props) {
         negotiable: false,
       },
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentJob]
   );
 
-  const methods = useForm<FormValuesProps>({
+  const methods = useForm({
     resolver: yupResolver(NewJobSchema),
     defaultValues,
   });
@@ -118,20 +117,17 @@ export default function JobNewEditForm({ currentJob }: Props) {
     }
   }, [currentJob, defaultValues, reset]);
 
-  const onSubmit = useCallback(
-    async (data: FormValuesProps) => {
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        reset();
-        enqueueSnackbar(currentJob ? 'Update success!' : 'Create success!');
-        router.push(paths.dashboard.job.root);
-        console.info('DATA', data);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    [currentJob, enqueueSnackbar, reset, router]
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      enqueueSnackbar(currentJob ? 'Update success!' : 'Create success!');
+      router.push(paths.dashboard.job.root);
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
+  });
 
   const renderDetails = (
     <>
@@ -436,7 +432,7 @@ export default function JobNewEditForm({ currentJob }: Props) {
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         {renderDetails}
 

@@ -11,14 +11,14 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Stack, { StackProps } from '@mui/material/Stack';
 // hooks
-import SvgColor from 'src/components/svg-color';
-import Iconify from 'src/components/iconify';
-import { varFade, MotionViewport } from 'src/components/animate';
 import { useResponsive } from 'src/hooks/use-responsive';
 // routes
 import { paths } from 'src/routes/paths';
 // _mock
 import { _homePlans } from 'src/_mock';
+// components
+import Iconify from 'src/components/iconify';
+import { varFade, MotionViewport } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
@@ -204,11 +204,11 @@ function PlanCard({ plan, sx, ...other }: PlanCardProps) {
       </Stack>
 
       {standard ? (
-        <SvgColor src={icons[2]} sx={{ width: 24, height: 24 }} />
+        <Box component="img" src={icons[1]} sx={{ width: 20, height: 20 }} />
       ) : (
         <Stack direction="row" spacing={2}>
           {icons.map((icon) => (
-            <SvgColor key={icon} src={icon} sx={{ width: 24, height: 24 }} />
+            <Box component="img" key={icon} src={icon} sx={{ width: 20, height: 20 }} />
           ))}
         </Stack>
       )}

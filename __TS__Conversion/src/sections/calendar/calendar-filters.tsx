@@ -1,6 +1,5 @@
 import orderBy from 'lodash/orderBy';
 import { useCallback } from 'react';
-import { EventInput } from '@fullcalendar/core';
 // @mui
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Box from '@mui/material/Box';
@@ -16,7 +15,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 // utils
 import { fDateTime } from 'src/utils/format-time';
 // types
-import { ICalendarFilters, ICalendarFilterValue } from 'src/types/calendar';
+import { ICalendarFilters, ICalendarFilterValue, ICalendarEvent } from 'src/types/calendar';
 // components
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -37,7 +36,7 @@ type Props = {
   open: boolean;
   onClose: VoidFunction;
   //
-  events: EventInput[];
+  events: ICalendarEvent[];
   colorOptions: string[];
   onClickEvent: (eventId: string) => void;
 };
@@ -176,11 +175,11 @@ export default function CalendarFilters({
                   sx={{ fontSize: 11, color: 'text.disabled' }}
                 >
                   {event.allDay ? (
-                    fDateTime(event.start as Date, 'dd MMM yy')
+                    fDateTime(event.start, 'dd MMM yy')
                   ) : (
                     <>
-                      {`${fDateTime(event.start as Date, 'dd MMM yy p')} - ${fDateTime(
-                        event.end as Date,
+                      {`${fDateTime(event.start, 'dd MMM yy p')} - ${fDateTime(
+                        event.end,
                         'dd MMM yy p'
                       )}`}
                     </>

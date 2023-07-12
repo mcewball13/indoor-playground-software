@@ -5,12 +5,12 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 // theme
 import { bgGradient } from 'src/theme/css';
-// types
-import { IProduct } from 'src/types/product';
 // components
 import Image from 'src/components/image';
 import Lightbox, { useLightBox } from 'src/components/lightbox';
 import Carousel, { CarouselArrowIndex, useCarousel } from 'src/components/carousel';
+// types
+import { IProductItem } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ const StyledThumbnailsContainer = styled('div')<{ length: number }>(({ length, t
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProduct;
+  product: IProductItem;
 };
 
 export default function ProductDetailsCarousel({ product }: Props) {

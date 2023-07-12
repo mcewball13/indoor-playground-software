@@ -23,47 +23,51 @@ export default function ChatHeaderDetail({ participants }: Props) {
 
   const singleParticipant = participants[0];
 
+  const renderGroup = (
+    <AvatarGroup
+      max={3}
+      sx={{
+        [`& .${avatarGroupClasses.avatar}`]: {
+          width: 32,
+          height: 32,
+        },
+      }}
+    >
+      {participants.map((participant) => (
+        <Avatar key={participant.id} alt={participant.name} src={participant.avatarUrl} />
+      ))}
+    </AvatarGroup>
+  );
+
+  const renderSingle = (
+    <Stack flexGrow={1} direction="row" alignItems="center" spacing={2}>
+      <Badge
+        variant={singleParticipant.status}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Avatar src={singleParticipant.avatarUrl} alt={singleParticipant.name} />
+      </Badge>
+
+      <ListItemText
+        primary={singleParticipant.name}
+        secondary={
+          singleParticipant.status === 'offline'
+            ? fToNow(singleParticipant.lastActivity)
+            : singleParticipant.status
+        }
+        secondaryTypographyProps={{
+          component: 'span',
+          ...(singleParticipant.status !== 'offline' && {
+            textTransform: 'capitalize',
+          }),
+        }}
+      />
+    </Stack>
+  );
+
   return (
     <>
-      {group ? (
-        <AvatarGroup
-          max={3}
-          sx={{
-            [`& .${avatarGroupClasses.avatar}`]: {
-              width: 32,
-              height: 32,
-            },
-          }}
-        >
-          {participants.map((participant) => (
-            <Avatar key={participant.id} alt={participant.name} src={participant.avatarUrl} />
-          ))}
-        </AvatarGroup>
-      ) : (
-        <Stack flexGrow={1} direction="row" alignItems="center" spacing={2}>
-          <Badge
-            variant={singleParticipant.status}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          >
-            <Avatar src={singleParticipant.avatarUrl} alt={singleParticipant.name} />
-          </Badge>
-
-          <ListItemText
-            primary={singleParticipant.name}
-            secondary={
-              singleParticipant.status === 'offline'
-                ? fToNow(singleParticipant.lastActivity)
-                : singleParticipant.status
-            }
-            secondaryTypographyProps={{
-              component: 'span',
-              ...(singleParticipant.status !== 'offline' && {
-                textTransform: 'capitalize',
-              }),
-            }}
-          />
-        </Stack>
-      )}
+      {group ? renderGroup : renderSingle}
 
       <Stack flexGrow={1} />
 

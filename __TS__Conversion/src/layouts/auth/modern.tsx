@@ -39,6 +39,7 @@ export default function AuthModernLayout({ children, image }: Props) {
           px: { xs: 3, md: 0 },
           boxShadow: { md: 'none' },
           overflow: { md: 'unset' },
+          bgcolor: { md: 'background.default' },
         }}
       >
         {children}

@@ -1,23 +1,24 @@
 'use client';
 
 import orderBy from 'lodash/orderBy';
-import { useEffect, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 // @mui
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 // routes
 import { paths } from 'src/routes/paths';
-// utils
-import axios, { API_ENDPOINTS } from 'src/utils/axios';
-// types
-import { IPostItem } from 'src/types/blog';
+// hooks
+import { useDebounce } from 'src/hooks/use-debounce';
 // _mock
 import { POST_SORT_OPTIONS } from 'src/_mock';
+// api
+import { useGetPosts, useSearchPosts } from 'src/api/blog';
 // components
 import { useSettingsContext } from 'src/components/settings';
+// types
+import { IPostItem } from 'src/types/blog';
 //
-import { useBlog } from '../hooks';
 import PostList from '../post-list';
 import PostSort from '../post-sort';
 import PostSearch from '../post-search';
@@ -27,50 +28,27 @@ import PostSearch from '../post-search';
 export default function PostListHomeView() {
   const settings = useSettingsContext();
 
-  const { posts, getPosts, postsStatus } = useBlog();
-
   const [sortBy, setSortBy] = useState('latest');
 
-  const [search, setSearch] = useState<{ query: string; results: IPostItem[] }>({
-    query: '',
-    results: [],
-  });
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const debouncedQuery = useDebounce(searchQuery);
+
+  const { posts, postsLoading } = useGetPosts();
+
+  const { searchResults, searchLoading } = useSearchPosts(debouncedQuery);
 
   const dataFiltered = applyFilter({
     inputData: posts,
     sortBy,
   });
 
-  useEffect(() => {
-    getPosts();
-  }, [getPosts]);
-
   const handleSortBy = useCallback((newValue: string) => {
     setSortBy(newValue);
   }, []);
 
-  const handleSearch = useCallback(async (value: string) => {
-    try {
-      setSearch((prevState) => ({
-        ...prevState,
-        query: value,
-      }));
-
-      if (value) {
-        const response = await axios.get(API_ENDPOINTS.post.search, {
-          params: {
-            query: value,
-          },
-        });
-
-        setSearch((prevState) => ({
-          ...prevState,
-          results: response.data.results,
-        }));
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const handleSearch = useCallback((inputValue: string) => {
+    setSearchQuery(inputValue);
   }, []);
 
   return (
@@ -92,15 +70,17 @@ export default function PostListHomeView() {
         sx={{ mb: { xs: 3, md: 5 } }}
       >
         <PostSearch
-          search={search}
+          query={debouncedQuery}
+          results={searchResults}
           onSearch={handleSearch}
+          loading={searchLoading}
           hrefItem={(title: string) => paths.post.details(title)}
         />
 
         <PostSort sort={sortBy} onSort={handleSortBy} sortOptions={POST_SORT_OPTIONS} />
       </Stack>
 
-      <PostList posts={dataFiltered} loading={postsStatus.loading} />
+      <PostList posts={dataFiltered} loading={postsLoading} />
     </Container>
   );
 }
