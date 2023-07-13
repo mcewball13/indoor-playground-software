@@ -29,6 +29,7 @@ import FormProvider, {
   RHFSwitch,
   RHFTextField,
   RHFUploadAvatar,
+  RHFChooseAvatar,
   RHFAutocomplete,
 } from 'src/components/hook-form';
 
@@ -141,7 +142,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
             )}
 
             <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
+              <RHFChooseAvatar
                 name="avatarUrl"
                 maxSize={3145728}
                 onDrop={handleDrop}
