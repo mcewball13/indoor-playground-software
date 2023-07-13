@@ -7,7 +7,7 @@ import { useSnackbar } from 'notistack';
 import { capitalCase } from  'change-case'; 
 import { useEffect, useState, useRef, useMemo } from 'react';
 // import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { useRouter } from 'next/router';
+import { useRouter } from 'src/routes/hook';
 import SignatureCanvas from 'react-signature-canvas';
 import { PDFExport} from '@progress/kendo-react-pdf';
 import { drawDOM, exportPDF } from '@progress/kendo-drawing';
@@ -33,6 +33,7 @@ import  FormValidationView  from '../../_examples/extra/form-validation-view';
 import HTMLBlock from './HTML-block-view';
 import JwtRegisterView from '../../auth/jwt/jwt-register-view'
 import { current } from '@reduxjs/toolkit';
+import FormProvider from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 //waiverText.content
@@ -47,32 +48,34 @@ interface signatureBlock {
 
 
 export default function SignWaiver() {
-  const {pathname, query, push} = useRouter();
+  const {push} = useRouter();
   //waiting on new auth
-  const { customer, submitSignedWaiver } = JwtRegisterView();
-  const { themeStretch } = useSettingsContext();
+  const { customer, submitSignedWaiver } = JwtRegisterView;
+  const settings = useSettingsContext();
   const { enqueueSnackbar} = useSnackbar();
-  const { id = '' } = query;
-  const isEdit = pathname.includes('edit');
+  // const { id = '' } = query;
+  // const isEdit = pathname.includes('edit');
   const signatureRef = useRef({});
-  const signatureBlockCardRef = useRef<signatureBlock>({});
+  const signatureBlockCardRef = useRef<HTMLElement | null>(null);
   const pdfWaiverElement = useRef(null);
   const pdfWaiverElementDownload = useRef(null);
   
   // only update signature width when the signature block is visible
   useEffect(() => {
-    if (signatureBlockCardRef.current !== undefined) {
+    if (signatureBlockCardRef.current !== null) {
       setCanvasWidth(signatureBlockCardRef.current.clientWidth);
     }
   }, [signatureBlockCardRef]);
   
   // set inital canvas width to null on load
-  const [canvasWidth, setCanvasWidth] = useState<signatureBlock>();
+  const [canvasWidth, setCanvasWidth] = useState<number | undefined>();
 
   // set the canvas width to the signature block width on resize
   useEffect(() => {
     const handleResize = () => {
-      setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
+      if (signatureBlockCardRef.current !== null) {
+        setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
+      }
     };
     window.addEventListener('resize', handleResize);
     return () => {
@@ -137,16 +140,17 @@ export default function SignWaiver() {
   const handleClearSignature = () => signatureRef.current.clear();
 
   return (
-    <Page title="User: Sign Waiver">
-      <Container maxWidth={themeStretch ? 'false' : 'lg'}>
-        <CustomBreadcrumbs
+    // <Page title="User: Sign Waiver">
+    <>
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        {/* <CustomBreadcrumbs
           heading="Sign Waiver"
           links={[
             { name: 'Edit Account Members', href: `#` },
             { name: 'User', href: paths.dashboard.user.list },
             { name: !isEdit ? 'New user' : capitalCase('name') },
           ]}
-        />
+        /> */}
         <PDFExport ref={pdfWaiverElementDownload} paperSize="Letter" imageResolution={300} scale={0.55} margin={10}>
           <Grid ref={pdfWaiverElement} container spacing={2}>
             <Grid item xs={12}>
@@ -190,10 +194,10 @@ export default function SignWaiver() {
                 ))}
             </Grid>
             <Grid item xs={12}>
-              <FormValidationView methods={methods} onSubmit={handleSubmit(onSubmit)}>
+              <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Card sx={{ border: 1, marginBottom: 3 }} ref={signatureBlockCardRef}>
                   <SignatureCanvas
-                    id={`signature`}
+                    // id={`signature`}
                     onEnd={handleUpdateSignature}
                     ref={signatureRef}
                     canvasProps={{
@@ -215,6 +219,6 @@ export default function SignWaiver() {
           </Grid>
         </PDFExport>
       </Container>
-    </Page>
+    </>
   );
 }
