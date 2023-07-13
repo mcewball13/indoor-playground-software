@@ -1,13 +1,18 @@
 'use client'
 
 // @mui
-import { Button, Card, Container, Grid, Stack, Typography } from '@mui/material';
+import { Button, Card, Grid, Stack, Typography } from '@mui/material';
+import Container from '@mui/material/Container'
 import { LoadingButton } from '@mui/lab';
 import { useSnackbar } from 'notistack';
 import { capitalCase } from  'change-case'; 
 import { useEffect, useState, useRef, useMemo } from 'react';
 // import { useLocation, useParams, useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { useRouter } from 'src/routes/hook';
+=======
+import { useRouter } from 'src/routes/hook'
+>>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
 import SignatureCanvas from 'react-signature-canvas';
 import { PDFExport} from '@progress/kendo-react-pdf';
 import { drawDOM, exportPDF } from '@progress/kendo-drawing';
@@ -19,31 +24,37 @@ import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // components
-import Layout from '../../../layouts/auth/classic';
+
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 // hooks
 import { useSettingsContext } from 'src/components/settings';
 // utils
-import { waiverText } from '../../../utils/temp-waiver-txt';
+import { waiverText } from '../tempWaiverText';
 
 // routes
 import { paths } from '../../../routes/paths';
 
-import  FormValidationView  from '../../_examples/extra/form-validation-view';
+import  FormProvider  from 'src/components/hook-form';
 import HTMLBlock from './HTML-block-view';
-import JwtRegisterView from '../../auth/jwt/jwt-register-view'
+//import JwtRegisterView from '../../auth/jwt/jwt-register-view'
 import { current } from '@reduxjs/toolkit';
+<<<<<<< HEAD
 import FormProvider from 'src/components/hook-form';
+=======
+import { number } from 'yup';
+>>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
 
 // ----------------------------------------------------------------------
 //waiverText.content
-const safeHTML = DOMPurify.sanitize(waiverText.content);
+const safeHTML = DOMPurify.sanitize(waiverText);
 
-interface signatureBlock {
-   current?: boolean;
-   clientWidth?: number;
 
+//temporary hard code of values
+const JwtRegisterView = {
+  customer: "Jim Halpert",
+  submitSignedWaiver: true,
 }
+
 
 
 
@@ -55,7 +66,11 @@ export default function SignWaiver() {
   const { enqueueSnackbar} = useSnackbar();
   // const { id = '' } = query;
   // const isEdit = pathname.includes('edit');
+<<<<<<< HEAD
   const signatureRef = useRef({});
+=======
+  const signatureRef = useRef<HTMLElement | null>(null);
+>>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
   const signatureBlockCardRef = useRef<HTMLElement | null>(null);
   const pdfWaiverElement = useRef(null);
   const pdfWaiverElementDownload = useRef(null);
@@ -74,9 +89,15 @@ export default function SignWaiver() {
   useEffect(() => {
     const handleResize = () => {
       if (signatureBlockCardRef.current !== null) {
+<<<<<<< HEAD
         setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
       }
     };
+=======
+      setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
+    }
+  };
+>>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -111,8 +132,10 @@ export default function SignWaiver() {
 
   // handler Funtions
   const handleUpdateSignature = async () => {
+    if (signatureRef.current !== null){
     const signatureImg = await signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
     setSignature(signatureImg);
+    }
   };
   const onSubmit = async () => {
     const drawnDOM = await drawDOM(pdfWaiverElement.current, {
@@ -140,15 +163,21 @@ export default function SignWaiver() {
   const handleClearSignature = () => signatureRef.current.clear();
 
   return (
+<<<<<<< HEAD
     // <Page title="User: Sign Waiver">
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         {/* <CustomBreadcrumbs
+=======
+
+      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+        <CustomBreadcrumbs
+>>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
           heading="Sign Waiver"
           links={[
             { name: 'Edit Account Members', href: `#` },
             { name: 'User', href: paths.dashboard.user.list },
-            { name: !isEdit ? 'New user' : capitalCase('name') },
+            // { name: !isEdit ? 'New user' : capitalCase('name') },
           ]}
         /> */}
         <PDFExport ref={pdfWaiverElementDownload} paperSize="Letter" imageResolution={300} scale={0.55} margin={10}>
@@ -214,11 +243,15 @@ export default function SignWaiver() {
                     Submit Waiver
                   </LoadingButton>
                 </Stack>
-              </FormValidationView>
+              </FormProvider>
             </Grid>
           </Grid>
         </PDFExport>
       </Container>
+<<<<<<< HEAD
     </>
+=======
+      
+>>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
   );
 }
