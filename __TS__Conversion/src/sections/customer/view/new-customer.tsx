@@ -1,3 +1,5 @@
+'use client'
+
 // @mui
 import { Box, Container, Dialog, DialogTitle, Grid } from '@mui/material';
 import { capitalCase, paramCase } from 'change-case'; //Come back to this
@@ -14,7 +16,7 @@ import { useDispatch, useSelector } from '../../redux/store'; //Talk to Mike fir
 // routes
 import { paths } from '../../../routes/paths'; //completed 7.6.23
 // sections
-import UserWaiverForm from '../UserWaiverForm'; //watch video and cry 7.7.23
+import UserWaiverForm from '../UserWaiverForm';
 // slices
 // _mock_
 import { _userList } from '../../../_mock'; //completed 7.6.23
@@ -25,7 +27,7 @@ import avatars from '../../../assets/avatars'; //completed 7.6.23
 
 
 
-export default function NewCustomer() {
+const NewCustomer = function() {
 
   // importing dashboard from paths
   const { dashboard } = paths;
@@ -99,3 +101,5 @@ export default function NewCustomer() {
     </>
   );
 }
+
+export default NewCustomer;

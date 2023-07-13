@@ -31,17 +31,15 @@ import {
 // utils
 import { format } from 'date-fns';
 // routes
-import { PATH_PAGE } from '../../../routes/paths';
+// import { PATH_PAGE } from '../../../routes/paths';
 // components
-import { DialogAnimate } from '../../../components/animate';
-import { FormProvider, RHFTextField } from '../../../components/hook-form';
-import RHFChooseAvatar  from '../../../components/hook-form/RHFChooseAvatar';
-import RHFDatePicker from '../../../components/hook-form/RHFDatePicker';
-import Iconify from '../../../components/Iconify';
-import Label from '../../../components/Label';
-import { AuthContext } from '../../../contexts/JWTContext';
-import useAuth from '../../../hooks/useAuth';
-import { useSelector } from '../../../redux/store';
+import Dialog from '@mui/material/Dialog';
+import FormProvider, { RHFTextField, RHFChooseAvatar, RHFDatePicker } from 'src/components/hook-form';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
+// import { AuthContext } from '../../../contexts/JWTContext';
+// import useAuth from '../../../hooks/useAuth';
+// import { useSelector } from '../../../redux/store';
 import { UserMoreMenu } from './list';
 import UserExistsModal from './UserExistsModal';
 import RHFTextFieldLoading from '../../../components/hook-form/RHFTextFieldLoading';
@@ -425,14 +423,14 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
           </Grid>
         </Grid>
       </FormProvider>
-      <DialogAnimate maxWidthMUI="sm" open={!!existingCustomer} onClose={handleCustomerExistsCloseModal}>
+      <Dialog maxWidth="sm" open={!!existingCustomer} onClose={handleCustomerExistsCloseModal}>
         <DialogActions sx={{ py: 2, px: 3 }}>
           <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
             Existing Customer Found
           </Typography>
         </DialogActions>
         <UserExistsModal onClose={handleCustomerExistsCloseModal} email={values.email} />
-      </DialogAnimate>
+      </Dialog>
     </>
   );
 }
