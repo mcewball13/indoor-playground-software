@@ -1,4 +1,4 @@
-const { Memberships } = require('../server/models');
+const { Memberships } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _MEMBERSHIPS = [];

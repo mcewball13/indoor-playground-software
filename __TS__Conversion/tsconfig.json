@@ -32,9 +32,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "server/models/CustomerGuardianHasCustomerMinor.js",
-    "server/models/index.js",
-    "server/config/connection.js"
+    "src/server/models/CustomerGuardianHasCustomerMinor.js",
+    "src/server/models/index.js",
+    "src/server/config/connection.js"
   ],
   "exclude": ["node_modules"]
 }

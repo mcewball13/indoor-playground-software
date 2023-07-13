@@ -1,4 +1,4 @@
-const { SessionProducts } = require('../server/models');
+const { SessionProducts } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _SESSION_PRODUCTS = [];
@@ -10,8 +10,8 @@ for (let i = 0; i < 50; i++) {
     notes: faker.lorem.lines(3),
     isConsumable: faker.datatype.boolean(),
     autoConsumable: faker.datatype.boolean(),
-    startDate: faker.date.past(1),
-    endDate: faker.date.future(10),
+    startDate: faker.date.past({ years: 1 }),
+    endDate: faker.date.future({ years: 10 }),
     termsAndConditions: faker.lorem.lines(6),
     isActive: true,
   });

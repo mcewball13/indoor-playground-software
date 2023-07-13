@@ -1,18 +1,13 @@
-console.log('typeDefs');
 import { ApolloServer } from '@apollo/server';
-import { startServerAndCreateNextHandler } from '@as-integrations/next'
+import { startServerAndCreateNextHandler } from '@as-integrations/next';
 
-import { typeDefs, resolvers } from '../../../schemas';
+import { schema } from '../../server/schemas';
 // import Cors from 'micro-cors';
 
-
 const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
 });
-
 // const cors = Cors();
-
 
 // export default cors(async function handler(req, res) {
 //   res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -34,10 +29,4 @@ const apolloServer = new ApolloServer({
 //   }
 // });
 
-startServerAndCreateNextHandler(apolloServer);
-
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
+export default startServerAndCreateNextHandler(apolloServer);

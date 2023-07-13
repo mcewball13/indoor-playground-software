@@ -107,7 +107,7 @@ export default function RootLayout({ children }: Props) {
                         <SettingsDrawer />
                         <ProgressBar />
                         <AuthConsumer>
-                          {children}
+                          <CustomerAuthConsumer>{children}</CustomerAuthConsumer>
                         </AuthConsumer>
                       </SnackbarProvider>
                     </MotionLazy>
