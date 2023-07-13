@@ -35,6 +35,8 @@ import HTMLBlock from './HTML-block-view';
 //import JwtRegisterView from '../../auth/jwt/jwt-register-view'
 import { current } from '@reduxjs/toolkit';
 import { number } from 'yup';
+import ReactSignatureCanvas from 'react-signature-canvas';
+import { pdf } from '@react-pdf/renderer';
 
 // ----------------------------------------------------------------------
 //waiverText.content
@@ -58,14 +60,14 @@ export default function SignWaiver() {
   const { enqueueSnackbar} = useSnackbar();
   // const { id = '' } = query;
   // const isEdit = pathname.includes('edit');
-  const signatureRef = useRef<HTMLElement | null>(null);
-  const signatureBlockCardRef = useRef<HTMLElement | null>(null);
-  const pdfWaiverElement = useRef(null);
-  const pdfWaiverElementDownload = useRef(null);
+  const signatureRef = useRef<SignatureCanvas>(null);
+  const signatureBlockCardRef = useRef<HTMLDivElement>(null);
+  const pdfWaiverElement = useRef<HTMLDivElement>(null);
+  const pdfWaiverElementDownload = useRef<PDFExport>(null);
   
   // only update signature width when the signature block is visible
   useEffect(() => {
-    if (signatureBlockCardRef.current !== null) {
+    if (signatureBlockCardRef.current) {
       setCanvasWidth(signatureBlockCardRef.current.clientWidth);
     }
   }, [signatureBlockCardRef]);
@@ -76,7 +78,7 @@ export default function SignWaiver() {
   // set the canvas width to the signature block width on resize
   useEffect(() => {
     const handleResize = () => {
-      if (signatureBlockCardRef.current !== null) {
+      if (signatureBlockCardRef.current) {
       setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
     }
   };
@@ -113,36 +115,45 @@ export default function SignWaiver() {
   } = methods;
 
   // handler Funtions
-  const handleUpdateSignature = async () => {
-    if (signatureRef.current !== null){
-    const signatureImg = await signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
+  const handleUpdateSignature = () => {
+    if (signatureRef.current){
+    const signatureImg = signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
     setSignature(signatureImg);
     }
   };
+
   const onSubmit = async () => {
+    if (pdfWaiverElement.current === null) return;
     const drawnDOM = await drawDOM(pdfWaiverElement.current, {
       paperSize: 'A4',
-      margin: '1cm',
+      margin: {
+        top: '1cm',
+        bottom: '1cm',
+        left: '1cm',
+        right: '1cm',
+      },
       scale: .55,
     });
+
     const signedWaiver = await exportPDF(drawnDOM);
     console.log(signedWaiver);
     // post cloudinary url to server
+
     const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (isDesktop) {
-      console.log(pdfWaiverElementDownload.current);
-      await pdfWaiverElementDownload.current.save();
+    if (isDesktop && pdfWaiverElementDownload.current) {
+      pdfWaiverElementDownload.current.save();
     }
-    await submitSignedWaiver({
-      signedWaiver,
-      customerId: customer.id,
-    }); 
+
+    // await submitSignedWaiver({
+    //   signedWaiver,
+    //   customerId: customer.id,
+    // }); 
     enqueueSnackbar('Waiver Signed');
-    push(paths.waiverConfirmation);
+    // push(paths.waiverConfirmation);
   };
 
   // clear signature on click
-  const handleClearSignature = () => signatureRef.current.clear();
+  const handleClearSignature = () => signatureRef.current && signatureRef.current.clear()
 
   return (
 
@@ -170,13 +181,14 @@ export default function SignWaiver() {
                 <Typography
                   alignSelf={'center'}
                   textAlign="left"
-                  variant="p"
+                  variant="body1"
                   component="p"
                   sx={{
                     marginLeft: '1rem',
                   }}
                 >
-                  {customer?.guardianFirstName} {customer?.guardianLastName}
+                  Herold McIntire
+                  {/* {customer?.guardianFirstName} {customer?.guardianLastName} */}
                 </Typography>
               </Grid>
             </Grid>
@@ -201,7 +213,6 @@ export default function SignWaiver() {
               <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                 <Card sx={{ border: 1, marginBottom: 3 }} ref={signatureBlockCardRef}>
                   <SignatureCanvas
-                    id={`signature`}
                     onEnd={handleUpdateSignature}
                     ref={signatureRef}
                     canvasProps={{
