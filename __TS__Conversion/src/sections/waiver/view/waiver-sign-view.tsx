@@ -8,11 +8,7 @@ import { useSnackbar } from 'notistack';
 import { capitalCase } from  'change-case'; 
 import { useEffect, useState, useRef, useMemo } from 'react';
 // import { useLocation, useParams, useNavigate } from 'react-router-dom';
-<<<<<<< HEAD
-import { useRouter } from 'src/routes/hook';
-=======
 import { useRouter } from 'src/routes/hook'
->>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
 import SignatureCanvas from 'react-signature-canvas';
 import { PDFExport} from '@progress/kendo-react-pdf';
 import { drawDOM, exportPDF } from '@progress/kendo-drawing';
@@ -38,11 +34,7 @@ import  FormProvider  from 'src/components/hook-form';
 import HTMLBlock from './HTML-block-view';
 //import JwtRegisterView from '../../auth/jwt/jwt-register-view'
 import { current } from '@reduxjs/toolkit';
-<<<<<<< HEAD
-import FormProvider from 'src/components/hook-form';
-=======
 import { number } from 'yup';
->>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
 
 // ----------------------------------------------------------------------
 //waiverText.content
@@ -66,14 +58,10 @@ export default function SignWaiver() {
   const { enqueueSnackbar} = useSnackbar();
   // const { id = '' } = query;
   // const isEdit = pathname.includes('edit');
-<<<<<<< HEAD
-  const signatureRef = useRef({});
-=======
-  const signatureRef = useRef<HTMLElement | null>(null);
->>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
-  const signatureBlockCardRef = useRef<HTMLElement | null>(null);
-  const pdfWaiverElement = useRef(null);
-  const pdfWaiverElementDownload = useRef(null);
+  const signatureRef = useRef<SignatureCanvas | null>(null);
+  const signatureBlockCardRef = useRef<HTMLDivElement | null>(null);
+  const pdfWaiverElement = useRef<HTMLDivElement | null>(null);
+  const pdfWaiverElementDownload = useRef<PDFExport | null>(null);
   
   // only update signature width when the signature block is visible
   useEffect(() => {
@@ -89,15 +77,9 @@ export default function SignWaiver() {
   useEffect(() => {
     const handleResize = () => {
       if (signatureBlockCardRef.current !== null) {
-<<<<<<< HEAD
-        setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
-      }
-    };
-=======
       setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
     }
   };
->>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -131,6 +113,7 @@ export default function SignWaiver() {
   } = methods;
 
   // handler Funtions
+  
   const handleUpdateSignature = async () => {
     if (signatureRef.current !== null){
     const signatureImg = await signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
@@ -138,18 +121,27 @@ export default function SignWaiver() {
     }
   };
   const onSubmit = async () => {
-    const drawnDOM = await drawDOM(pdfWaiverElement.current, {
+    if(pdfWaiverElement.current !== null){
+      const drawnDOM = await drawDOM(pdfWaiverElement.current, {
       paperSize: 'A4',
-      margin: '1cm',
+      margin: {
+        top: '1cm',
+        right: '1cm',
+        bottom: '1cm',
+        left: '1cm',
+      },
       scale: .55,
     });
     const signedWaiver = await exportPDF(drawnDOM);
     console.log(signedWaiver);
+
     // post cloudinary url to server
     const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isDesktop) {
       console.log(pdfWaiverElementDownload.current);
-      await pdfWaiverElementDownload.current.save();
+      if (pdfWaiverElementDownload.current !== null){
+        await pdfWaiverElementDownload.current.save();
+      }
     }
     await submitSignedWaiver({
       signedWaiver,
@@ -157,29 +149,23 @@ export default function SignWaiver() {
     }); 
     enqueueSnackbar('Waiver Signed');
     push(paths.waiverConfirmation);
+  }
   };
 
   // clear signature on click
   const handleClearSignature = () => signatureRef.current.clear();
 
   return (
-<<<<<<< HEAD
-    // <Page title="User: Sign Waiver">
-    <>
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        {/* <CustomBreadcrumbs
-=======
 
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
->>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
           heading="Sign Waiver"
           links={[
             { name: 'Edit Account Members', href: `#` },
             { name: 'User', href: paths.dashboard.user.list },
             // { name: !isEdit ? 'New user' : capitalCase('name') },
           ]}
-        /> */}
+        />
         <PDFExport ref={pdfWaiverElementDownload} paperSize="Letter" imageResolution={300} scale={0.55} margin={10}>
           <Grid ref={pdfWaiverElement} container spacing={2}>
             <Grid item xs={12}>
@@ -248,10 +234,6 @@ export default function SignWaiver() {
           </Grid>
         </PDFExport>
       </Container>
-<<<<<<< HEAD
-    </>
-=======
       
->>>>>>> 860e9ff301845ab024e9eb11ee4ff42f09c07e52
   );
 }
