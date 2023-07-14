@@ -1,67 +1,65 @@
-import { add } from 'date-fns';
-import _mock from './_mock';
-import { randomInArray, randomNumberRange } from './funcs';
+import { add, subDays } from 'date-fns';
+//
+import { _mock } from './_mock';
+import { _addressBooks } from './_others';
 
 // ----------------------------------------------------------------------
 
-export const _invoices = [...Array(20)].map((_, index) => ({
+export const INVOICE_STATUS_OPTIONS = [
+  { value: 'paid', label: 'Paid' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'overdue', label: 'Overdue' },
+  { value: 'draft', label: 'Draft' },
+];
+
+export const INVOICE_SERVICE_OPTIONS = [...Array(8)].map((_, index) => ({
   id: _mock.id(index),
-  invoiceNumber: `${17048 + index}`,
-  taxes: 5,
-  discount: 10,
-  sent: randomNumberRange(1, 10),
-  subTotalPrice: _mock.number.price(index + 1),
-  totalPrice: _mock.number.price(index + 1),
-  createDate: add(new Date(), { days: index, hours: index }),
-  dueDate: add(new Date(), { days: index + 15, hours: index }),
-  status: randomInArray(['paid', 'unpaid', 'overdue', 'draft']),
-  invoiceFrom: {
-    id: _mock.id(index),
-    name: _mock.name.fullName(index),
-    address: _mock.address.fullAddress(index),
-    company: _mock.company(index),
-    email: _mock.email(index),
-    phone: _mock.phoneNumber(index),
-  },
-  invoiceTo: {
-    id: _mock.id(index + 1),
-    name: _mock.name.fullName(index + 1),
-    address: _mock.address.fullAddress(index + 1),
-    company: _mock.company(index + 1),
-    email: _mock.email(index + 1),
-    phone: _mock.phoneNumber(index + 1),
-  },
-  items: [...Array(3)].map((_, index) => ({
-    id: _mock.id(index),
-    title: _mock.text.title(index),
-    description: _mock.text.description(index),
-    quantity: 5,
-    price: _mock.number.price(index),
-    total: _mock.number.price(index),
-    service: randomInArray([
-      'full stack development',
-      'backend development',
-      'ui design',
-      'ui/ux design',
-      'front end development',
-    ]),
-  })),
+  name: _mock.role(index),
+  price: _mock.number.price(index),
 }));
 
-export const _invoiceAddressFrom = [...Array(5)].map((_, index) => ({
-  id: _mock.id(index),
-  name: _mock.name.fullName(index),
-  address: _mock.address.fullAddress(index),
-  company: _mock.company(index),
-  email: _mock.email(index),
-  phone: _mock.phoneNumber(index),
-}));
+const ITEMS = [...Array(3)].map((__, index) => {
+  const total = INVOICE_SERVICE_OPTIONS[index].price * _mock.number.nativeS(index);
 
-export const _invoiceAddressTo = [...Array(16)].map((_, index) => ({
-  id: _mock.id(index + 1),
-  name: _mock.name.fullName(index + 1),
-  address: _mock.address.fullAddress(index + 1),
-  company: _mock.company(index + 1),
-  email: _mock.email(index + 1),
-  phone: _mock.phoneNumber(index + 1),
-}));
+  return {
+    id: _mock.id(index),
+    total,
+    title: _mock.productName(index),
+    description: _mock.sentence(index),
+    price: INVOICE_SERVICE_OPTIONS[index].price,
+    service: INVOICE_SERVICE_OPTIONS[index].name,
+    quantity: _mock.number.nativeS(index),
+  };
+});
+
+export const _invoices = [...Array(20)].map((_, index) => {
+  const taxes = _mock.number.price(index + 1);
+
+  const discount = _mock.number.price(index + 2);
+
+  const shipping = _mock.number.price(index + 3);
+
+  const subTotal = ITEMS.reduce((accumulator, item) => accumulator + item.price * item.quantity, 0);
+
+  const totalAmount = subTotal - shipping - discount + taxes;
+
+  const status =
+    (index % 2 && 'paid') || (index % 3 && 'pending') || (index % 4 && 'overdue') || 'draft';
+
+  return {
+    id: _mock.id(index),
+    taxes,
+    status,
+    discount,
+    shipping,
+    subTotal,
+    totalAmount,
+    items: ITEMS,
+    invoiceNumber: `INV-199${index}`,
+    invoiceFrom: _addressBooks[index],
+    invoiceTo: _addressBooks[index + 1],
+    sent: _mock.number.nativeS(index),
+    createDate: subDays(new Date(), index),
+    dueDate: add(new Date(), { days: index + 15, hours: index }),
+  };
+});

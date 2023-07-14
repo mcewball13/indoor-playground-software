@@ -1,17 +1,17 @@
-const { Company } = require('../server/models');
+const { Company } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _COMPANIES = [];
 
 for (let i = 0; i < 7; i++) {
   _COMPANIES.push({
-    companyName: faker.company.companyName(),
-    dateInBusiness: faker.date.past(50),
-    addressStreet: faker.address.streetAddress(),
-    addressCity: faker.address.cityName(),
-    addressState: faker.address.stateAbbr(),
-    addressZip: faker.address.zipCode(),
-    addressPhone: faker.phone.number(),
+    companyName: faker.company.name(),
+    dateInBusiness: faker.date.past({ years: 50 }),
+    street: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state({ abbreviated: true }),
+    zipCode: faker.location.zipCode(),
+    phoneNumber: faker.phone.number(),
   });
 }
 

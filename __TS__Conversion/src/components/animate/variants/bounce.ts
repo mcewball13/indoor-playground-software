@@ -1,5 +1,5 @@
-// @types
-import { VariantsType } from '../type';
+// types
+import { VariantsType } from '../types';
 //
 import { varTranEnter, varTranExit } from './transition';
 

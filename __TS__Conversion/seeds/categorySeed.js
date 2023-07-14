@@ -1,4 +1,4 @@
-const { ProductCategories } = require('../server/models');
+const { ProductCategories } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _CATEGORIES = [];
