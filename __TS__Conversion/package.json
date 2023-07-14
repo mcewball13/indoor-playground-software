@@ -61,7 +61,7 @@
     "highlight.js": "^11.8.0",
     "i18next": "^23.1.0",
     "i18next-browser-languagedetector": "^7.0.2",
-    "isomorphic-dompurify": "^1.6.0",
+    "isomorphic-dompurify": "^1.8.0",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "mapbox-gl": "^2.15.0",
