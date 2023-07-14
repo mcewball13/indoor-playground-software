@@ -1,4 +1,4 @@
-const { Locations } = require('../server/models');
+const { Locations } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _LOCATIONS = [];
@@ -6,11 +6,11 @@ const _LOCATIONS = [];
 for (let i = 0; i < 4; i++) {
   _LOCATIONS.push({
     locationName: faker.company.bsNoun(),
-    addressStreet: faker.address.streetAddress(),
-    addressCity: faker.address.cityName(),
-    addressState: faker.address.stateAbbr(),
-    addressZip: faker.address.zipCode(),
-    addressPhone: faker.phone.number(),
+    street: faker.location.streetAddress(),
+    city: faker.location.city(),
+    state: faker.location.state({ abbreviated: true }),
+    zipCode: faker.location.zipCode(),
+    phoneNumber: faker.phone.number(),
     company_id: Math.floor(Math.random() * 7 + 1),
   });
 }

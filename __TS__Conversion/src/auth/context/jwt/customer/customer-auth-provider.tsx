@@ -88,11 +88,21 @@ export function CustomerAuthProvider({ children }: Props) {
           payload: { customer: response.data.customer },
         });
       } else {
-        dispatch({ type: CustomerTypes.LOGOUT });
+        dispatch({
+          type: CustomerTypes.INITIAL,
+          payload: {
+            customer: null,
+          },
+        });
       }
     } catch (error) {
       console.error(error);
-      dispatch({ type: CustomerTypes.LOGOUT });
+      dispatch({
+        type: CustomerTypes.INITIAL,
+        payload: {
+          customer: null,
+        },
+      });
     }
   }, []);
 
@@ -172,5 +182,7 @@ export function CustomerAuthProvider({ children }: Props) {
     [login, register, logout, state.customer, status]
   );
 
-  return <CustomerAuthContext.Provider value={memoizedValue}>{children}</CustomerAuthContext.Provider>;
+  return (
+    <CustomerAuthContext.Provider value={memoizedValue}>{children}</CustomerAuthContext.Provider>
+  );
 }

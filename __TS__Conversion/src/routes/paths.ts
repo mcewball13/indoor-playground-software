@@ -24,6 +24,8 @@ export const paths = {
   about: '/about-us',
   contact: '/contact-us',
   faqs: '/faqs',
+  waiver: '/sign-waiver',
+  waiverConfirmation: '/waiver-confirmed',
   page403: '/403',
   page404: '/404',
   page500: '/500',
