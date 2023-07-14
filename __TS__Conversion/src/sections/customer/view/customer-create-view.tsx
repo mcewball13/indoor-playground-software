@@ -10,7 +10,11 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
 import UserNewEditForm from '../customer-new-edit-form';
 
+import * as avatars from 'src/assets/avatars';
+
 // ----------------------------------------------------------------------
+
+console.log('avatars', avatars);
 
 export default function UserCreateView() {
   const settings = useSettingsContext();
@@ -35,7 +39,7 @@ export default function UserCreateView() {
         }}
       />
 
-      <UserNewEditForm />
+      {/* <UserNewEditForm /> */}
     </Container>
   );
 }

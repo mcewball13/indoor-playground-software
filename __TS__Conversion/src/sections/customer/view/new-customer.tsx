@@ -21,9 +21,10 @@ import UserWaiverForm from '../UserWaiverForm';
 // _mock_
 import { _userList } from '../../../_mock'; //completed 7.6.23
 // avatars
-import avatars from '../../../assets/avatars'; //completed 7.6.23
+import * as avatars from 'src/assets/avatars'; //completed 7.6.23
 
 // ----------------------------------------------------------------------
+
 
 
 

@@ -1,108 +1,152 @@
-import PropTypes from 'prop-types';
-import isString from 'lodash/isString';
+import { useDropzone } from 'react-dropzone';
 // @mui
-import { Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { alpha } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 //
-// usedispatch from store
-import { useDispatch } from '../../redux/store';
+import Iconify from '../iconify';
+import Image from '../image';
 //
-
-import Image from '../Image';
-import Iconify from '../Iconify';
-import { openModal } from '../../redux/slices/waiverFormSlice';
+import { UploadProps } from './types';
+import RejectionFiles from './errors-rejection-files';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled('div')(({ theme }) => ({
-  width: 144,
-  height: 144,
-  margin: 'auto',
-  borderRadius: '50%',
-  padding: theme.spacing(1),
-  border: `1px dashed ${theme.palette.grey[500_32]}`,
-}));
-
-const ThumbnailStyle = styled('div')({
-  zIndex: 0,
-  width: '100%',
-  height: '100%',
-  outline: 'none',
-  display: 'flex',
-  overflow: 'hidden',
-  borderRadius: '50%',
-  position: 'relative',
-  alignItems: 'center',
-  justifyContent: 'center',
-  '& > *': { width: '100%', height: '100%' },
-  '&:hover': {
-    cursor: 'pointer',
-    '& .placeholder': {
-      zIndex: 9,
+export default function ChooseAvatar({
+  error,
+  file,
+  disabled,
+  helperText,
+  sx,
+  isCAPage = false,
+  ...other
+}: UploadProps) {
+  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
+    multiple: false,
+    disabled,
+    accept: {
+      'image/*': [],
     },
-  },
-});
+    ...other,
+  });
 
-const PlaceholderStyle = styled('div')(({ theme }) => ({
-  display: 'flex',
-  position: 'absolute',
-  alignItems: 'center',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  color: theme.palette.text.secondary,
-  backgroundColor: theme.palette.background.neutral,
-  transition: theme.transitions.create('opacity', {
-    easing: theme.transitions.easing.easeInOut,
-    duration: theme.transitions.duration.shorter,
-  }),
-  '&:hover': { opacity: 0.72 },
-}));
+  const hasFile = !!file;
 
-// ----------------------------------------------------------------------
+  const hasError = isDragReject || !!error;
 
-ChooseAvatar.propTypes = {
-  error: PropTypes.bool,
-  file: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  helperText: PropTypes.node,
-  sx: PropTypes.object,
-};
+  const imgUrl = typeof file === 'string' ? file : file?.preview;
 
-export default function ChooseAvatar({ file, helperText, sx, ...other }) {
-  const dispatch = useDispatch();
+  const renderPreview = hasFile && (
+    <Image
+      alt="avatar"
+      src={imgUrl}
+      sx={{
+        width: 1,
+        height: 1,
+        borderRadius: '50%',
+      }}
+    />
+  );
 
-  const handleOpenModal = () => {
-    dispatch(openModal(true));
-  };
+  const renderPlaceholder = (
+    <Stack
+      alignItems="center"
+      justifyContent="center"
+      spacing={1}
+      className="upload-placeholder"
+      sx={{
+        top: 0,
+        left: 0,
+        width: 1,
+        height: 1,
+        zIndex: 9,
+        borderRadius: '50%',
+        position: 'absolute',
+        color: 'text.disabled',
+        bgcolor: (theme) => alpha(theme.palette.grey[500], 0.08),
+        transition: (theme) =>
+          theme.transitions.create(['opacity'], {
+            duration: theme.transitions.duration.shorter,
+          }),
+        '&:hover': {
+          opacity: 0.72,
+        },
+        ...(hasError && {
+          color: 'error.main',
+          bgcolor: 'error.lighter',
+        }),
+        ...(hasFile && {
+          zIndex: 9,
+          opacity: 0,
+          color: 'common.white',
+          bgcolor: (theme) => alpha(theme.palette.grey[900], 0.64),
+        }),
+      }}
+    >
+      <Iconify icon="solar:camera-add-bold" width={32} />
+
+      <Typography variant="caption">{file ? 'Update photo' : 'Upload photo'}</Typography>
+    </Stack>
+  );
+
+  const renderContent = (
+    <Box
+      sx={{
+        width: 1,
+        height: 1,
+        overflow: 'hidden',
+        borderRadius: '50%',
+        position: 'relative',
+      }}
+    >
+      {renderPreview}
+      {renderPlaceholder}
+    </Box>
+  );
 
   return (
     <>
-      <RootStyle
+      <Box
+        {...getRootProps()}
         sx={{
+          p: 1,
+          m: 'auto',
+          width: isCAPage ? 70 : 144,
+          height: isCAPage ? 70 : 144,
+          cursor: 'pointer',
+          overflow: 'hidden',
+          borderRadius: '50%',
+          border: (theme) => `1px dashed ${alpha(theme.palette.grey[500], 0.2)}`,
+          ...(isDragActive && {
+            opacity: 0.72,
+          }),
+          ...(disabled && {
+            opacity: 0.48,
+            pointerEvents: 'none',
+          }),
+          ...(hasError && {
+            borderColor: 'error.light',
+          }),
+          ...(hasFile && {
+            ...(hasError && {
+              bgcolor: 'error.lighter',
+            }),
+            '&:hover .upload-placeholder': {
+              opacity: 1,
+            },
+          }),
           ...sx,
         }}
-        {...other}
       >
-        <ThumbnailStyle onClick={handleOpenModal}>
-          {file && <Image alt="avatar" src={isString(file) ? file : file.preview} sx={{ zIndex: 8 }} />}
+        <input {...getInputProps()} />
 
-          <PlaceholderStyle
-            className="placeholder"
-            sx={{
-              ...(file && {
-                opacity: 0,
-                color: 'common.white',
-                bgcolor: 'grey.900',
-                '&:hover': { opacity: 0.72 },
-              }),
-            }}
-          >
-            <Iconify icon={'ic:round-add-a-photo'} sx={{ width: 24, height: 24, mb: 1 }} />
-            <Typography variant="caption">{file ? 'Update avatar' : 'Choose Avatar'}</Typography>
-          </PlaceholderStyle>
-        </ThumbnailStyle>
-      </RootStyle>
+        {renderContent}
+      </Box>
 
-       {helperText && helperText}
+      {helperText && helperText}
+
+      <RejectionFiles fileRejections={fileRejections} />
     </>
   );
 }

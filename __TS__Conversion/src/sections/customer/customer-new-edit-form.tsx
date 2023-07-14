@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -41,6 +41,8 @@ type Props = {
 
 export default function UserNewEditForm({ currentUser }: Props) {
   const router = useRouter();
+
+  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -121,6 +123,13 @@ export default function UserNewEditForm({ currentUser }: Props) {
       }
     },
     [setValue]
+  );
+
+  const handleSetAvatar = useCallback(
+    (url: string) => {
+      setSelectedAvatar(url);
+    },
+    [setSelectedAvatar]
   );
 
   return (
