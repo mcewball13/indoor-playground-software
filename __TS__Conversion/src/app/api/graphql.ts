@@ -2,7 +2,7 @@ console.log('typeDefs');
 import { ApolloServer } from '@apollo/server';
 import { startServerAndCreateNextHandler } from '@as-integrations/next';
 
-import { typeDefs, resolvers } from '../../schemas';
+import { typeDefs, resolvers } from '../../server/schemas';
 // import Cors from 'micro-cors';
 
 const apolloServer = new ApolloServer({

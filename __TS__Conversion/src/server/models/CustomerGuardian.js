@@ -46,16 +46,16 @@ CustomerGuardian.init(
         len: [8, 22],
       },
     },
-    addressStreet: {
+    street: {
       type: DataTypes.STRING,
     },
-    addressCity: {
+    city: {
       type: DataTypes.STRING,
     },
-    addressState: {
+    state: {
       type: DataTypes.STRING,
     },
-    addressZipCode: {
+    zipCode: {
       type: DataTypes.STRING,
     },
     phoneNumber: {

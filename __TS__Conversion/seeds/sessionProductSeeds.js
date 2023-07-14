@@ -1,4 +1,4 @@
-const { SessionProducts } = require('../server/models');
+const { SessionProducts } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _SESSION_PRODUCTS = [];

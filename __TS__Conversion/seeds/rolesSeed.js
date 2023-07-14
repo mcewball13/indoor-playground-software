@@ -1,4 +1,4 @@
-const { EmployeeRoles } = require('../server/models');
+const { EmployeeRoles } = require('../src/server/models');
 const { faker } = require('@faker-js/faker');
 
 const _ROLES = [];

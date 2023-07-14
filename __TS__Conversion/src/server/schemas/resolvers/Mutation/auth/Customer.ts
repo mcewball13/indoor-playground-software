@@ -1,17 +1,14 @@
-const { GraphQLError } = require('graphql');
-const nodemailer = require('nodemailer');
-const randomstring = require('randomstring');
-const { randomUUID } = require('crypto');
+import { GraphQLError } from 'graphql';
+import { IResolvers }  from '@graphql-tools/utils';
+import nodemailer from 'nodemailer';
+import randomstring from 'randomstring';
+import { randomUUID } from 'crypto';
 const cloudinary = require('cloudinary').v2;
 
-const {
-  CustomerGuardian,
-  CustomerMinor,
-  CustomerGuardianHasCustomerMinor,
-} = require('../../../../server/models');
-const generateHtmlEmail = require('../../../../src/utils/emailHtml');
-const generatePlainEmail = require('../../../../src/utils/emailPlain');
-const { signToken } = require('../../../../src/utils/auth');
+import { CustomerGuardian, CustomerMinor, CustomerGuardianHasCustomerMinor } from 'src/server/models';
+import generateHtmlEmail from 'src/utils/emailHtml';
+import generatePlainEmail from 'src/utils/emailPlain';
+import { auth } from 'src/utils/auth';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -21,11 +18,14 @@ cloudinary.config({
 });
 
 // email client instance
-const sgMail = require('@sendgrid/mail');
-const SignedWaivers = require('../../../../server/models/SignedWaivers');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+import sgMail from '@sendgrid/mail';
+import SignedWaivers from 'src/server/models/SignedWaivers';
 
-export default {
+if (typeof process.env.SENDGRID_API_KEY === 'string') {
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
+
+const resolvers: IResolvers = {
   customerLogin: async (parent:unknown, { email, password }: Record<string, any>, context: any) => {
     try {
       const existingCustomerData = await CustomerGuardian.findOne({
@@ -35,7 +35,6 @@ export default {
         include: [
           {
             model: CustomerMinor,
-            through: CustomerGuardianHasCustomerMinor,
             as: 'minors',
           },
         ],
@@ -57,7 +56,7 @@ export default {
         });
       }
       const { id, email: customerEmail } = existingCustomerData.dataValues;
-      const customerAccessToken = signToken({ id, customerEmail });
+      const customerAccessToken = auth.signToken({ id, customerEmail });
 
       return {
         existingCustomerData,
@@ -97,10 +96,10 @@ export default {
           minor_id: minor.id,
         });
       });
-      // const token = signToken({id: newCustomerData.id, email: newCustomerData.email});
+      // const token = auth.signToken({id: newCustomerData.id, email: newCustomerData.email});
 
       // test user created by mui assets api
-      const customerAccessToken = signToken({
+      const customerAccessToken = auth.signToken({
         id: '8864c717-587d-472a-929a-8e5f298024da-0',
         displayName: 'Jaydon Frankie',
         email: 'demo@minimals.cc',
@@ -193,3 +192,5 @@ export default {
     }
   },
 };
+
+export default resolvers;

@@ -8,7 +8,7 @@ const seedEmployees = require("./employeeSeed");
 const seedMemberships = require("./membershipSeed");
 const seedCategories = require("./categorySeed");
 
-const sequelize = require('../server/config/connection');
+const sequelize = require('../src/server/config/connection');
 
 const seedAll = async () => {
   await sequelize.sync({ force: true });

@@ -1,16 +1,17 @@
-const { CustomerGuardian, Employee, EmployeeRoles, Locations } = require('../../../server/models');
+import { IResolvers } from '@graphql-tools/utils';
+import { CustomerGuardian, Employees, EmployeeRoles, Locations } from 'src/server/models';
 
-module.exports = {
-  allEmployees: async (parent, args, context) => {
+const UserQueries: IResolvers = {
+  allEmployees: async (parent: unknown, args: Record<string, any>, context: any) => {
     try {
-      const guardianData = await Employee.findAll({});
+      const guardianData = await Employees.findAll({});
       console.log(guardianData);
       return guardianData;
     } catch (error) {
       console.log(error);
     }
   },
-  getRoles: async (parent, args, context) => {
+  getRoles: async (parent: unknown, args: Record<string, any>, context: any) => {
     try {
       const roleData = await EmployeeRoles.findAll({});
       return roleData;
@@ -18,9 +19,9 @@ module.exports = {
       console.log(error);
     }
   },
-  addEmployeeFormFill: async (parent, args, context) => {
+  addEmployeeFormFill: async (parent: unknown, args: Record<string, any>, context: any) => {
     try {
-      const formFillData = await Employee.findAll({
+      const formFillData = await Employees.findAll({
         attributes: { exclude: ['password'] },
         include: [
           {
@@ -40,3 +41,5 @@ module.exports = {
     }
   },
 };
+
+export default UserQueries;
