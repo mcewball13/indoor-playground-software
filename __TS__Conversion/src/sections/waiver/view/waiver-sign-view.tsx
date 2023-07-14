@@ -35,8 +35,6 @@ import HTMLBlock from './HTML-block-view';
 //import JwtRegisterView from '../../auth/jwt/jwt-register-view'
 import { current } from '@reduxjs/toolkit';
 import { number } from 'yup';
-import ReactSignatureCanvas from 'react-signature-canvas';
-import { pdf } from '@react-pdf/renderer';
 
 // ----------------------------------------------------------------------
 //waiverText.content
@@ -83,15 +81,14 @@ export default function SignWaiver() {
   const { enqueueSnackbar } = useSnackbar();
   // const { id = '' } = query;
   // const isEdit = pathname.includes('edit');
+  const signatureRef = useRef<SignatureCanvas | null>(null);
+  const signatureBlockCardRef = useRef<HTMLDivElement | null>(null);
+  const pdfWaiverElement = useRef<HTMLDivElement | null>(null);
+  const pdfWaiverElementDownload = useRef<PDFExport | null>(null);
 
-  const signatureRef = useRef<SignatureCanvas>(null);
-  const signatureBlockCardRef = useRef<HTMLDivElement>(null);
-  const pdfWaiverElement = useRef<HTMLDivElement>(null);
-  const pdfWaiverElementDownload = useRef<PDFExport>(null);
-  
   // only update signature width when the signature block is visible
   useEffect(() => {
-    if (signatureBlockCardRef.current) {
+    if (signatureBlockCardRef.current !== null) {
       setCanvasWidth(signatureBlockCardRef.current.clientWidth);
     }
   }, [signatureBlockCardRef]);
@@ -102,12 +99,10 @@ export default function SignWaiver() {
   // set the canvas width to the signature block width on resize
   useEffect(() => {
     const handleResize = () => {
-
-      if (signatureBlockCardRef.current) {
-      setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
-    }
-  };
-
+      if (signatureBlockCardRef.current !== null) {
+        setCanvasWidth(Math.floor(signatureBlockCardRef.current.clientWidth));
+      }
+    };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -141,22 +136,13 @@ export default function SignWaiver() {
   } = methods;
 
   // handler Funtions
-
-  const handleUpdateSignature = () => {
-    if (signatureRef.current){
-    const signatureImg = signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
-    setSignature(signatureImg);
-
   const handleUpdateSignature = async () => {
     if (signatureRef.current !== null) {
       const signatureImg = await signatureRef.current.getTrimmedCanvas().toDataURL('image/png');
       setSignature(signatureImg);
-
     }
   };
-
   const onSubmit = async () => {
-
     let drawnDOM;
     if (pdfWaiverElement.current) {
       drawnDOM = await drawDOM(pdfWaiverElement.current, {
@@ -181,65 +167,9 @@ export default function SignWaiver() {
       // Handle the case when drawnDOM is null or undefined
       console.log('drawnDOM is null or undefined');
     }
-
     // post cloudinary url to server
-
     const isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isDesktop && pdfWaiverElementDownload.current) {
-
-      pdfWaiverElementDownload.current.save();
-    }
-
-    // await submitSignedWaiver({
-    //   signedWaiver,
-    //   customerId: customer.id,
-    // }); 
-    enqueueSnackbar('Waiver Signed');
-    // push(paths.waiverConfirmation);
-  };
-
-  // clear signature on click
-  const handleClearSignature = () => signatureRef.current && signatureRef.current.clear()
-
-  return (
-
-      <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-        <CustomBreadcrumbs
-          heading="Sign Waiver"
-          links={[
-            { name: 'Edit Account Members', href: `#` },
-            { name: 'User', href: paths.dashboard.user.list },
-            // { name: !isEdit ? 'New user' : capitalCase('name') },
-          ]}
-        />
-        <PDFExport ref={pdfWaiverElementDownload} paperSize="Letter" imageResolution={300} scale={0.55} margin={10}>
-          <Grid ref={pdfWaiverElement} container spacing={2}>
-            <Grid item xs={12}>
-              <HTMLBlock waiverText={safeHTML} />
-            </Grid>
-            <Grid alignItems="center" container spacing={2} item xs={6}>
-              <Grid item>
-                <Typography variant="h4" component="h4">
-                  Signing for:
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography
-                  alignSelf={'center'}
-                  textAlign="left"
-                  variant="body1"
-                  component="p"
-                  sx={{
-                    marginLeft: '1rem',
-                  }}
-                >
-                  Herold McIntire
-                  {/* {customer?.guardianFirstName} {customer?.guardianLastName} */}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid alignItems="center" container item xs={6}>
-
       console.log(pdfWaiverElementDownload.current);
       await pdfWaiverElementDownload.current.save();
     }
@@ -276,12 +206,10 @@ export default function SignWaiver() {
           </Grid>
           <Grid alignItems="center" container spacing={2} item xs={6}>
             <Grid item>
-
               <Typography variant="h4" component="h4">
                 Signing for:
               </Typography>
             </Grid>
-
             <Grid item xs={6}>
               <Typography
                 alignSelf={'center'}
@@ -293,7 +221,6 @@ export default function SignWaiver() {
               >
                 {customer?.guardianFirstName} {customer?.guardianLastName}
               </Typography>
-
             </Grid>
           </Grid>
           <Grid alignItems="center" container item xs={6}>
