@@ -17,7 +17,7 @@ export interface UploadProps extends DropzoneOptions {
   placeholder?: React.ReactNode;
   helperText?: React.ReactNode;
   disableMultiple?: boolean;
-  isCAPage?: boolean;
+  isCustomerAccountPage?: boolean;
   //
   file?: CustomFile | string | null;
   onDelete?: VoidFunction;
