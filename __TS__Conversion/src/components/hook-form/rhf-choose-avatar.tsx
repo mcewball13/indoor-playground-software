@@ -7,14 +7,19 @@ import { ChooseAvatar, Upload, UploadBox } from '../upload';
 
 // ----------------------------------------------------------------------
 
-type Props = {
+type ChooseProps = {
+  name: string;
+  selectedAvatar?: string | null;
+}
+
+type UploadProps = {
   name: string;
   multiple?: boolean;
   helperText?: React.ReactNode;
   selectedAvatar?: string | null;
 };
 
-export default function RHFChooseAvatar({ name, selectedAvatar = null, ...other }: Props) {
+export default function RHFChooseAvatar({ name, selectedAvatar = null, ...other }: ChooseProps) {
   const { control } = useFormContext();
 
   return (
@@ -41,7 +46,7 @@ export default function RHFChooseAvatar({ name, selectedAvatar = null, ...other 
 
 // ----------------------------------------------------------------------
 
-export function RHFUploadBox({ name, ...other }: Props) {
+export function RHFUploadBox({ name, ...other }: UploadProps) {
   const { control } = useFormContext();
 
   return (
@@ -57,7 +62,7 @@ export function RHFUploadBox({ name, ...other }: Props) {
 
 // ----------------------------------------------------------------------
 
-export function RHFUpload({ name, multiple, helperText, ...other }: Props) {
+export function RHFUpload({ name, multiple, helperText, ...other }: UploadProps) {
   const { control } = useFormContext();
 
   return (

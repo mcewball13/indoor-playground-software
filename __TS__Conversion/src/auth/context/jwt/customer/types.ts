@@ -36,7 +36,6 @@ export type AuthMinorType = {
   minorFirstName: string;
   minorLastName: string;
   birthday: string;
-  guardianId: number;
 };
 export type AuthStateTypeCustomer = {
     status?: string;
