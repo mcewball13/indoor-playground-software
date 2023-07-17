@@ -10,16 +10,22 @@ import { ChooseAvatar, Upload, UploadBox } from '../upload';
 type ChooseProps = {
   name: string;
   selectedAvatar?: string | null;
-}
+  helperText?: React.ReactNode;
+  openModal?: VoidFunction;
+};
 
 type UploadProps = {
   name: string;
   multiple?: boolean;
   helperText?: React.ReactNode;
-  selectedAvatar?: string | null;
 };
 
-export default function RHFChooseAvatar({ name, selectedAvatar = null, ...other }: ChooseProps) {
+export default function RHFChooseAvatar({
+  name,
+  selectedAvatar = null,
+  openModal,
+  ...other
+}: ChooseProps) {
   const { control } = useFormContext();
 
   return (
@@ -30,7 +36,7 @@ export default function RHFChooseAvatar({ name, selectedAvatar = null, ...other 
         const checkError = !!error && !field.value;
 
         return (
-          <div>
+          <div onClick={openModal}>
             <ChooseAvatar {...other} file={selectedAvatar} />
             {checkError && (
               <FormHelperText error sx={{ px: 2, textAlign: 'center' }}>

@@ -36,10 +36,12 @@ import FormProvider, {
 // ----------------------------------------------------------------------
 
 type Props = {
+  avatar?: string | null;
   currentUser?: IUserItem;
+  openModal: VoidFunction;
 };
 
-export default function UserNewEditForm({ currentUser }: Props) {
+export default function UserNewEditForm({ currentUser, avatar, openModal }: Props) {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -143,6 +145,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
             <Box sx={{ mb: 5 }}>
               <RHFChooseAvatar
+                openModal={openModal}
                 name="avatarUrl"
                 helperText={
                   <Typography
@@ -155,8 +158,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
                       color: 'text.disabled',
                     }}
                   >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
+                    If you don't choose an avatar,
+                    <br /> your initials will be used.
                   </Typography>
                 }
               />

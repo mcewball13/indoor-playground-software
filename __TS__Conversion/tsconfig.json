@@ -35,6 +35,6 @@
     "src/server/models/CustomerGuardianHasCustomerMinor.js",
     "src/server/models/index.js",
     "src/server/config/connection.js"
-  ],
+, "src/assets/avatars/index.ts"  ],
   "exclude": ["node_modules"]
 }

@@ -16,6 +16,9 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
 import UserNewEditForm from '../customer-new-edit-form';
+import avatars from 'src/assets/avatars';
+
+console.log(avatars)
 
 // ----------------------------------------------------------------------
 
@@ -46,14 +49,14 @@ export default function UserCreateView() {
         }}
       />
 
-      <UserNewEditForm avatar={selectedAvatar} />
+      <UserNewEditForm avatar={selectedAvatar} openModal={modal.onTrue} />
       <Dialog maxWidth="lg" open={modal.value} onClose={modal.onFalse}>
         <Box p={2}>
           <Grid container spacing={2}>
             <Grid item xs={12} textAlign="center">
               <DialogTitle>Select an avatar</DialogTitle>
             </Grid>
-            {mappedAvatars.map(({src: url}) => (
+            {avatars.map((url) => (
               <Grid
                 sx={{ '&:hover': { opacity: 0.72 } }}
                 onClick={() => setSelectedAvatar(url)}
