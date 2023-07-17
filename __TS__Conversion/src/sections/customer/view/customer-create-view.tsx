@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @mui
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -24,6 +24,10 @@ console.log(avatars)
 
 export default function UserCreateView() {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
+
+  useEffect(() => {
+    console.log(selectedAvatar);
+  }, [selectedAvatar]);
 
   const modal = useBoolean();
 
@@ -56,19 +60,20 @@ export default function UserCreateView() {
             <Grid item xs={12} textAlign="center">
               <DialogTitle>Select an avatar</DialogTitle>
             </Grid>
-            {avatars.map((url) => (
-              <Grid
+            {Object.keys(avatars).map((avatar) => {
+              const Avatar = avatars[avatar];
+              return <Grid
                 sx={{ '&:hover': { opacity: 0.72 } }}
-                onClick={() => setSelectedAvatar(url)}
+                onClick={() => setSelectedAvatar(avatar)}
                 item
                 xs={6}
                 sm={3}
                 md={2}
-                key={url}
+                key={avatar}
               >
-                <Image src={url} ratio="1/1" disabledEffect alt={url} />
+                <Image component={Avatar} ratio="1/1" disabledEffect alt={"Avatar Icon"} />
               </Grid>
-            ))}
+})}
           </Grid>
         </Box>
       </Dialog>

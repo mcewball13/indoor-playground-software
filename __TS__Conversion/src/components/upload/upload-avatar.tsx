@@ -112,8 +112,8 @@ export default function UploadAvatar({
         sx={{
           p: 1,
           m: 'auto',
-          width: isCAPage ? 70 : 144,
-          height: isCAPage ? 70 : 144,
+          width: isCustomerAccountPage ? 70 : 144,
+          height: isCustomerAccountPage ? 70 : 144,
           cursor: 'pointer',
           overflow: 'hidden',
           borderRadius: '50%',
