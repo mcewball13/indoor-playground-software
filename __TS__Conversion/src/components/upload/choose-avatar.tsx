@@ -1,4 +1,3 @@
-import { useDropzone } from 'react-dropzone';
 // @mui
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -8,7 +7,8 @@ import Typography from '@mui/material/Typography';
 import Iconify from '../iconify';
 import Image from '../image';
 //
-import { UploadProps } from './types';
+import { AvatarComponent, ChooseAvatarProps } from './types';
+import avatars from 'src/assets/avatars';
 
 // ----------------------------------------------------------------------
 
@@ -18,16 +18,14 @@ export default function ChooseAvatar({
   helperText,
   sx,
   isCustomerAccountPage = false,
-}: UploadProps) {
+}: ChooseAvatarProps) {
 
   const hasFile = !!file;
-
-  const imgUrl = typeof file === 'string' ? file : file?.preview;
 
   const renderPreview = hasFile && (
     <Image
       alt="avatar"
-      src={imgUrl}
+      component={avatars[file]}
       sx={{
         width: 1,
         height: 1,

@@ -32,11 +32,12 @@ import FormProvider, {
   RHFAutocomplete,
   RHFChooseAvatar,
 } from 'src/components/hook-form';
+import avatars from 'src/assets/avatars';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  avatar?: string | null;
+  avatar?: string;
   currentUser?: IUserItem;
   openModal: VoidFunction;
 };
@@ -75,7 +76,7 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
       country: currentUser?.country || '',
       zipCode: currentUser?.zipCode || '',
       company: currentUser?.company || '',
-      avatarUrl: currentUser?.avatarUrl || null,
+      avatarUrl: currentUser?.avatarUrl || avatar || null,
       phoneNumber: currentUser?.phoneNumber || '',
       isVerified: currentUser?.isVerified || true,
     }),
@@ -145,6 +146,7 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
 
             <Box sx={{ mb: 5 }}>
               <RHFChooseAvatar
+                selectedAvatar={avatar}
                 openModal={openModal}
                 name="avatarUrl"
                 helperText={

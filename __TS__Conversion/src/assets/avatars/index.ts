@@ -162,7 +162,7 @@ import avatar182 from './Asset 182.svg';
 import avatar184 from './Asset 184.svg';
 import avatar185 from './Asset 185.svg';
 
-export default {
+const avatars: Record<string, any> = {
   avatar10,
   avatar11,
   avatar12,
@@ -327,3 +327,5 @@ export default {
   avatar184,
   avatar185,
 };
+
+export default avatars;

@@ -27,3 +27,22 @@ export interface UploadProps extends DropzoneOptions {
   onRemove?: (file: CustomFile | string) => void;
   onRemoveAll?: VoidFunction;
 }
+export interface ChooseAvatarProps extends DropzoneOptions {
+  error?: boolean;
+  sx?: SxProps<Theme>;
+  thumbnail?: boolean;
+  placeholder?: React.ReactNode;
+  helperText?: React.ReactNode;
+  disableMultiple?: boolean;
+  isCustomerAccountPage?: boolean;
+  //
+  file?: AvatarComponent | string | null;
+  onDelete?: VoidFunction;
+  //
+  files?: (File | string)[];
+  onUpload?: VoidFunction;
+  onRemove?: (file: CustomFile | string) => void;
+  onRemoveAll?: VoidFunction;
+}
+
+export type AvatarComponent = React.FC<React.SVGProps<SVGSVGElement>>;

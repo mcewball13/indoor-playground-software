@@ -18,9 +18,9 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import UserNewEditForm from '../customer-new-edit-form';
 import avatars from 'src/assets/avatars';
 
-console.log(avatars)
-
 // ----------------------------------------------------------------------
+
+type AvatarKey = keyof typeof avatars;
 
 export default function UserCreateView() {
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
@@ -61,19 +61,21 @@ export default function UserCreateView() {
               <DialogTitle>Select an avatar</DialogTitle>
             </Grid>
             {Object.keys(avatars).map((avatar) => {
-              const Avatar = avatars[avatar];
-              return <Grid
-                sx={{ '&:hover': { opacity: 0.72 } }}
-                onClick={() => setSelectedAvatar(avatar)}
-                item
-                xs={6}
-                sm={3}
-                md={2}
-                key={avatar}
-              >
-                <Image component={Avatar} ratio="1/1" disabledEffect alt={"Avatar Icon"} />
-              </Grid>
-})}
+              const Avatar = avatars[avatar as AvatarKey];
+              return (
+                <Grid
+                  sx={{ '&:hover': { opacity: 0.72 } }}
+                  onClick={() => setSelectedAvatar(avatar)}
+                  item
+                  xs={6}
+                  sm={3}
+                  md={2}
+                  key={avatar}
+                >
+                  <Image component={Avatar} ratio="1/1" disabledEffect alt={'Avatar Icon'} />
+                </Grid>
+              );
+            })}
           </Grid>
         </Box>
       </Dialog>

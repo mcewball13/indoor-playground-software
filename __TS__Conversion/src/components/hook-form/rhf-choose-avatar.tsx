@@ -3,13 +3,13 @@ import { useFormContext, Controller } from 'react-hook-form';
 // @mui
 import { FormHelperText } from '@mui/material';
 // type
-import { ChooseAvatar, Upload, UploadBox } from '../upload';
+import { AvatarComponent, ChooseAvatar, Upload, UploadBox } from '../upload';
 
 // ----------------------------------------------------------------------
 
 type ChooseProps = {
   name: string;
-  selectedAvatar?: string | null;
+  selectedAvatar?: string;
   helperText?: React.ReactNode;
   openModal?: VoidFunction;
 };
@@ -22,7 +22,7 @@ type UploadProps = {
 
 export default function RHFChooseAvatar({
   name,
-  selectedAvatar = null,
+  selectedAvatar = '',
   openModal,
   ...other
 }: ChooseProps) {
