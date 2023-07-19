@@ -1,4 +1,3 @@
-import { useDropzone } from 'react-dropzone';
 // @mui
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -8,39 +7,25 @@ import Typography from '@mui/material/Typography';
 import Iconify from '../iconify';
 import Image from '../image';
 //
-import { UploadProps } from './types';
-import RejectionFiles from './errors-rejection-files';
+import { ChooseAvatarProps } from './types';
+import avatars from 'src/assets/avatars';
 
 // ----------------------------------------------------------------------
 
-export default function UploadAvatar({
-  error,
+export default function ChooseAvatar({
   file,
   disabled,
   helperText,
   sx,
   isCustomerAccountPage = false,
-  ...other
-}: UploadProps) {
-  const { getRootProps, getInputProps, isDragActive, isDragReject, fileRejections } = useDropzone({
-    multiple: false,
-    disabled,
-    accept: {
-      'image/*': [],
-    },
-    ...other,
-  });
+}: ChooseAvatarProps) {
 
   const hasFile = !!file;
-
-  const hasError = isDragReject || !!error;
-
-  const imgUrl = typeof file === 'string' ? file : file?.preview;
 
   const renderPreview = hasFile && (
     <Image
       alt="avatar"
-      src={imgUrl}
+      component={avatars[file]}
       sx={{
         width: 1,
         height: 1,
@@ -72,10 +57,6 @@ export default function UploadAvatar({
         '&:hover': {
           opacity: 0.72,
         },
-        ...(hasError && {
-          color: 'error.main',
-          bgcolor: 'error.lighter',
-        }),
         ...(hasFile && {
           zIndex: 9,
           opacity: 0,
@@ -86,7 +67,7 @@ export default function UploadAvatar({
     >
       <Iconify icon="solar:camera-add-bold" width={32} />
 
-      <Typography variant="caption">{file ? 'Update photo' : 'Upload photo'}</Typography>
+      <Typography variant="caption">{file ? 'Update photo' : 'Choose Avatar'}</Typography>
     </Stack>
   );
 
@@ -108,7 +89,6 @@ export default function UploadAvatar({
   return (
     <>
       <Box
-        {...getRootProps()}
         sx={{
           p: 1,
           m: 'auto',
@@ -118,20 +98,11 @@ export default function UploadAvatar({
           overflow: 'hidden',
           borderRadius: '50%',
           border: (theme) => `1px dashed ${alpha(theme.palette.grey[500], 0.2)}`,
-          ...(isDragActive && {
-            opacity: 0.72,
-          }),
           ...(disabled && {
             opacity: 0.48,
             pointerEvents: 'none',
           }),
-          ...(hasError && {
-            borderColor: 'error.light',
-          }),
           ...(hasFile && {
-            ...(hasError && {
-              bgcolor: 'error.lighter',
-            }),
             '&:hover .upload-placeholder': {
               opacity: 1,
             },
@@ -139,14 +110,12 @@ export default function UploadAvatar({
           ...sx,
         }}
       >
-        <input {...getInputProps()} />
 
         {renderContent}
       </Box>
 
       {helperText && helperText}
 
-      <RejectionFiles fileRejections={fileRejections} />
     </>
   );
 }

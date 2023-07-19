@@ -28,17 +28,20 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSwitch,
   RHFTextField,
-  RHFUploadAvatar,
   RHFAutocomplete,
+  RHFChooseAvatar,
 } from 'src/components/hook-form';
+import avatars from 'src/assets/avatars';
 
 // ----------------------------------------------------------------------
 
 type Props = {
+  avatar?: string;
   currentUser?: IUserItem;
+  openModal: VoidFunction;
 };
 
-export default function UserNewEditForm({ currentUser }: Props) {
+export default function UserNewEditForm({ currentUser, avatar, openModal }: Props) {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -72,7 +75,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
       country: currentUser?.country || '',
       zipCode: currentUser?.zipCode || '',
       company: currentUser?.company || '',
-      avatarUrl: currentUser?.avatarUrl || null,
+      avatarUrl: currentUser?.avatarUrl || avatar || null,
       phoneNumber: currentUser?.phoneNumber || '',
       isVerified: currentUser?.isVerified || true,
     }),
@@ -107,20 +110,6 @@ export default function UserNewEditForm({ currentUser }: Props) {
     }
   });
 
-  const handleDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile, { shouldValidate: true });
-      }
-    },
-    [setValue]
-  );
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -141,10 +130,10 @@ export default function UserNewEditForm({ currentUser }: Props) {
             )}
 
             <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
+              <RHFChooseAvatar
+                selectedAvatar={avatar}
+                openModal={openModal}
                 name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
                 helperText={
                   <Typography
                     variant="caption"
@@ -156,8 +145,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
                       color: 'text.disabled',
                     }}
                   >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
+                    If you don't choose an avatar,
+                    <br /> your initials will be used.
                   </Typography>
                 }
               />
