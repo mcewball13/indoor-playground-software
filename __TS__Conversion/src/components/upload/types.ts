@@ -36,7 +36,7 @@ export interface ChooseAvatarProps extends DropzoneOptions {
   disableMultiple?: boolean;
   isCustomerAccountPage?: boolean;
   //
-  file?: AvatarComponent | string | null;
+  file?: string | null;
   onDelete?: VoidFunction;
   //
   files?: (File | string)[];

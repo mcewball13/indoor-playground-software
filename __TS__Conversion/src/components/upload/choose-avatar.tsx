@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Iconify from '../iconify';
 import Image from '../image';
 //
-import { AvatarComponent, ChooseAvatarProps } from './types';
+import { ChooseAvatarProps } from './types';
 import avatars from 'src/assets/avatars';
 
 // ----------------------------------------------------------------------

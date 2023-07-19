@@ -28,7 +28,6 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSwitch,
   RHFTextField,
-  RHFUploadAvatar,
   RHFAutocomplete,
   RHFChooseAvatar,
 } from 'src/components/hook-form';
@@ -111,20 +110,6 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
     }
   });
 
-  const handleDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile, { shouldValidate: true });
-      }
-    },
-    [setValue]
-  );
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

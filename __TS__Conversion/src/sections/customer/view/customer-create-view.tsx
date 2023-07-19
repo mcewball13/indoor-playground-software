@@ -23,15 +23,16 @@ import avatars from 'src/assets/avatars';
 type AvatarKey = keyof typeof avatars;
 
 export default function UserCreateView() {
-  const [selectedAvatar, setSelectedAvatar] = useState<string | null>(null);
-
-  useEffect(() => {
-    console.log(selectedAvatar);
-  }, [selectedAvatar]);
+  const [selectedAvatar, setSelectedAvatar] = useState<string>();
 
   const modal = useBoolean();
 
   const settings = useSettingsContext();
+
+  const handleSelectAvatar = (avatar: AvatarKey) => {
+    setSelectedAvatar(avatar);
+    modal.onFalse();
+  }
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -65,7 +66,7 @@ export default function UserCreateView() {
               return (
                 <Grid
                   sx={{ '&:hover': { opacity: 0.72 } }}
-                  onClick={() => setSelectedAvatar(avatar)}
+                  onClick={() => handleSelectAvatar(avatar)}
                   item
                   xs={6}
                   sm={3}
