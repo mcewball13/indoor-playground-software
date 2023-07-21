@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useCustomerAuthContext } from 'src/auth/hooks';
 // @mui
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -59,6 +60,8 @@ const TABS = [
 
 export default function AccountView() {
   const settings = useSettingsContext();
+
+  const { customer } = useCustomerAuthContext();
 
   const [currentTab, setCurrentTab] = useState('general');
 

@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { useCallback } from 'react';
+import { useCustomerAuthContext } from 'src/auth/hooks';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -33,6 +34,8 @@ import Label from '../../components/label/label';
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
 
+  const { customer } = useCustomerAuthContext();
+
   const { user } = useMockedUser();
 
   const UpdateUserSchema = Yup.object().shape({
@@ -51,17 +54,17 @@ export default function AccountGeneral() {
   });
 
   const defaultValues = {
-    displayName: user?.displayName || '',
-    email: user?.email || '',
-    photoURL: user?.photoURL || null,
-    phoneNumber: user?.phoneNumber || '',
-    country: user?.country || '',
-    address: user?.address || '',
-    state: user?.state || '',
-    city: user?.city || '',
-    zipCode: user?.zipCode || '',
-    about: user?.about || '',
-    isPublic: user?.isPublic || false,
+    displayName: customer?.displayName || '',
+    email: customer?.email || '',
+    photoURL: customer?.photoURL || null,
+    phoneNumber: customer?.phoneNumber || '',
+    country: customer?.country || '',
+    address: customer?.address || '',
+    state: customer?.state || '',
+    city: customer?.city || '',
+    zipCode: customer?.zipCode || '',
+    about: customer?.about || '',
+    isPublic: customer?.isPublic || false,
   };
 
   const methods = useForm({
@@ -134,7 +137,7 @@ export default function AccountGeneral() {
             }}
           >
             <RHFUploadAvatar
-              isCAPage={true}
+              isCustomerAccountPage={true}
               name="photoURL"
               maxSize={3145728}
               onDrop={handleDrop}
@@ -198,7 +201,7 @@ export default function AccountGeneral() {
               </Box>
 
               <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                <RHFTextField name="about" multiline rows={4} label="About" />
+                <RHFTextField name="about" multiline rows={4} label="Notes" />
 
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Save Changes
