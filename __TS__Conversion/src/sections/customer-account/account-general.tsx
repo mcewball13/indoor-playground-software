@@ -122,7 +122,8 @@ export default function AccountGeneral() {
     },
   ] as const;
 
-  console.log(_testData);
+  // console.log(_testData);
+  console.log(customer);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
