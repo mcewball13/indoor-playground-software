@@ -43,14 +43,18 @@ export default function AccountGeneral() {
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    photoURL: Yup.mixed<any>().nullable().required('Avatar is required'),
+    // photoURL: Yup.mixed<any>().nullable().required('Avatar is required'),
+    avatarUrl: Yup.mixed<any>().nullable().required('Avatar is required'),
     phoneNumber: Yup.string().required('Phone number is required'),
-    country: Yup.string().required('Country is required'),
+    // country: Yup.string().required('Country is required'),
+    birthday: Yup.string().required('Birthday is required'),
     address: Yup.string().required('Address is required'),
+    street: Yup.string().required('Street is required'),
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
     zipCode: Yup.string().required('Zip code is required'),
-    about: Yup.string().required('About is required'),
+    // about: Yup.string().required('About is required'),
+    notes: Yup.string().required('Notes is required'),
     // not required
     isPublic: Yup.boolean(),
   });
@@ -58,7 +62,9 @@ export default function AccountGeneral() {
   const defaultValues = {
     displayName: customer?.displayName || '',
     email: customer?.email || '',
-    photoURL: customer?.photoURL || null,
+    // photoURL: customer?.photoURL || null,
+    avatarUrl: customer?.avatarUrl || null,
+    birthday: customer?.birthday || '',
     phoneNumber: customer?.phoneNumber || '',
     // country: customer?.country || '',
     // address: customer?.address || '',
@@ -169,9 +175,10 @@ export default function AccountGeneral() {
                 <RHFTextField name="displayName" label="Name" />
                 <RHFTextField name="email" label="Email Address" />
                 <RHFTextField name="phoneNumber" label="Phone Number" />
-                <RHFTextField name="address" label="Address" />
+                
+                <RHFTextField name="birthday" label="Birthday" />
 
-                <RHFAutocomplete
+                {/* <RHFAutocomplete
                   name="country"
                   label="Country"
                   options={countries.map((country) => country.label)}
@@ -197,15 +204,17 @@ export default function AccountGeneral() {
                       </li>
                     );
                   }}
-                />
+                /> */}
 
-                <RHFTextField name="state" label="State/Region" />
+                <RHFTextField name="street" label="Street" />
                 <RHFTextField name="city" label="City" />
+                <RHFTextField name="state" label="State/Region" />
                 <RHFTextField name="zipCode" label="Zip/Code" />
               </Box>
 
               <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                <RHFTextField name="about" multiline rows={4} label="About" />
+                {/* this used to be About */}
+                <RHFTextField name="notes" multiline rows={4} label="Notes" /> 
 
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Save Changes

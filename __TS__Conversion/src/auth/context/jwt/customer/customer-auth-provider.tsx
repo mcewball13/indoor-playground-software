@@ -17,7 +17,7 @@ enum CustomerTypes {
 
 const TEST_CUSTOMER = {
   id: '5e86809283e28b96d2d38537',
-  avatarUrl: "#",
+  avatarUrl: "x",
   email: 'test@test.com',
   guardianFirstName: "Test",
   guardianLastName: "Test",
