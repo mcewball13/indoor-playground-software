@@ -65,6 +65,19 @@ export default function AccountGeneral() {
     return dateObject.toLocaleDateString(undefined, options);
   };
 
+  const getAge = (birthday: string) : string => {
+    const today = new Date();
+    const birthDate = new Date(birthday);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age.toString();
+  }
+
   const defaultValues = {
     displayName: customer?.displayName || '',
     email: customer?.email || '',
@@ -241,7 +254,7 @@ export default function AccountGeneral() {
                 </IconButton>
               </Stack>
               <Stack spacing={1}>
-                {_testData.map((person, i) => (
+                {customer.minors.map((person, i) => (
                   <Stack
                     sx={{ py: 1, ml: 1, justifyContent: 'space-between' }}
                     key={i}
@@ -249,9 +262,10 @@ export default function AccountGeneral() {
                   >
                     <Stack direction="row" gap={1} alignItems="center">
                       <Label variant="soft" color={person.waiverLastSigned}>
-                        {person.age}
+                        {getAge(person.minorBirthday.slice(0, 10))}
                       </Label>
-                      <Typography variant="h6">{person.displayName}</Typography>
+                      <Typography variant="h6">{person.minorFirstName}</Typography> 
+                      {/* <Typography variant="h6">{person.displayName}</Typography>  */}
                     </Stack>
                     <IconButton color="default">
                       <Iconify icon="eva:more-vertical-fill" />
