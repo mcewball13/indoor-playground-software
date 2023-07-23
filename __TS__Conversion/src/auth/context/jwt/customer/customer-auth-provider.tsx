@@ -84,7 +84,7 @@ const TEST_CUSTOMER = {
   city: "test city",
   state: "test state",
   zipCode: "12345",
-  note: "test note",
+  notes: "test note",
   isAccountOwner: true,
   minors: [
     {
@@ -119,14 +119,13 @@ export function CustomerAuthProvider({ children }: Props) {
         dispatch({
           type: CustomerTypes.INITIAL,
           // ! return to null
-          // payload: { customer: response.data.customer },
-          payload: { customer: {...TEST_CUSTOMER} },
+          payload: { customer: response.data.customer },
         });
       } else {
         dispatch({
           type: CustomerTypes.INITIAL,
           payload: {
-            customer: null,
+            customer: {...TEST_CUSTOMER},
           },
         });
       }
@@ -139,6 +138,9 @@ export function CustomerAuthProvider({ children }: Props) {
         },
       });
     }
+
+    console.log('initialize');
+    console.log(TEST_CUSTOMER);
   }, []);
 
   useEffect(() => {
@@ -216,7 +218,8 @@ export function CustomerAuthProvider({ children }: Props) {
     }),
     [login, register, logout, state.customer, status]
   );
-
+  
+  
   return (
     <CustomerAuthContext.Provider value={memoizedValue}>{children}</CustomerAuthContext.Provider>
   );

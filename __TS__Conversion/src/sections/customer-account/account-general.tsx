@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import { useCallback } from 'react';
-import { useCustomerAuthContext } from 'src/auth/hooks';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
@@ -13,6 +12,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 // hooks
 import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useCustomerAuthContext } from 'src/auth/hooks';
 // utils
 import { fData } from 'src/utils/format-number';
 // assets
@@ -35,6 +35,7 @@ export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { customer } = useCustomerAuthContext();
+  console.log("CUSTOMER", customer);
 
   const { user } = useMockedUser();
 
@@ -58,13 +59,15 @@ export default function AccountGeneral() {
     email: customer?.email || '',
     photoURL: customer?.photoURL || null,
     phoneNumber: customer?.phoneNumber || '',
-    country: customer?.country || '',
-    address: customer?.address || '',
+    // country: customer?.country || '',
+    // address: customer?.address || '',
+    street: customer?.street || '',
     state: customer?.state || '',
     city: customer?.city || '',
     zipCode: customer?.zipCode || '',
-    about: customer?.about || '',
-    isPublic: customer?.isPublic || false,
+    // about: customer?.about || '',
+    notes: customer?.notes || '',
+    // isPublic: customer?.isPublic || false,
   };
 
   const methods = useForm({
@@ -123,7 +126,7 @@ export default function AccountGeneral() {
   ] as const;
 
   // console.log(_testData);
-  console.log(customer);
+  // console.log("CUSTOMER", customer);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
