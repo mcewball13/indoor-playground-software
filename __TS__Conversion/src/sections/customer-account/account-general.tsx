@@ -59,9 +59,9 @@ export default function AccountGeneral() {
     isPublic: Yup.boolean(),
   });
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) : string => {
     const dateObject = new Date(dateString);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return dateObject.toLocaleDateString(undefined, options);
   };
 
@@ -71,6 +71,7 @@ export default function AccountGeneral() {
     // photoURL: customer?.photoURL || null,
     avatarUrl: customer?.avatarUrl || null,
     // birthday: customer?.birthday || '',
+    // Format the birthday using the formatDate function and remove the time zone offset
     birthday: customer?.birthday ? formatDate(customer.birthday.slice(0, 10)) : '',
     phoneNumber: customer?.phoneNumber || '',
     // country: customer?.country || '',
