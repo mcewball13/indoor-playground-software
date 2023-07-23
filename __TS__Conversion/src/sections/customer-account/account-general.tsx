@@ -59,12 +59,19 @@ export default function AccountGeneral() {
     isPublic: Yup.boolean(),
   });
 
+  const formatDate = (dateString) => {
+    const dateObject = new Date(dateString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObject.toLocaleDateString(undefined, options);
+  };
+
   const defaultValues = {
     displayName: customer?.displayName || '',
     email: customer?.email || '',
     // photoURL: customer?.photoURL || null,
     avatarUrl: customer?.avatarUrl || null,
-    birthday: customer?.birthday || '',
+    // birthday: customer?.birthday || '',
+    birthday: customer?.birthday ? formatDate(customer.birthday.slice(0, 10)) : '',
     phoneNumber: customer?.phoneNumber || '',
     // country: customer?.country || '',
     // address: customer?.address || '',
