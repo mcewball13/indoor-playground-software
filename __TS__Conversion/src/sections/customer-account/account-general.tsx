@@ -27,6 +27,7 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import { IconButton } from '@mui/material';
 import Label from '../../components/label/label';
+import { useCustomerAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,10 @@ export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { user } = useMockedUser();
+
+  const { customer } = useCustomerAuthContext();
+
+  console.log("customer : " + customer)
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),
@@ -51,17 +56,19 @@ export default function AccountGeneral() {
   });
 
   const defaultValues = {
-    displayName: user?.displayName || '',
-    email: user?.email || '',
-    photoURL: user?.photoURL || null,
-    phoneNumber: user?.phoneNumber || '',
-    country: user?.country || '',
-    address: user?.address || '',
-    state: user?.state || '',
-    city: user?.city || '',
-    zipCode: user?.zipCode || '',
-    about: user?.about || '',
-    isPublic: user?.isPublic || false,
+    displayName: customer?.displayName || '',
+    email: customer?.email || '',
+    photoURL: customer?.photoURL || null,
+    phoneNumber: customer?.phoneNumber || '',
+    // country: customer?.country || '',
+    // address: customer?.address || '',
+    street: customer?.street || '',
+    state: customer?.state || '',
+    city: customer?.city || '',
+    zipCode: customer?.zipCode || '',
+    // about: customer?.about || '',
+    notes: customer?.notes || '',
+    // isPublic: customer?.isPublic || false,
   };
 
   const methods = useForm({
@@ -134,7 +141,7 @@ export default function AccountGeneral() {
             }}
           >
             <RHFUploadAvatar
-              isCAPage={true}
+              isCustomerAccountPage={true}
               name="photoURL"
               maxSize={3145728}
               onDrop={handleDrop}

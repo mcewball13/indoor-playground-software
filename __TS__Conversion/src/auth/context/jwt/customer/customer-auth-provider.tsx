@@ -15,6 +15,39 @@ enum CustomerTypes {
   LOGOUT = 'LOGOUT',
 }
 
+const TEST_CUSTOMER = {
+  id: '5e86809283e28b96d2d38537',
+  avatarUrl: "#",
+  email: 'test@test.com',
+  guardianFirstName: "Test",
+  guardianLastName: "Test",
+  phoneNumber: "1234567890",
+  displayName: "Test",
+  birthday: "1984-10-10T-5:00",
+  street: "test street",
+  city: "test city",
+  state: "test state",
+  zipCode: "12345",
+  notes: "test note",
+  isAccountOwner: true,
+  minors: [
+    {
+      id: '5e86809283e28b96d2d38537',
+      minorFirstName: "Minor First Test",
+      minorLastName: "Minor Last Test",
+      minorBirthday: "2020-10-10T-5:00",
+      email: 'test@test.com'
+    },
+    {
+      id: '5e86809283e27c96d2d38537',
+      minorFirstName: "Minor First Test 2",
+      minorLastName: "Minor Last Test 2",
+      minorBirthday: "2018-10-10T-5:00",
+      email: 'test@test.com'
+    },
+  ]
+};
+
 type Payload = {
   [CustomerTypes.INITIAL]: {
     customer: AuthCustomerType;
@@ -91,7 +124,8 @@ export function CustomerAuthProvider({ children }: Props) {
         dispatch({
           type: CustomerTypes.INITIAL,
           payload: {
-            customer: null,
+            // customer: null,
+            customer: {...TEST_CUSTOMER},
           },
         });
       }
@@ -104,6 +138,8 @@ export function CustomerAuthProvider({ children }: Props) {
         },
       });
     }
+    console.log(TEST_CUSTOMER);
+    console.log("hello I'm in the auth")
   }, []);
 
   useEffect(() => {
