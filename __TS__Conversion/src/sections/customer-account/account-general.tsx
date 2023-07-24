@@ -54,10 +54,31 @@ export default function AccountGeneral() {
     isPublic: Yup.boolean(),
   });
 
+  const formatDate = (dateString: string) : string => {
+    const dateObject = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObject.toLocaleDateString(undefined, options);
+  };
+
+  const getAge = (birthday: string) : string => {
+    const today = new Date();
+    const birthDate = new Date(birthday);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age.toString();
+  }
+
+
   const defaultValues = {
     displayName: customer?.displayName || '',
     email: customer?.email || '',
-    photoURL: customer?.photoURL || null,
+    // photoURL: customer?.photoURL || null,
+    avatarUrl: customer?.avatarUrl || null,
+    // birthday: customer?.birthday || '',
+    birthday: customer?.birthday ? formatDate(customer.birthday.slice(0, 10)) : '',
     phoneNumber: customer?.phoneNumber || '',
     // country: customer?.country || '',
     // address: customer?.address || '',
@@ -169,9 +190,11 @@ export default function AccountGeneral() {
                 <RHFTextField name="displayName" label="Name" />
                 <RHFTextField name="email" label="Email Address" />
                 <RHFTextField name="phoneNumber" label="Phone Number" />
-                <RHFTextField name="address" label="Address" />
 
-                <RHFAutocomplete
+                <RHFTextField name="birthday" label="Birthday" />
+                
+
+                {/* <RHFAutocomplete
                   name="country"
                   label="Country"
                   options={countries.map((country) => country.label)}
@@ -197,15 +220,16 @@ export default function AccountGeneral() {
                       </li>
                     );
                   }}
-                />
+                /> */}
 
-                <RHFTextField name="state" label="State/Region" />
+                <RHFTextField name="street" label="Street" />
                 <RHFTextField name="city" label="City" />
+                <RHFTextField name="state" label="State/Region" />
                 <RHFTextField name="zipCode" label="Zip/Code" />
               </Box>
 
               <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                <RHFTextField name="about" multiline rows={4} label="Notes" />
+                <RHFTextField name="notes" multiline rows={4} label="Notes" />
 
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Save Changes
@@ -224,7 +248,7 @@ export default function AccountGeneral() {
                 </IconButton>
               </Stack>
               <Stack spacing={1}>
-                {_testData.map((person, i) => (
+                {customer.minors.map((person, i) => (
                   <Stack
                     sx={{ py: 1, ml: 1, justifyContent: 'space-between' }}
                     key={i}
@@ -232,9 +256,9 @@ export default function AccountGeneral() {
                   >
                     <Stack direction="row" gap={1} alignItems="center">
                       <Label variant="soft" color={person.waiverLastSigned}>
-                        {person.age}
+                        {getAge(person.minorBirthday.slice(0, 10))}
                       </Label>
-                      <Typography variant="h6">{person.displayName}</Typography>
+                      <Typography variant="h6">{`${person.minorFirstName} ${person.minorLastName}`}</Typography>
                     </Stack>
                     <IconButton color="default">
                       <Iconify icon="eva:more-vertical-fill" />
