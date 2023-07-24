@@ -139,7 +139,7 @@ export default function AccountGeneral() {
     {
       displayName: 'John Doe',
       age: 34,
-      waiverLastSigned: 'warning',
+      waiverLastSigned: 'warning', // todo we need this in minor types
     },
     {
       displayName: 'Jane Doe',
@@ -174,7 +174,7 @@ export default function AccountGeneral() {
               onDrop={handleDrop}
             />
             <Typography variant="h5">
-              Account Owner: <strong>{user?.displayName}</strong>
+              Account Owner: <strong>{customer?.displayName}</strong>
             </Typography>
             <Typography variant="subtitle2">
               Last visited: <strong>67 Days ago</strong>
@@ -264,7 +264,7 @@ export default function AccountGeneral() {
                       <Label variant="soft" color={person.waiverLastSigned}>
                         {getAge(person.minorBirthday.slice(0, 10))}
                       </Label>
-                      <Typography variant="h6">{person.minorFirstName}</Typography> 
+                      <Typography variant="h6">{person.minorFirstName} {person.minorLastName}</Typography> 
                       {/* <Typography variant="h6">{person.displayName}</Typography>  */}
                     </Stack>
                     <IconButton color="default">
