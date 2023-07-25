@@ -11,13 +11,12 @@ export type ActionMapTypeCustomer<T extends Record<string, any>> = {
 };
 
 export type AuthCustomerType = {
-  id: number;
+  id: number | string;
   guardianFirstName: string;
   guardianLastName: string;
-  displayName: string;
+  displayName?: string;
   birthday: string;
   email: string;
-  password: string;
   street?: string;
   city?: string;
   state?: string;
@@ -27,15 +26,16 @@ export type AuthCustomerType = {
   storedValue?: number;
   notes?: string;
   isAccountOwner: boolean;
-  isBanned: boolean;
+  isBanned?: boolean;
   minors?: AuthMinorType[];
 } | null;
 
 export type AuthMinorType = {
-  id: number;
+  id: number | string;
   minorFirstName: string;
   minorLastName: string;
-  birthday: string;
+  minorBirthday: string;
+  email: string;
 };
 export type AuthStateTypeCustomer = {
     status?: string;

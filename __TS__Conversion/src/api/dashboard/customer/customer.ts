@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
 // utils
-import { gqlFetcher } from 'src/utils/graphql-fetcher';
+import { gqlFetcher } from 'src/utils/graphql';
 // types
 import { IPostItem } from 'src/types/blog';
 

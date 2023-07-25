@@ -24,6 +24,7 @@ import AccountNotifications from '../account-notifications';
 import AccountChangePassword from '../account-change-password';
 import FormProvider, { RHFTextField } from '../../../components/hook-form';
 import { Stack } from '@mui/system';
+import { useCustomerAuthContext } from '../../../auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +61,8 @@ const TABS = [
 export default function AccountView() {
   const settings = useSettingsContext();
 
+  const { customer } = useCustomerAuthContext()
+
   const [currentTab, setCurrentTab] = useState('general');
 
   const handleChangeTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
@@ -84,6 +87,8 @@ export default function AccountView() {
       console.error(error);
     }
   });
+
+  console.log('CUSTOMER', customer)
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

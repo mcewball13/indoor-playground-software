@@ -3,6 +3,7 @@
 import { memo, useCallback, useEffect, useMemo, useReducer } from 'react';
 // utils
 import axios, { endpoints } from 'src/utils/axios';
+import graphQL from 'src/utils/graphql';
 
 import { CustomerAuthContext } from './customer-auth-context';
 import { isValidToken, setSession } from '../utils';
@@ -71,6 +72,39 @@ type Props = {
   children: React.ReactNode;
 };
 
+const TEST_CUSTOMER = {
+  id: '5e86809283e28b96d2d38537',
+  avatarUrl: '#',
+  email: 'test@test.com',
+  guardianFirstName: 'Test',
+  guardianLastName: 'Test',
+  phoneNumber: '1234567890',
+  displayName: 'Test',
+  birthday: '1984-10-10T-5:00',
+  street: 'test street',
+  city: 'test city',
+  state: 'test state',
+  zipCode: '12345',
+  note: 'test note',
+  isAccountOwner: true,
+  minors: [
+    {
+      id: '5e86809283e28b96d2d38537',
+      minorFirstName: 'Minor First Test',
+      minorLastName: 'Minor Last Test',
+      minorBirthday: '2020-10-10T-5:00',
+      email: 'test@test.com',
+    },
+    {
+      id: '5e86809283e27c96d2d38537',
+      minorFirstName: 'Minor First Test 2',
+      minorLastName: 'Minor Last Test 2',
+      minorBirthday: '2018-10-10T-5:00',
+      email: 'test@test.com',
+    },
+  ],
+};
+
 export function CustomerAuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -88,10 +122,35 @@ export function CustomerAuthProvider({ children }: Props) {
           payload: { customer: response.data.customer },
         });
       } else {
+        const response = await graphQL.post('/api/graphql', {
+          query: `query Query($singleCustomerId: ID!) {
+            singleCustomer(id: $singleCustomerId) {
+              birthday
+              city
+              displayName
+              email
+              id
+              minors {
+                minorBirthday
+                minorFirstName
+                minorLastName
+              }
+              state
+              street
+              zipCode
+            }
+          }
+          `,
+          variables: {
+            singleCustomerId: 62,
+          },
+        });
+        console.log("response", response.data.data.singleCustomer);
         dispatch({
           type: CustomerTypes.INITIAL,
           payload: {
-            customer: null,
+            // ! return to null
+            customer: { ...TEST_CUSTOMER },
           },
         });
       }
@@ -104,6 +163,7 @@ export function CustomerAuthProvider({ children }: Props) {
         },
       });
     }
+    console.log(initialState);
   }, []);
 
   useEffect(() => {

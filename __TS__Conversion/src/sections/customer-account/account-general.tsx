@@ -27,11 +27,15 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import { IconButton } from '@mui/material';
 import Label from '../../components/label/label';
+import { useCustomerAuthContext } from '../../auth/hooks';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
   const { enqueueSnackbar } = useSnackbar();
+
+  const { customer } = useCustomerAuthContext()
+
 
   const { user } = useMockedUser();
 
@@ -134,7 +138,7 @@ export default function AccountGeneral() {
             }}
           >
             <RHFUploadAvatar
-              isCAPage={true}
+              isCustomerAccountPage={true}
               name="photoURL"
               maxSize={3145728}
               onDrop={handleDrop}
