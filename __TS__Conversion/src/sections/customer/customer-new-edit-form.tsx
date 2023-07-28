@@ -98,7 +98,7 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
   } = methods;
 
   const values = watch();
-
+console.log(values.birthday);
   const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -232,7 +232,7 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
                   render={({ field, fieldState: { error } }) => (
                     <DatePicker
                       {...field}
-                      format="dd/MM/yyyy"
+                      format="mm/dd/yyyy"
                       slotProps={{
                         textField: {
                           fullWidth: true,
