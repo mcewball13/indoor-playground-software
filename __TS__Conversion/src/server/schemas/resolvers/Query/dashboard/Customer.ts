@@ -90,6 +90,7 @@ const CustomerQueries: IResolvers = {
             as: 'minors',
           },
         ],
+      
       });
       console.log(guardianData);
       return guardianData;
