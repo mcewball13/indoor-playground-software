@@ -43,17 +43,14 @@ export default function AccountGeneral() {
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    // photoURL: Yup.mixed<any>().nullable().required('Avatar is required'),
     avatarUrl: Yup.mixed<any>().nullable().required('Avatar is required'),
     phoneNumber: Yup.string().required('Phone number is required'),
-    // country: Yup.string().required('Country is required'),
     birthday: Yup.string().required('Birthday is required'),
     address: Yup.string().required('Address is required'),
     street: Yup.string().required('Street is required'),
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
     zipCode: Yup.string().required('Zip code is required'),
-    // about: Yup.string().required('About is required'),
     notes: Yup.string().required('Notes is required'),
     // not required
     isPublic: Yup.boolean(),
@@ -81,21 +78,15 @@ export default function AccountGeneral() {
   const defaultValues = {
     displayName: customer?.displayName || '',
     email: customer?.email || '',
-    // photoURL: customer?.photoURL || null,
     avatarUrl: customer?.avatarUrl || null,
-    // birthday: customer?.birthday || '',
-    // Format the birthday using the formatDate function and remove the time zone offset
+    // ? Format the birthday using the formatDate function and remove the time zone offset
     birthday: customer?.birthday ? formatDate(customer.birthday.slice(0, 10)) : '',
     phoneNumber: customer?.phoneNumber || '',
-    // country: customer?.country || '',
-    // address: customer?.address || '',
     street: customer?.street || '',
     state: customer?.state || '',
     city: customer?.city || '',
     zipCode: customer?.zipCode || '',
-    // about: customer?.about || '',
     notes: customer?.notes || '',
-    // isPublic: customer?.isPublic || false,
   };
 
   const methods = useForm({
@@ -198,34 +189,6 @@ export default function AccountGeneral() {
                 
                 {/* todo : make this a datepicker .. make a custom RHFDatePicker file instead of inline*/}
                 <RHFTextField name="birthday" label="Birthday" /> 
-
-                {/* <RHFAutocomplete
-                  name="country"
-                  label="Country"
-                  options={countries.map((country) => country.label)}
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option) => {
-                    const { code, label, phone } = countries.filter(
-                      (country) => country.label === option
-                    )[0];
-
-                    if (!label) {
-                      return null;
-                    }
-
-                    return (
-                      <li {...props} key={label}>
-                        <Iconify
-                          key={label}
-                          icon={`circle-flags:${code.toLowerCase()}`}
-                          width={28}
-                          sx={{ mr: 1 }}
-                        />
-                        {label} ({code}) +{phone}
-                      </li>
-                    );
-                  }}
-                /> */}
 
                 <RHFTextField name="street" label="Street" />
                 <RHFTextField name="city" label="City" />
