@@ -28,6 +28,7 @@ type CustomerAuth{
     state: String
     zipCode: String
     phoneNumber: String
+    notes: String
     minors: [CustomerMinor]
   }
 
@@ -66,7 +67,7 @@ type CustomerAuth{
   extend type Query {
     allCustomers: [CustomerGuardian]
     allCustomersPaginated(page: Int!, limit: Int!): [CustomerGuardian]
-    singleCustomer(id: ID!): CustomerGuardian
+    singleCustomer(id: ID!): CustomerGuardian 
     customerAccountAutoSearch(filter: String!): [CustomerGuardian]
   }
 

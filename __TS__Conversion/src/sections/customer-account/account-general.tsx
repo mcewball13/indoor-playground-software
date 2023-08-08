@@ -10,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 // hooks
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 // utils
@@ -37,8 +39,6 @@ export default function AccountGeneral() {
   const { user } = useMockedUser();
 
   const { customer } = useCustomerAuthContext();
-
-  console.log("customer : " + customer)
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),
@@ -153,7 +153,6 @@ export default function AccountGeneral() {
     },
   ] as const;
 
-  console.log(_testData);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -197,7 +196,8 @@ export default function AccountGeneral() {
                 <RHFTextField name="email" label="Email Address" />
                 <RHFTextField name="phoneNumber" label="Phone Number" />
                 
-                <RHFTextField name="birthday" label="Birthday" />
+                {/* todo : make this a datepicker .. make a custom RHFDatePicker file instead of inline*/}
+                <RHFTextField name="birthday" label="Birthday" /> 
 
                 {/* <RHFAutocomplete
                   name="country"
