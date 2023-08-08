@@ -364,7 +364,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                         <RHFDatePicker name="minorBirthday" label="Birth Date" openTo="year" />
                       </Stack>
                       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                        <Button onClick={onCancel} color="error" startIcon={<Iconify icon={'eva:close-outline'} />}>
+                        <Button onClick={onCancel} color="error" startIcon={<Iconify icon='eva:close-outline' />}>
                           Cancel
                         </Button>
                         <Button
@@ -377,7 +377,7 @@ export default function UserWaiverForm({ isEdit, currentUser, isOpen, onOpen, on
                               email: values.email,
                             })
                           }
-                          startIcon={<Iconify icon={'eva:plus-fill'} />}
+                          startIcon={<Iconify icon='eva:plus-fill' />}
                         >
                           Add
                         </Button>
