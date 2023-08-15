@@ -24,6 +24,7 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
   RHFAutocomplete,
+  RHFDatePicker
 } from 'src/components/hook-form';
 import { IconButton } from '@mui/material';
 import Label from '../../components/label/label';
@@ -164,7 +165,8 @@ export default function AccountGeneral() {
                 <RHFTextField name="phoneNumber" label="Phone Number" />
                 <RHFTextField name="address" label="Address" />
 
-                <RHFAutocomplete
+                <RHFDatePicker />
+                {/* <RHFAutocomplete
                   name="country"
                   label="Country"
                   options={countries.map((country) => country.label)}
@@ -190,7 +192,7 @@ export default function AccountGeneral() {
                       </li>
                     );
                   }}
-                />
+                /> */}
 
                 <RHFTextField name="state" label="State/Region" />
                 <RHFTextField name="city" label="City" />
