@@ -101,7 +101,7 @@ export type IUserItem = {
   state: string;
   status: string;
   address: string;
-  country: string;
+  birthday: string;
   zipCode: string;
   company: string;
   avatarUrl: string;

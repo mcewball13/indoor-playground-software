@@ -12,6 +12,7 @@ import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { DatePicker } from '@mui/x-date-pickers';
 // utils
 import { fData } from 'src/utils/format-number';
 // routes
@@ -51,7 +52,7 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     phoneNumber: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
-    country: Yup.string().required('Country is required'),
+    birthday: Yup.string().required('Birthday is required'),
     company: Yup.string().required('Company is required'),
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
@@ -72,7 +73,7 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
       state: currentUser?.state || '',
       status: currentUser?.status || '',
       address: currentUser?.address || '',
-      country: currentUser?.country || '',
+      birthday: currentUser?.birthday || '',
       zipCode: currentUser?.zipCode || '',
       company: currentUser?.company || '',
       avatarUrl: currentUser?.avatarUrl || avatar || null,
@@ -97,7 +98,7 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
   } = methods;
 
   const values = watch();
-
+console.log(values.birthday);
   const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -225,34 +226,23 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
               <RHFTextField name="email" label="Email Address" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
 
-              <RHFAutocomplete
-                name="country"
-                label="Country"
-                options={countries.map((country) => country.label)}
-                getOptionLabel={(option) => option}
-                isOptionEqualToValue={(option, value) => option === value}
-                renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
-                  )[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
-                    </li>
-                  );
-                }}
-              />
+              <Controller
+                  name="birthday"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <DatePicker
+                      {...field}
+                      format="mm/dd/yyyy"
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!error,
+                          helperText: error?.message,
+                        },
+                      }}
+                    />
+                  )}
+                />
 
               <RHFTextField name="state" label="State/Region" />
               <RHFTextField name="city" label="City" />
