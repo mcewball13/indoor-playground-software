@@ -165,7 +165,7 @@ export default function AccountGeneral() {
                 <RHFTextField name="phoneNumber" label="Phone Number" />
                 <RHFTextField name="address" label="Address" />
 
-                <RHFDatePicker />
+                <RHFDatePicker name="birthday" label="Birthday" />
                 {/* <RHFAutocomplete
                   name="country"
                   label="Country"
