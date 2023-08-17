@@ -15,7 +15,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 //
-import UserNewEditForm from '../customer-new-edit-form';
+import CustomerNewEditForm from '../customer-new-edit-form';
 import avatars from 'src/assets/avatars';
 
 // ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ export default function UserCreateView() {
         }}
       />
 
-      <UserNewEditForm avatar={selectedAvatar} openModal={modal.onTrue} />
+      <CustomerNewEditForm avatar={selectedAvatar} openModal={modal.onTrue} />
       <Dialog maxWidth="lg" open={modal.value} onClose={modal.onFalse}>
         <Box p={2}>
           <Grid container spacing={2}>
