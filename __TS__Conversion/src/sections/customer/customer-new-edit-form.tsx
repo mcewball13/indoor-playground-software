@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Switch from '@mui/material/Switch';
 import Grid from '@mui/material/Unstable_Grid2';
+import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 // utils
@@ -32,7 +33,7 @@ import FormProvider, {
   RHFChooseAvatar,
 } from 'src/components/hook-form';
 import avatars from 'src/assets/avatars';
-
+import { useBoolean } from 'src/hooks/use-boolean';
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -41,8 +42,10 @@ type Props = {
   openModal: VoidFunction;
 };
 
-export default function UserNewEditForm({ currentUser, avatar, openModal }: Props) {
+export default function CustomerNewEditForm({ currentUser, avatar, openModal }: Props) {
   const router = useRouter();
+
+  const minorPlate = useBoolean(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -266,6 +269,62 @@ export default function UserNewEditForm({ currentUser, avatar, openModal }: Prop
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {!currentUser ? 'Create User' : 'Save Changes'}
               </LoadingButton>
+              <Button
+                    size="small"
+                    startIcon={<Iconify icon='eva:plus-fill' />}
+                    onClick={minorPlate.onTrue}
+                    disabled={minorPlate.value}
+                  >
+                    Add a Minor
+                  </Button>
+              <Collapse
+                  // onEntered={() => handleOnEntered(addMinorFormScrollRef)}
+                  in={minorPlate.value}
+                  // ref={addMinorFormScrollRef}
+                >
+                  <Box
+                    sx={{
+                      padding: 3,
+                      marginTop: 3,
+                      borderRadius: 1,
+                      bgcolor: 'background.paper',
+                    }}
+                  >
+                    <Stack spacing={3}>
+                      <Typography variant="subtitle1" sx={{ color: 'text.secondary' }}>
+                        {' '}
+                        Add a Minor
+                      </Typography>
+
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                        <RHFTextField name="minorFirstName" fullWidth label="First Name" />
+                        <RHFTextField name="minorLastName" fullWidth label="Last Name" />
+                      </Stack>
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                        {/* <RHFDatePicker name="minorBirthday" label="Birth Date" openTo="year" /> */}
+                      </Stack>
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                        <Button onClick={minorPlate.onFalse} color="error" startIcon={<Iconify icon='eva:close-outline' />}>
+                          Cancel
+                        </Button>
+                        <Button
+                          color="success"
+                          onClick={() =>
+                            handleSetMinors({
+                              minorFirstName: values.minorFirstName,
+                              minorLastName: values.minorLastName,
+                              minorBirthday: values.minorBirthday,
+                              email: values.email,
+                            })
+                          }
+                          startIcon={<Iconify icon='eva:plus-fill' />}
+                        >
+                          Add
+                        </Button>
+                      </Stack>
+                    </Stack>
+                  </Box>
+                </Collapse>
             </Stack>
           </Card>
         </Grid>
