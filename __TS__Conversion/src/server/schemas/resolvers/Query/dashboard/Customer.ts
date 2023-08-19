@@ -59,7 +59,13 @@ const CustomerQueries: IResolvers = {
   },
   singleCustomer: async (parent: unknown, { id }: Record<string, any>, context: any) => {
     try {
-      const customer = await CustomerGuardian.findByPk(id);
+      const customer = await CustomerGuardian.findByPk(id , {
+        include: [
+        {
+          model: CustomerMinor,
+          as: 'minors',
+        },
+      ]},);
       return customer;
     } catch (error) {
       console.log(error);

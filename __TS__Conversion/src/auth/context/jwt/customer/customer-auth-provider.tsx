@@ -3,6 +3,7 @@
 import { memo, useCallback, useEffect, useMemo, useReducer } from 'react';
 // utils
 import axios, { endpoints } from 'src/utils/axios';
+import graphQL from 'src/utils/graphql';
 
 import { CustomerAuthContext } from './customer-auth-context';
 import { isValidToken, setSession } from '../utils';
@@ -88,10 +89,38 @@ export function CustomerAuthProvider({ children }: Props) {
           payload: { customer: response.data.customer },
         });
       } else {
+        const response = await graphQL.post('/api/graphql', {
+          query: `query Query($singleCustomerId: ID!) {
+            singleCustomer(id: $singleCustomerId) {
+              birthday
+              city
+              displayName
+              email
+              id
+              phoneNumber
+              minors {
+                minorBirthday
+                minorFirstName
+                minorLastName
+              }
+              notes
+              state
+              street
+              zipCode
+            }
+          }
+          `,
+          // ! hard coded customer id for demo purposes
+          variables: {
+            singleCustomerId: 9,
+          },
+        });
+        console.log("response", response.data.data.singleCustomer);
         dispatch({
           type: CustomerTypes.INITIAL,
           payload: {
-            customer: null,
+            // ! return to null
+            customer: { ... response.data.data.singleCustomer },
           },
         });
       }
@@ -104,6 +133,7 @@ export function CustomerAuthProvider({ children }: Props) {
         },
       });
     }
+    console.log(initialState);
   }, []);
 
   useEffect(() => {
