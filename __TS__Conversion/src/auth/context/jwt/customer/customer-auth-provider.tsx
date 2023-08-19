@@ -143,8 +143,9 @@ export function CustomerAuthProvider({ children }: Props) {
             }
           }
           `,
+          // ! hard coded customer id for demo purposes
           variables: {
-            singleCustomerId: 3,
+            singleCustomerId: 9,
           },
         });
         console.log("response", response.data.data.singleCustomer);
