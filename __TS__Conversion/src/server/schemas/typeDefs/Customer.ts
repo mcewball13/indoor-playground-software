@@ -28,6 +28,7 @@ type CustomerAuth{
     state: String
     zipCode: String
     phoneNumber: String
+    notes: String
     minors: [CustomerMinor]
   }
 

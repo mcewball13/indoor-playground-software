@@ -10,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 // hooks
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 // utils
@@ -27,6 +29,7 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import { IconButton } from '@mui/material';
 import Label from '../../components/label/label';
+import { useCustomerAuthContext } from 'src/auth/hooks';
 
 // ----------------------------------------------------------------------
 
@@ -35,33 +38,55 @@ export default function AccountGeneral() {
 
   const { user } = useMockedUser();
 
+  const { customer } = useCustomerAuthContext();
+
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    photoURL: Yup.mixed<any>().nullable().required('Avatar is required'),
+    avatarUrl: Yup.mixed<any>().nullable().required('Avatar is required'),
     phoneNumber: Yup.string().required('Phone number is required'),
-    country: Yup.string().required('Country is required'),
+    birthday: Yup.string().required('Birthday is required'),
     address: Yup.string().required('Address is required'),
+    street: Yup.string().required('Street is required'),
     state: Yup.string().required('State is required'),
     city: Yup.string().required('City is required'),
     zipCode: Yup.string().required('Zip code is required'),
-    about: Yup.string().required('About is required'),
+    notes: Yup.string().required('Notes is required'),
     // not required
     isPublic: Yup.boolean(),
   });
 
+  const formatDate = (dateString: string) : string => {
+    const dateObject = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObject.toLocaleDateString(undefined, options);
+  };
+
+  const getAge = (birthday: string) : string => {
+    const today = new Date();
+    const birthDate = new Date(birthday);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age.toString();
+  }
+
   const defaultValues = {
-    displayName: user?.displayName || '',
-    email: user?.email || '',
-    photoURL: user?.photoURL || null,
-    phoneNumber: user?.phoneNumber || '',
-    country: user?.country || '',
-    address: user?.address || '',
-    state: user?.state || '',
-    city: user?.city || '',
-    zipCode: user?.zipCode || '',
-    about: user?.about || '',
-    isPublic: user?.isPublic || false,
+    displayName: customer?.displayName || '',
+    email: customer?.email || '',
+    avatarUrl: customer?.avatarUrl || null,
+    // ? Format the birthday using the formatDate function and remove the time zone offset
+    birthday: customer?.birthday ? formatDate(customer.birthday.slice(0, 10)) : '',
+    phoneNumber: customer?.phoneNumber || '',
+    street: customer?.street || '',
+    state: customer?.state || '',
+    city: customer?.city || '',
+    zipCode: customer?.zipCode || '',
+    notes: customer?.notes || '',
   };
 
   const methods = useForm({
@@ -105,7 +130,7 @@ export default function AccountGeneral() {
     {
       displayName: 'John Doe',
       age: 34,
-      waiverLastSigned: 'warning',
+      waiverLastSigned: 'warning', // todo we need this in minor types
     },
     {
       displayName: 'Jane Doe',
@@ -119,7 +144,6 @@ export default function AccountGeneral() {
     },
   ] as const;
 
-  console.log(_testData);
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -134,13 +158,13 @@ export default function AccountGeneral() {
             }}
           >
             <RHFUploadAvatar
-              isCAPage={true}
+              isCustomerAccountPage={true}
               name="photoURL"
               maxSize={3145728}
               onDrop={handleDrop}
             />
             <Typography variant="h5">
-              Account Owner: <strong>{user?.displayName}</strong>
+              Account Owner: <strong>{customer?.displayName}</strong>
             </Typography>
             <Typography variant="subtitle2">
               Last visited: <strong>67 Days ago</strong>
@@ -162,43 +186,19 @@ export default function AccountGeneral() {
                 <RHFTextField name="displayName" label="Name" />
                 <RHFTextField name="email" label="Email Address" />
                 <RHFTextField name="phoneNumber" label="Phone Number" />
-                <RHFTextField name="address" label="Address" />
+                
+                {/* todo : make this a datepicker .. make a custom RHFDatePicker file instead of inline*/}
+                <RHFTextField name="birthday" label="Birthday" /> 
 
-                <RHFAutocomplete
-                  name="country"
-                  label="Country"
-                  options={countries.map((country) => country.label)}
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option) => {
-                    const { code, label, phone } = countries.filter(
-                      (country) => country.label === option
-                    )[0];
-
-                    if (!label) {
-                      return null;
-                    }
-
-                    return (
-                      <li {...props} key={label}>
-                        <Iconify
-                          key={label}
-                          icon={`circle-flags:${code.toLowerCase()}`}
-                          width={28}
-                          sx={{ mr: 1 }}
-                        />
-                        {label} ({code}) +{phone}
-                      </li>
-                    );
-                  }}
-                />
-
-                <RHFTextField name="state" label="State/Region" />
+                <RHFTextField name="street" label="Street" />
                 <RHFTextField name="city" label="City" />
+                <RHFTextField name="state" label="State/Region" />
                 <RHFTextField name="zipCode" label="Zip/Code" />
               </Box>
 
               <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                <RHFTextField name="about" multiline rows={4} label="About" />
+                {/* this used to be About */}
+                <RHFTextField name="notes" multiline rows={4} label="Notes" /> 
 
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Save Changes
@@ -217,7 +217,7 @@ export default function AccountGeneral() {
                 </IconButton>
               </Stack>
               <Stack spacing={1}>
-                {_testData.map((person, i) => (
+                {customer.minors.map((person, i) => (
                   <Stack
                     sx={{ py: 1, ml: 1, justifyContent: 'space-between' }}
                     key={i}
@@ -225,9 +225,10 @@ export default function AccountGeneral() {
                   >
                     <Stack direction="row" gap={1} alignItems="center">
                       <Label variant="soft" color={person.waiverLastSigned}>
-                        {person.age}
+                        {getAge(person.minorBirthday.slice(0, 10))}
                       </Label>
-                      <Typography variant="h6">{person.displayName}</Typography>
+                      <Typography variant="h6">{person.minorFirstName} {person.minorLastName}</Typography> 
+                      {/* <Typography variant="h6">{person.displayName}</Typography>  */}
                     </Stack>
                     <IconButton color="default">
                       <Iconify icon="eva:more-vertical-fill" />
