@@ -1,33 +1,28 @@
 import PropTypes from 'prop-types';
-
-// form
 import { useFormContext, Controller } from 'react-hook-form';
-// @mui
-import { TextField } from '@mui/material';
-import { MobileDatePicker } from '@mui/x-date-pickers'
-
-// ----------------------------------------------------------------------
+import { DatePicker } from '@mui/x-date-pickers';
 
 type RHFDatePickerProps = {
-    name: string;
-    label: string;
-}
+  name: string;
+  label: string;
+};
 
-export default function RHFDatePicker({ label = 'Select your Date', name, ...other }: RHFDatePickerProps){
-  const { control } = useFormContext();
+export default function RHFDatePicker({ label = 'Select your Date', name, ...other }: RHFDatePickerProps) {
+  const { control, setValue } = useFormContext(); // Added setValue
 
   return (
     <Controller
       name={name}
       control={control}
       render={({ field }) => (
-        <MobileDatePicker
-          {...other}
+        <DatePicker
           {...field}
           label={label}
           // inputFormat="M/d/yyyy"
           views={['year', 'month', 'day']}
-          // renderInput={(params) => <TextField {...params} fullWidth />}
+          value={field.value || null} // Set the value from react-hook-form
+          onChange={(date) => setValue(name, date)} // Update the value using setValue
+          {...other}
         />
       )}
     />
