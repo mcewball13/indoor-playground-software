@@ -88,6 +88,7 @@ export default function AccountGeneral() {
     city: customer?.city || '',
     zipCode: customer?.zipCode || '',
     notes: customer?.notes || '',
+    minors: customer?.minors || [],
   };
 
   const methods = useForm({
