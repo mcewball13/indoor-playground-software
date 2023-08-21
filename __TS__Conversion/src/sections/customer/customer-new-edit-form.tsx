@@ -216,12 +216,18 @@ export default function CustomerNewEditForm({ currentUser, avatar, openModal }: 
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
-              rowGap={3}
-              columnGap={2}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
+              // rowGap={3}
+              // columnGap={2}
+              // display="grid"
+              // gridTemplateColumns={{
+              //   xs: 'repeat(1, 1fr)',
+              //   sm: 'repeat(2, 1fr)',
+              // }}
+              sx={{
+                "padding": 3,
+                "marginTop": 3,
+                "borderRadius": 1,
+                "bgcolor": "background.paper"
               }}
             >
               <RHFTextField name="name" label="Full Name" />
