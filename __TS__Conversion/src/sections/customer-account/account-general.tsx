@@ -26,6 +26,7 @@ import FormProvider, {
   RHFTextField,
   RHFUploadAvatar,
   RHFAutocomplete,
+  RHFDatePicker
 } from 'src/components/hook-form';
 import { IconButton } from '@mui/material';
 import Label from '../../components/label/label';
@@ -87,6 +88,7 @@ export default function AccountGeneral() {
     city: customer?.city || '',
     zipCode: customer?.zipCode || '',
     notes: customer?.notes || '',
+    minors: customer?.minors || [],
   };
 
   const methods = useForm({
@@ -188,7 +190,7 @@ export default function AccountGeneral() {
                 <RHFTextField name="phoneNumber" label="Phone Number" />
                 
                 {/* todo : make this a datepicker .. make a custom RHFDatePicker file instead of inline*/}
-                <RHFTextField name="birthday" label="Birthday" /> 
+                <RHFDatePicker name="birthday" label="Birthday" /> 
 
                 <RHFTextField name="street" label="Street" />
                 <RHFTextField name="city" label="City" />
